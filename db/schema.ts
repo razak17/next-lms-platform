@@ -9,6 +9,8 @@ import {
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
+	firstName: text("first_name"),
+	lastName: text("last_name"),
 	email: text("email").notNull().unique(),
 	emailVerified: boolean("email_verified")
 		.$defaultFn(() => false)

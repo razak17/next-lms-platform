@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -12,7 +11,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
 	Form,
 	FormControl,
@@ -21,19 +19,22 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 import { signUp } from "@/server/users";
 
-import { z } from "zod";
-import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
-import Link from "next/link";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const formSchema = z.object({
-	username: z.string().min(3, "Username must be at least 3 characters long."),
+	firstName: z.string().min(1, "First name is required."),
+	lastName: z.string().min(1, "Last name is required."),
 	email: z.email("Please enter a valid email address."),
 	password: z.string().min(8, "Password must be at least 8 characters long."),
 });
@@ -48,7 +49,8 @@ export function RegisterForm({
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			username: "",
+			firstName: "",
+			lastName: "",
 			email: "",
 			password: "",
 		},
@@ -67,7 +69,8 @@ export function RegisterForm({
 		const { success, message } = await signUp(
 			values.email,
 			values.password,
-			values.username
+			values.firstName,
+			values.lastName
 		);
 
 		if (success) {
@@ -118,10 +121,10 @@ export function RegisterForm({
 									<div className="grid gap-3">
 										<FormField
 											control={form.control}
-											name="username"
+											name="firstName"
 											render={({ field }) => (
 												<FormItem>
-													<FormLabel>Username</FormLabel>
+													<FormLabel>First Name</FormLabel>
 													<FormControl>
 														<Input {...field} />
 													</FormControl>
@@ -129,7 +132,19 @@ export function RegisterForm({
 												</FormItem>
 											)}
 										/>
-
+										<FormField
+											control={form.control}
+											name="lastName"
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Last Name</FormLabel>
+													<FormControl>
+														<Input {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
 										<FormField
 											control={form.control}
 											name="email"
