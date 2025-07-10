@@ -32,8 +32,8 @@ import Link from "next/link";
 import { signIn } from "@/server/users";
 
 const formSchema = z.object({
-	email: z.email(),
-	password: z.string().min(8),
+	email: z.email("Please enter a valid email address."),
+	password: z.string().min(8, "Password must be at least 8 characters long."),
 });
 
 export function LoginForm({
@@ -114,7 +114,7 @@ export function LoginForm({
 												<FormItem>
 													<FormLabel>Email</FormLabel>
 													<FormControl>
-														<Input placeholder="m@example.com" {...field} />
+														<Input {...field} />
 													</FormControl>
 													<FormMessage />
 												</FormItem>
@@ -130,11 +130,7 @@ export function LoginForm({
 													<FormItem>
 														<FormLabel>Password</FormLabel>
 														<FormControl>
-															<Input
-																placeholder="********"
-																{...field}
-																type="password"
-															/>
+															<Input {...field} type="password" />
 														</FormControl>
 														<FormMessage />
 													</FormItem>
@@ -158,7 +154,10 @@ export function LoginForm({
 								</div>
 								<div className="text-center text-sm">
 									Don&apos;t have an account?{" "}
-									<Link href="/register" className="underline underline-offset-4">
+									<Link
+										href="/register"
+										className="underline underline-offset-4"
+									>
 										Sign up
 									</Link>
 								</div>

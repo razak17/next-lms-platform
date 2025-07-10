@@ -33,9 +33,9 @@ import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 
 const formSchema = z.object({
-	username: z.string().min(3),
-	email: z.email(),
-	password: z.string().min(8),
+	username: z.string().min(3, "Username must be at least 3 characters long."),
+	email: z.email("Please enter a valid email address."),
+	password: z.string().min(8, "Password must be at least 8 characters long."),
 });
 
 export function RegisterForm({
@@ -123,7 +123,7 @@ export function RegisterForm({
 												<FormItem>
 													<FormLabel>Username</FormLabel>
 													<FormControl>
-														<Input placeholder="shadcn" {...field} />
+														<Input {...field} />
 													</FormControl>
 													<FormMessage />
 												</FormItem>
@@ -137,7 +137,7 @@ export function RegisterForm({
 												<FormItem>
 													<FormLabel>Email</FormLabel>
 													<FormControl>
-														<Input placeholder="m@example.com" {...field} />
+														<Input {...field} />
 													</FormControl>
 													<FormMessage />
 												</FormItem>
@@ -153,11 +153,7 @@ export function RegisterForm({
 													<FormItem>
 														<FormLabel>Password</FormLabel>
 														<FormControl>
-															<Input
-																placeholder="********"
-																{...field}
-																type="password"
-															/>
+															<Input {...field} type="password" />
 														</FormControl>
 														<FormMessage />
 													</FormItem>
