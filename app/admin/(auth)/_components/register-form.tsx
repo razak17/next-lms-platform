@@ -32,12 +32,18 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Icons } from "@/components/icons";
 
-const formSchema = z.object({
-	firstName: z.string().min(1, "First name is required."),
-	lastName: z.string().min(1, "Last name is required."),
-	email: z.email("Please enter a valid email address."),
-	password: z.string().min(8, "Password must be at least 8 characters long."),
-});
+const formSchema = z
+	.object({
+		firstName: z.string().min(1, "First name is required."),
+		lastName: z.string().min(1, "Last name is required."),
+		email: z.email("Please enter a valid email address."),
+		password: z.string().min(8, "Password must be at least 8 characters long."),
+		confirmPassword: z.string().min(1, "Confirm password is required."),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Passwords do not match.",
+		path: ["confirmPassword"],
+	});
 
 export function RegisterForm({
 	className,
@@ -53,6 +59,7 @@ export function RegisterForm({
 			lastName: "",
 			email: "",
 			password: "",
+			confirmPassword: "",
 		},
 	});
 
@@ -147,6 +154,19 @@ export function RegisterForm({
 												render={({ field }) => (
 													<FormItem>
 														<FormLabel>Password</FormLabel>
+														<FormControl>
+															<Input {...field} type="password" />
+														</FormControl>
+														<FormMessage />
+													</FormItem>
+												)}
+											/>
+											<FormField
+												control={form.control}
+												name="confirmPassword"
+												render={({ field }) => (
+													<FormItem>
+														<FormLabel>Confirm Password</FormLabel>
 														<FormControl>
 															<Input {...field} type="password" />
 														</FormControl>
