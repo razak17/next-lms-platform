@@ -3,7 +3,7 @@ import { adminClient } from "better-auth/client/plugins";
 import { ac, admin, learner } from "./permissions";
 
 export const authClient = createAuthClient({
-	baseURL: process.env.BASE_URL as string,
+	baseURL: process.env.BETTER_AUTH_URL,
 	plugins: [
 		adminClient({
 			ac,
