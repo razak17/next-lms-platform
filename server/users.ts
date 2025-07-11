@@ -53,12 +53,19 @@ export const signIn = async (email: string, password: string) => {
 	}
 };
 
-export const signUp = async (
-	email: string,
-	password: string,
-	firstName: string,
-	lastName: string
-) => {
+export const signUp = async ({
+	email,
+	password,
+	firstName,
+	lastName,
+	role = "learner",
+}: {
+	email: string;
+	password: string;
+	firstName: string;
+	lastName: string;
+	role?: "learner" | "admin";
+}) => {
 	try {
 		const newUser = await auth.api.signUpEmail({
 			body: {
@@ -67,11 +74,14 @@ export const signUp = async (
 				name: firstName,
 			},
 		});
-		await db.update(user).set({
-			...newUser,
-			firstName,
-			lastName,
-		});
+		await db
+			.update(user)
+			.set({
+				firstName,
+				lastName,
+				role,
+			})
+			.where(eq(user.id, newUser.user.id));
 
 		return {
 			success: true,
