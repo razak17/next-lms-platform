@@ -5,24 +5,24 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from "@/components/ui/card";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-import { signUp } from "@/server/users";
+import { sendVerificationOtp, signUp } from "@/server/users";
 
 import { Icons } from "@/components/icons";
 import { registerSchema } from "@/lib/validations/auth";
@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { authClient } from "@/lib/auth-client";
 
 export function RegisterForm({
 	className,
@@ -65,12 +66,18 @@ export function RegisterForm({
 		});
 
 		if (success) {
-			toast.success(
-				`${message as string} Please check your email for verification.`
-			);
-			router.push("/admin/dashboard");
+			const { success: otpSuccess } = await sendVerificationOtp(email);
+
+			if (otpSuccess) {
+				toast.success(
+					`${message as string}. Please check your email for your verification code.`
+				);
+				router.push(
+					`/admin/otp-verification?email=${encodeURIComponent(email)}`
+				);
+			}
 		} else {
-			toast.error(message as string);
+			toast.error(message);
 		}
 
 		setIsLoading(false);

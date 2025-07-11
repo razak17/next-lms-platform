@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card";
 
 import { loginSchema } from "@/lib/validations/auth";
-import { signIn } from "@/server/users";
+import { sendVerificationOtp, signIn } from "@/server/users";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -50,13 +50,29 @@ export function LoginForm({
 	async function onSubmit(values: z.infer<typeof loginSchema>) {
 		setIsLoading(true);
 
-		const { success, message } = await signIn(values.email, values.password);
+		const { success, statusCode, message } = await signIn(
+			values.email,
+			values.password
+		);
 
 		if (success) {
 			toast.success(message as string);
 			router.push("/admin/dashboard");
 		} else {
-			toast.error(message as string);
+			if (statusCode === 403) {
+				const { success: otpSuccess } = await sendVerificationOtp(values.email);
+
+				if (otpSuccess) {
+					toast.success(
+						`${message as string}. Please check your email for your verification code.`
+					);
+					router.push(
+						`/admin/otp-verification?email=${encodeURIComponent(values.email)}`
+					);
+				}
+			} else {
+				toast.error(message as string);
+			}
 		}
 
 		setIsLoading(false);

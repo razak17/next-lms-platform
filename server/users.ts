@@ -3,6 +3,8 @@
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
+import { APIError } from "better-auth";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -44,10 +46,11 @@ export const signIn = async (email: string, password: string) => {
 			message: "Signed in successfully.",
 		};
 	} catch (error) {
-		const e = error as Error;
+		const e = error as APIError;
 
 		return {
 			success: false,
+			statusCode: e.statusCode,
 			message: e.message || "An unknown error occurred.",
 		};
 	}
@@ -86,6 +89,43 @@ export const signUp = async ({
 		return {
 			success: true,
 			message: "Signed up successfully.",
+		};
+	} catch (error) {
+		const e = error as Error;
+
+		return {
+			success: false,
+			message: e.message || "An unknown error occurred.",
+		};
+	}
+};
+
+export const getUserByEmail = async (email: string) => {
+	const currentUser = await db.query.user.findFirst({
+		where: eq(user.email, email),
+	});
+
+	if (!currentUser) {
+		redirect("/");
+	}
+
+	return {
+		currentUser,
+	};
+};
+
+export const sendVerificationOtp = async (email: string) => {
+	try {
+		const { currentUser } = await getUserByEmail(email);
+
+		await authClient.emailOtp.sendVerificationOtp({
+			email: currentUser.email,
+			type: "email-verification", // or "sign-in", "email-verification", "forget-password"
+		});
+
+		return {
+			success: true,
+			message: "Please check your email for your verification code.",
 		};
 	} catch (error) {
 		const e = error as Error;
