@@ -5,45 +5,33 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 import { signUp } from "@/server/users";
 
+import { Icons } from "@/components/icons";
+import { registerSchema } from "@/lib/validations/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Icons } from "@/components/icons";
-
-const formSchema = z
-	.object({
-		firstName: z.string().min(1, "First name is required."),
-		lastName: z.string().min(1, "Last name is required."),
-		email: z.email("Please enter a valid email address."),
-		password: z.string().min(8, "Password must be at least 8 characters long."),
-		confirmPassword: z.string().min(1, "Confirm password is required."),
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords do not match.",
-		path: ["confirmPassword"],
-	});
 
 export function RegisterForm({
 	className,
@@ -52,8 +40,8 @@ export function RegisterForm({
 	const [isLoading, setIsLoading] = useState(false);
 
 	const router = useRouter();
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
+	const form = useForm<z.infer<typeof registerSchema>>({
+		resolver: zodResolver(registerSchema),
 		defaultValues: {
 			firstName: "",
 			lastName: "",
@@ -63,7 +51,7 @@ export function RegisterForm({
 		},
 	});
 
-	async function onSubmit(values: z.infer<typeof formSchema>) {
+	async function onSubmit(values: z.infer<typeof registerSchema>) {
 		setIsLoading(true);
 
 		const { email, password, firstName, lastName } = values;
