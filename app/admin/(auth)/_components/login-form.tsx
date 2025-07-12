@@ -3,8 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -14,14 +20,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
+import { Icons } from "@/components/icons";
+import { PasswordInput } from "@/components/password-input";
 import { loginSchema } from "@/lib/validations/auth";
 import { sendVerificationOtp, signIn } from "@/server/users";
 import { Loader2 } from "lucide-react";
@@ -30,7 +32,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Icons } from "@/components/icons";
 
 export function LoginForm({
 	className,
@@ -119,7 +120,7 @@ export function LoginForm({
 													<FormItem>
 														<FormLabel>Password</FormLabel>
 														<FormControl>
-															<Input {...field} type="password" />
+															<PasswordInput {...field} />
 														</FormControl>
 														<FormMessage />
 													</FormItem>

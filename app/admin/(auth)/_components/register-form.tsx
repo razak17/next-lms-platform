@@ -33,6 +33,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { authClient } from "@/lib/auth-client";
+import { PasswordInput } from "@/components/password-input";
 
 export function RegisterForm({
 	className,
@@ -150,7 +151,7 @@ export function RegisterForm({
 													<FormItem>
 														<FormLabel>Password</FormLabel>
 														<FormControl>
-															<Input {...field} type="password" />
+															<PasswordInput {...field} />
 														</FormControl>
 														<FormMessage />
 													</FormItem>
@@ -163,7 +164,7 @@ export function RegisterForm({
 													<FormItem>
 														<FormLabel>Confirm Password</FormLabel>
 														<FormControl>
-															<Input {...field} type="password" />
+															<PasswordInput {...field} />
 														</FormControl>
 														<FormMessage />
 													</FormItem>

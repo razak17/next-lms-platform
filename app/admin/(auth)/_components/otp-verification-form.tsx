@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
+import Link from "next/link";
 import { Icons } from "@/components/icons";
 import { authClient } from "@/lib/auth-client";
 import { otpVerificationSchema } from "@/lib/validations/auth";
@@ -112,7 +113,7 @@ export function OTPVerificationForm({
 											<FormItem>
 												<FormLabel>Code</FormLabel>
 												<FormControl>
-													<Input {...field} />
+													<Input type="text" {...field} />
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -144,6 +145,14 @@ export function OTPVerificationForm({
 										"Resend code"
 									)}
 								</Button>
+							</div>
+							<div className="text-center text-sm">
+								<Link
+									href="/admin/login"
+									className="underline-offset-4 hover:underline"
+								>
+									Back to login
+								</Link>
 							</div>
 						</form>
 					</Form>
