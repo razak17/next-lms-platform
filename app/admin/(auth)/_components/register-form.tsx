@@ -32,7 +32,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { authClient } from "@/lib/auth-client";
 import { PasswordInput } from "@/components/password-input";
 
 export function RegisterForm({
@@ -71,7 +70,7 @@ export function RegisterForm({
 
 			if (otpSuccess) {
 				toast.success(
-					`${message as string}. Please check your email for your verification code.`
+					`${message}. Please check your email for your verification code.`
 				);
 				router.push(
 					`/admin/otp-verification?email=${encodeURIComponent(email)}`

@@ -57,7 +57,7 @@ export function LoginForm({
 		);
 
 		if (success) {
-			toast.success(message as string);
+			toast.success(message);
 			router.push("/admin/dashboard");
 		} else {
 			if (statusCode === 403) {
@@ -65,14 +65,14 @@ export function LoginForm({
 
 				if (otpSuccess) {
 					toast.success(
-						`${message as string}. Please check your email for your verification code.`
+						`${message} Please check your email for your verification code.`
 					);
 					router.push(
 						`/admin/otp-verification?email=${encodeURIComponent(values.email)}`
 					);
 				}
 			} else {
-				toast.error(message as string);
+				toast.error(message);
 			}
 		}
 

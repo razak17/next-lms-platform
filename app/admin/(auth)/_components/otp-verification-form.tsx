@@ -39,6 +39,7 @@ export function OTPVerificationForm({
 	...props
 }: React.ComponentProps<"div"> & { email: string }) {
 	const [isLoading, setIsLoading] = useState(false);
+	const [isResendingCode, setIsResendingCode] = useState(false); // New state for resending
 	const [cooldown, setCooldown] = useState(0);
 
 	const router = useRouter();
@@ -60,7 +61,7 @@ export function OTPVerificationForm({
 	}, [cooldown]);
 
 	async function resendVerificaiontOtp() {
-		setIsLoading(true);
+		setIsResendingCode(true); // Use new state
 		const result = await sendVerificationOtp(email);
 		if (result.success) {
 			toast.success(result.message);
@@ -68,7 +69,7 @@ export function OTPVerificationForm({
 		} else {
 			toast.error(result.message);
 		}
-		setIsLoading(false);
+		setIsResendingCode(false); // Use new state
 	}
 
 	async function onSubmit(values: z.infer<typeof otpVerificationSchema>) {
@@ -120,7 +121,11 @@ export function OTPVerificationForm({
 										)}
 									/>
 								</div>
-								<Button type="submit" className="w-full" disabled={isLoading}>
+								<Button
+									type="submit"
+									className="w-full"
+									disabled={isLoading || isResendingCode}
+								>
 									{isLoading ? (
 										<Loader2 className="size-4 animate-spin" />
 									) : (
@@ -134,10 +139,10 @@ export function OTPVerificationForm({
 									type="button"
 									variant="link"
 									onClick={resendVerificaiontOtp}
-									disabled={isLoading || cooldown > 0}
+									disabled={isResendingCode || cooldown > 0}
 									className="h-auto p-0 underline-offset-4 hover:underline"
 								>
-									{isLoading ? (
+									{isResendingCode ? ( // Show loader when resending
 										<Loader2 className="size-4 animate-spin" />
 									) : cooldown > 0 ? (
 										`Resend code in ${cooldown}s`

@@ -99,10 +99,7 @@ const ResetPasswordEmail = (props: ForgotPasswordEmailProps) => {
 						<Section className="mb-[32px]">
 							<Text className="m-0 text-[14px] leading-[20px] text-gray-600">
 								Need help? Contact our support team at{" "}
-								<Link
-									href="mailto:support@company.com"
-									className="text-blue-600"
-								>
+								<Link href="mailto:help@razakmo.tech" className="text-blue-600">
 									support@company.com
 								</Link>
 							</Text>
@@ -114,13 +111,10 @@ const ResetPasswordEmail = (props: ForgotPasswordEmailProps) => {
 								This email was sent to {userEmail}
 							</Text>
 							<Text className="m-0 mb-[8px] text-[12px] leading-[16px] text-gray-500">
-								Company Name, 123 Business Street, City, State 12345
+								LMS Platform, 123 Business Street, Accra, Ghana
 							</Text>
 							<Text className="m-0 text-[12px] leading-[16px] text-gray-500">
-								© 2025 Company Name. All rights reserved.{" "}
-								<Link href="#" className="text-gray-500">
-									Unsubscribe
-								</Link>
+								© 2025 LMS Platform. All rights reserved.
 							</Text>
 						</Section>
 					</Container>
