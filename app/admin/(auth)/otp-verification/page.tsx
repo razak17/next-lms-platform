@@ -1,12 +1,6 @@
 import { OTPVerificationForm } from "../_components/otp-verification-form";
 import { redirect } from "next/navigation"; // Import redirect
 
-interface OTPVerificationPageProps {
-	searchParams: {
-		email?: string;
-	};
-}
-
 export default async function OTPVerificationPage({
 	searchParams,
 }: {

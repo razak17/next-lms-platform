@@ -32,7 +32,7 @@ const OTPVerificationEmail = (props: OTPVerificationEmailProps) => {
 								Verify Your Email Address
 							</Heading>
 							<Text className="m-0 text-[16px] text-gray-600">
-								We've sent a verification code to {userEmail}
+								We&apos;ve sent a verification code to {userEmail}
 							</Text>
 						</Section>
 
@@ -55,7 +55,7 @@ const OTPVerificationEmail = (props: OTPVerificationEmailProps) => {
 								This code will expire in 10 minutes for security reasons.
 							</Text>
 							<Text className="m-0 text-[14px] text-gray-500">
-								If you didn't request this verification, please ignore this
+								If you didn&apos;t request this verification, please ignore this
 								email or contact our support team.
 							</Text>
 						</Section>
