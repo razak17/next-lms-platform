@@ -100,7 +100,7 @@ const ResetPasswordEmail = (props: ForgotPasswordEmailProps) => {
 							<Text className="m-0 text-[14px] leading-[20px] text-gray-600">
 								Need help? Contact our support team at{" "}
 								<Link href="mailto:help@razakmo.tech" className="text-blue-600">
-									support@company.com
+									support@lms.razakmo.tech
 								</Link>
 							</Text>
 						</Section>

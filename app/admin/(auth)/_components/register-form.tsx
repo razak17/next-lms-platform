@@ -70,7 +70,7 @@ export function RegisterForm({
 
 			if (otpSuccess) {
 				toast.success(
-					`${message}. Please check your email for your verification code.`
+					`${message} Please check your email for your verification code.`
 				);
 				router.push(
 					`/admin/otp-verification?email=${encodeURIComponent(email)}`
