@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
-	return <>{redirect("/adim/dashboard")}</>;
+	return <>{redirect("/admin/dashboard")}</>;
 }
