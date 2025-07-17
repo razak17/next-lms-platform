@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
 			<SidebarFooter>
 				<div className="flex w-full items-center gap-2">
 					<Button
-						className="flex flex-1 px-2 py-6"
+						className="hover:bg-accent/10 flex flex-1 px-2 py-6"
 						onClick={() => router.push("/admin/profile")}
 					>
 						<Avatar className="h-8 w-8 rounded-full grayscale">
@@ -100,7 +100,10 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
 							<span className="truncate text-xs">{props.user.email}</span>
 						</div>
 					</Button>
-					<Button className="px-2 py-6" onClick={handleLogout}>
+					<Button
+						className="hover:bg-accent/10 px-2 py-6"
+						onClick={handleLogout}
+					>
 						<Icons.logout aria-hidden="true" />
 					</Button>
 				</div>
