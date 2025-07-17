@@ -23,8 +23,8 @@ import { Button } from "./ui/button";
 
 const data = {
 	user: {
-		name: "shadcn",
-		email: "m@example.com",
+		name: "John Doe",
+		email: "jd@email.com",
 		avatar: "/avatars/shadcn.jpg",
 	},
 };

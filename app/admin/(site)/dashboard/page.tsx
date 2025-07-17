@@ -1,10 +1,10 @@
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
+import { Heading } from "@/components/ui/heading";
+import { tableData } from "@/constants/data";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import data from "../../../dashboard/data.json";
-import { Heading } from "@/components/ui/heading";
 
 export default async function AdminDashbordPage() {
 	const session = await auth.api.getSession({
@@ -25,7 +25,7 @@ export default async function AdminDashbordPage() {
 					<div className="px-4 lg:px-6">
 						<ChartAreaInteractive />
 					</div>
-					<DataTable data={data} />
+					<DataTable data={tableData} />
 				</div>
 			</div>
 		</div>
