@@ -1,3 +1,4 @@
+import { StaticImageData } from "next/image";
 import { Icons } from "@/components/icons";
 
 export interface NavItem {
@@ -19,4 +20,14 @@ export interface CardItem {
 	change: string;
 	changeDirection: "up" | "down";
 	icon?: React.ReactNode;
+}
+
+export interface TrackCardItem {
+	title: string;
+	duration: string;
+	description: string;
+	image: StaticImageData;
+  skills: string[];
+  price?: number;
+  isPopular?: boolean;
 }

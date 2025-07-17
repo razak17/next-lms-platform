@@ -2,8 +2,8 @@ import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 
 import {
 	Card,
+	CardContent,
 	CardDescription,
-	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
 import { CardItem } from "@/types";
@@ -17,7 +17,7 @@ export function DashboardCards({ cardData }: DashboardCardsProps) {
 		<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-6 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
 			{cardData?.map((card, index) => (
 				<Card key={index} className="@container/card">
-					<CardHeader>
+					<CardContent>
 						<CardDescription className="text-foreground text-md">{card.title}</CardDescription>
 						<div className="mt-2 flex items-center justify-between">
 							<div className="flex flex-col items-center gap-4">
@@ -44,7 +44,7 @@ export function DashboardCards({ cardData }: DashboardCardsProps) {
 								</div>
 							)}
 						</div>
-					</CardHeader>
+					</CardContent>
 				</Card>
 			))}
 		</div>

@@ -1,5 +1,9 @@
 import { Icons } from "@/components/icons";
-import { CardItem, NavItem } from "@/types";
+import { CardItem, NavItem, TrackCardItem } from "@/types";
+import SoftwareEngineeringImage from "@/assets/images/software-engineering.jpg";
+import CloudComputingImage from "@/assets/images/cloud-computing.jpg";
+import DataScienceImage from "@/assets/images/data-science.jpg";
+import UiUxImage from "@/assets/images/ui-ux.jpg";
 
 export const navItems: NavItem[] = [
 	{
@@ -670,5 +674,44 @@ export const cardData: CardItem[] = [
 		change: "-2%",
 		changeDirection: "down",
 		icon: <Icons.clipboard />,
+	},
+];
+
+export const tracksCardData: TrackCardItem[] = [
+	{
+		title: "Software Engineering",
+		duration: "12 weeks",
+		description:
+			"Learn the fundamentals of software engineering, including programming languages, software development methodologies, and project management.",
+		image: SoftwareEngineeringImage,
+		skills: ["JavaScript", "Python"],
+		price: 499,
+	},
+	{
+		title: "Cloud Computing",
+		duration: "10 weeks",
+		description:
+			"Explore cloud computing concepts, including cloud service models, deployment models, and cloud security.",
+		image: CloudComputingImage,
+		skills: ["AWS", "Azure"],
+		price: 599,
+	},
+	{
+		title: "Data Science",
+		duration: "14 weeks",
+		description:
+			"Dive into data science with a focus on data analysis, machine learning, and statistical modeling.",
+		image: DataScienceImage,
+		skills: ["Python", "R"],
+		price: 699,
+	},
+	{
+		title: "UI/UX",
+		duration: "8 weeks",
+		description:
+			"Learn the principles of user interface and user experience design, including wireframing, prototyping, and usability testing.",
+		image: UiUxImage,
+		skills: ["Figma", "Adobe XD"],
+		price: 399,
 	},
 ];
