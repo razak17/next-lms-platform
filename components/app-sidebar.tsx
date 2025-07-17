@@ -16,20 +16,17 @@ import {
 } from "@/components/ui/sidebar";
 import { navItems } from "@/constants/data";
 import { authClient } from "@/lib/auth-client";
+import { User } from "@/types";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 
-const data = {
-	user: {
-		name: "John Doe",
-		email: "jd@email.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
-};
+type AppSidebarProps = {
+	user: User;
+} & React.ComponentProps<typeof Sidebar>;
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: AppSidebarProps) {
 	const pathname = usePathname();
 	const router = useRouter();
 
@@ -81,28 +78,29 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			<SidebarFooter>
 				<div className="flex w-full items-center gap-2">
 					<Button
-						className="bg-sidebar flex flex-1 px-2 py-6"
-						type="button"
+						className="flex flex-1 px-2 py-6"
 						onClick={() => router.push("/admin/profile")}
 					>
 						<Avatar className="h-8 w-8 rounded-full grayscale">
-							<AvatarImage src={data.user.avatar} alt={data.user.name} />
+							<AvatarImage
+								src={props.user.image ? props.user.image : undefined}
+								alt={props.user.name}
+							/>
 							<AvatarFallback className="text-sidebar-accent-foreground rounded-full">
-								CN
+								{props.user.name
+									? props.user.name
+											.split(" ")
+											.map((n) => n[0])
+											.join("")
+									: "U"}
 							</AvatarFallback>
 						</Avatar>
 						<div className="grid flex-1 text-left text-sm leading-tight">
-							<span className="truncate font-medium">{data.user.name}</span>
-							<span className="truncate text-xs">
-								{data.user.email}
-							</span>
+							<span className="truncate font-medium">{props.user.name}</span>
+							<span className="truncate text-xs">{props.user.email}</span>
 						</div>
 					</Button>
-					<Button
-						className="bg-sidebar px-2 py-6"
-						type="button"
-						onClick={handleLogout}
-					>
+					<Button className="px-2 py-6" onClick={handleLogout}>
 						<Icons.logout aria-hidden="true" />
 					</Button>
 				</div>

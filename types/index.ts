@@ -1,5 +1,8 @@
 import { StaticImageData } from "next/image";
 import { Icons } from "@/components/icons";
+import { user } from "@/db/schema";
+
+export type User = typeof user.$inferSelect;
 
 export interface NavItem {
 	title: string;
@@ -27,7 +30,7 @@ export interface TrackCardItem {
 	duration: string;
 	description: string;
 	image: StaticImageData;
-  skills: string[];
-  price?: number;
-  isPopular?: boolean;
+	skills: string[];
+	price?: number;
+	isPopular?: boolean;
 }
