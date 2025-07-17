@@ -1,4 +1,5 @@
-import { NavItem } from "@/types";
+import { Icons } from "@/components/icons";
+import { CardItem, NavItem } from "@/types";
 
 export const navItems: NavItem[] = [
 	{
@@ -645,5 +646,29 @@ export const tableData = [
 		target: "26",
 		limit: "29",
 		reviewer: "Assign reviewer",
+	},
+];
+
+export const cardData: CardItem[] = [
+	{
+		title: "Total Learners",
+		value: "12,450",
+		change: "+12%",
+		changeDirection: "up",
+		icon: <Icons.users />,
+	},
+	{
+		title: "Revenue",
+		value: "12,434",
+		change: "+20%",
+		changeDirection: "up",
+		icon: <Icons.earnings />,
+	},
+	{
+		title: "Invoice",
+		value: "100",
+		change: "-2%",
+		changeDirection: "down",
+		icon: <Icons.clipboard />,
 	},
 ];

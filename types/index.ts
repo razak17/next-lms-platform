@@ -12,3 +12,11 @@ export interface NavItem {
 	isActive?: boolean;
 	items?: NavItem[];
 }
+
+export interface CardItem {
+	title: string;
+	value: string;
+	change: string;
+	changeDirection: "up" | "down";
+	icon?: React.ReactNode;
+}

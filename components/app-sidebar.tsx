@@ -93,7 +93,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 						</Avatar>
 						<div className="grid flex-1 text-left text-sm leading-tight">
 							<span className="truncate font-medium">{data.user.name}</span>
-							<span className="text-muted-foreground truncate text-xs">
+							<span className="truncate text-xs">
 								{data.user.email}
 							</span>
 						</div>
