@@ -183,7 +183,7 @@ export function RegisterForm({
 									Already have an account?{" "}
 									<Link
 										href="/admin/login"
-										className="underline-offset-4 hover:underline"
+										className="text-sidebar underline-offset-4 hover:underline"
 									>
 										Login
 									</Link>

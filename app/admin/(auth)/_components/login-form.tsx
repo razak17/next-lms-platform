@@ -128,7 +128,7 @@ export function LoginForm({
 											/>
 											<Link
 												href="/admin/forgot-password"
-												className="mr-auto text-sm underline-offset-4 hover:underline"
+												className="text-sidebar mr-auto text-sm underline-offset-4 hover:underline"
 											>
 												Forgot your password?
 											</Link>
@@ -146,7 +146,7 @@ export function LoginForm({
 									Don&apos;t have an account?{" "}
 									<Link
 										href="/admin/register"
-										className="underline-offset-4 hover:underline"
+										className="text-sidebar underline-offset-4 hover:underline"
 									>
 										Sign up
 									</Link>

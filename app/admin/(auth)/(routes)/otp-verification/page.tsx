@@ -1,4 +1,4 @@
-import { OTPVerificationForm } from "../_components/otp-verification-form";
+import { OTPVerificationForm } from "../../_components/otp-verification-form";
 import { redirect } from "next/navigation"; // Import redirect
 
 export default async function OTPVerificationPage({

@@ -1,4 +1,3 @@
-import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
@@ -7,6 +6,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
+import { AdminSidebar } from "./_components/admin-sidebar";
 
 export const metadata: Metadata = {
 	title: "Admin Dashboard - E-Learning Platform",
@@ -35,7 +35,7 @@ export default async function Layout({
 				} as React.CSSProperties
 			}
 		>
-			<AppSidebar user={session.user as User} variant="inset" />
+			<AdminSidebar user={session.user as User} variant="inset" />
 			<SidebarInset>
 				<SiteHeader />
 				{children}

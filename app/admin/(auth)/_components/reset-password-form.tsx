@@ -127,7 +127,7 @@ export function ResetPasswordForm({
 								Don&apos;t have an account?{" "}
 								<Link
 									href="/admin/register"
-									className="underline-offset-4 hover:underline"
+									className="text-sidebar underline-offset-4 hover:underline"
 								>
 									Sign up
 								</Link>
