@@ -1,27 +1,14 @@
-import { Config, defineConfig } from "drizzle-kit";
 import "dotenv/config";
-
-const connectionString =
-	process.env.ENV === "testing"
-		? "postgres://postgres:postgres@db.localtest.me:5432/main"
-		: process.env.DB_URL!;
-
-const localDbCredentials = {
-	password: process.env.DB_PASSWORD!,
-	user: process.env.DB_USER!,
-	database: process.env.DB_NAME!,
-	host: process.env.DB_HOST!,
-	ssl: false,
-};
+import { Config, defineConfig } from "drizzle-kit";
+import { connectionString, localConnection } from "./env/db";
+import { env } from "./env/schema";
 
 export default defineConfig({
 	schema: "./db/schema",
 	out: "./db/migrations",
-	dialect: process.env.DB_TYPE as Config["dialect"],
+	dialect: env.DB_TYPE as Config["dialect"],
 	strict: true,
 	verbose: true,
 	dbCredentials:
-		process.env.ENV === "development"
-			? localDbCredentials
-			: { url: connectionString },
+		env.ENV === "development" ? localConnection : { url: connectionString },
 });
