@@ -22,11 +22,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 
-type AppSidebarProps = {
-	user: User;
-} & React.ComponentProps<typeof Sidebar>;
-
-export function AppSidebar({ ...props }: AppSidebarProps) {
+export function AppSidebar({
+	...props
+}: React.ComponentProps<typeof Sidebar> & { user: User }) {
 	const pathname = usePathname();
 	const router = useRouter();
 

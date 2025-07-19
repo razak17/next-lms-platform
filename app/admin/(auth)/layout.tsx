@@ -27,7 +27,6 @@ export default async function Layout({
 	return (
 		<div className="relative flex min-h-screen w-full flex-col items-center justify-center">
 			<Image
-				height={1080}
 				src={AuthBackdrop}
 				alt="Authentication Backdrop"
 				className="object-fit absolute inset-0 hidden h-full w-full md:block"

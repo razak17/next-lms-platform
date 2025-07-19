@@ -75,16 +75,16 @@ export function OTPVerificationForm({
 	async function onSubmit(values: z.infer<typeof otpVerificationSchema>) {
 		setIsLoading(true);
 
-		const { error } = await authClient.emailOtp.verifyEmail({
-			email: email,
+		const verifyResult = await authClient.emailOtp.verifyEmail({
+			email,
 			otp: values.code,
 		});
 
-		if (error) {
-			toast.error(error.message);
+		if (verifyResult.error) {
+			toast.error(verifyResult.error.message);
 		} else {
 			toast.success("Your account has been verified.");
-			router.push("/admin/dashboard");
+      router.push("/admin/dashboard");
 		}
 
 		setIsLoading(false);
