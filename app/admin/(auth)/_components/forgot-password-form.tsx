@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 import { Icons } from "@/components/icons";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";

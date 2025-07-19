@@ -15,7 +15,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { navItems } from "@/constants/data";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 import { User } from "@/types";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -40,7 +40,7 @@ export function AdminSidebar({
 					<SidebarMenuItem>
 						<SidebarMenuButton
 							asChild
-							className="data-[slot=sidebar-menu-button]:!p-1.5"
+							className="hover:bg-sidebar-foreground data-[slot=sidebar-menu-button]:!p-1.5"
 						>
 							<Icons.logo className="h-10 w-18" aria-hidden="true" />
 						</SidebarMenuButton>

@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 
 import Link from "next/link";
 import { Icons } from "@/components/icons";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 import { otpVerificationSchema } from "@/lib/validations/auth";
 import { sendVerificationOtp } from "@/server/users";
 import { Loader2 } from "lucide-react";

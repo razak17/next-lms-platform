@@ -1,7 +1,7 @@
 import OTPVerificationEmail from "@/components/emails/otp-verification";
 import ResetPasswordEmail from "@/components/emails/reset-password";
 import { db } from "@/db/drizzle";
-import { schema } from "@/db/schema";
+import * as schema from "@/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";

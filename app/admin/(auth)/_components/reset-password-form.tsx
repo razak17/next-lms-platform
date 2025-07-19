@@ -27,7 +27,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPasswordSchema } from "@/lib/validations/auth";
 import { Icons } from "@/components/icons";

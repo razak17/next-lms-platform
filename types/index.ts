@@ -29,8 +29,9 @@ export interface TrackCardItem {
 	title: string;
 	duration: string;
 	description: string;
-	image: StaticImageData;
-	skills: string[];
+	image: StaticImageData | string;
+	techStack: string[];
+	instructor: string;
 	price?: number;
 	isPopular?: boolean;
 }

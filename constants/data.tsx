@@ -684,8 +684,9 @@ export const tracksCardData: TrackCardItem[] = [
 		description:
 			"Learn the fundamentals of software engineering, including programming languages, software development methodologies, and project management.",
 		image: SoftwareEngineeringImage,
-		skills: ["JavaScript", "Python"],
+		techStack: ["JavaScript", "Python"],
 		price: 499,
+		instructor: "John Doe",
 	},
 	{
 		title: "Cloud Computing",
@@ -693,8 +694,9 @@ export const tracksCardData: TrackCardItem[] = [
 		description:
 			"Explore cloud computing concepts, including cloud service models, deployment models, and cloud security.",
 		image: CloudComputingImage,
-		skills: ["AWS", "Azure"],
+		techStack: ["AWS", "Azure"],
 		price: 599,
+		instructor: "John Doe",
 	},
 	{
 		title: "Data Science",
@@ -702,8 +704,9 @@ export const tracksCardData: TrackCardItem[] = [
 		description:
 			"Dive into data science with a focus on data analysis, machine learning, and statistical modeling.",
 		image: DataScienceImage,
-		skills: ["Python", "R"],
+		techStack: ["Python", "R"],
 		price: 699,
+		instructor: "John Doe",
 	},
 	{
 		title: "UI/UX",
@@ -711,7 +714,8 @@ export const tracksCardData: TrackCardItem[] = [
 		description:
 			"Learn the principles of user interface and user experience design, including wireframing, prototyping, and usability testing.",
 		image: UiUxImage,
-		skills: ["Figma", "Adobe XD"],
+		techStack: ["Figma", "Adobe XD"],
 		price: 399,
+		instructor: "John Doe",
 	},
 ];

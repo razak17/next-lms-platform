@@ -1,10 +1,9 @@
-import {
-	pgTable,
-	text,
-	timestamp,
-	boolean,
-	integer,
-} from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
+
+export const userRoleEnums = pgEnum("user_in_community_role", [
+	"admin",
+	"learner",
+]);
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -22,7 +21,7 @@ export const user = pgTable("user", {
 	updatedAt: timestamp("updated_at")
 		.$defaultFn(() => /* @__PURE__ */ new Date())
 		.notNull(),
-	role: text("role"),
+	role: userRoleEnums(),
 	banned: boolean("banned"),
 	banReason: text("ban_reason"),
 	banExpires: timestamp("ban_expires"),
@@ -72,5 +71,3 @@ export const verification = pgTable("verification", {
 		() => /* @__PURE__ */ new Date()
 	),
 });
-
-export const schema = { user, session, account, verification };

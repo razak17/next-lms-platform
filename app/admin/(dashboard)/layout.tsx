@@ -1,6 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import { User } from "@/types";
 import type { Metadata } from "next";
 import { headers } from "next/headers";

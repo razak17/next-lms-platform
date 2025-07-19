@@ -2,8 +2,8 @@
 
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
-import { auth } from "@/lib/auth";
-import { authClient } from "@/lib/auth-client";
+import { auth } from "@/lib/auth/auth";
+import { authClient } from "@/lib/auth/client";
 import { APIError } from "better-auth";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";

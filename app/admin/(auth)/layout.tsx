@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import React from "react";
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
 import AuthBackdrop from "../../../assets/images/auth-backdrop.jpg";
