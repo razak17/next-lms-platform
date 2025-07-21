@@ -15,7 +15,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { navItems } from "@/constants/data";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/client";
 import { User } from "@/types";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

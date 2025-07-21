@@ -7,7 +7,7 @@ interface TracksCardsProps {
 	tracksCardData?: TrackCardItem[];
 }
 
-const skillColorClasses = [
+const techStackColorClasses = [
 	{ bg: "bg-blue-100", text: "text-blue-800" },
 	{ bg: "bg-green-100", text: "text-green-800" },
 	{ bg: "bg-yellow-100", text: "text-yellow-800" },
@@ -41,17 +41,17 @@ export function TracksCards({ tracksCardData }: TracksCardsProps) {
 							<span className="text-muted-foreground">{card.duration}</span>
 						</div>
 						<div className="mt-2 flex flex-wrap gap-1">
-							{card.skills?.map((skill, skillIndex) => {
+							{card.techStack?.map((techStack, techStackIndex) => {
 								const randomColorIndex = Math.floor(
-									Math.random() * skillColorClasses.length
+									Math.random() * techStackColorClasses.length
 								);
-								const color = skillColorClasses[randomColorIndex];
+								const color = techStackColorClasses[randomColorIndex];
 								return (
 									<span
-										key={skillIndex}
+										key={techStackIndex}
 										className={`${color.bg} ${color.text} rounded-full px-4 py-2 text-xs font-medium`}
 									>
-										{skill}
+										{techStack}
 									</span>
 								);
 							})}
