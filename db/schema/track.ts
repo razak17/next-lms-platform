@@ -6,10 +6,10 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
-import { trackToTechStackTable } from "./techStack";
-import { userTable } from "./user";
+import { trackToTechStack } from "./techStack";
+import { user } from "./user";
 
-export const trackTable = pgTable("track", {
+export const track = pgTable("track", {
 	id: text("id").primaryKey(),
 	userId: text("user_id").notNull(),
 	name: text("name").notNull(),
@@ -27,10 +27,10 @@ export const trackTable = pgTable("track", {
 		.notNull(),
 });
 
-export const trackRelations = relations(trackTable, ({ one, many }) => ({
-	userTable: one(userTable, {
-		fields: [trackTable.userId],
-		references: [userTable.id],
+export const trackRelations = relations(track, ({ one, many }) => ({
+	userTable: one(user, {
+		fields: [track.userId],
+		references: [user.id],
 	}),
-	trackToTechStack: many(trackToTechStackTable),
+	trackToTechStack: many(trackToTechStack),
 }));

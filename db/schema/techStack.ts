@@ -1,14 +1,14 @@
 import { relations } from "drizzle-orm";
 import { pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
-import { trackTable } from "./track";
-import { userTable } from "./user";
+import { track } from "./track";
+import { user } from "./user";
 
-export const techStackTable = pgTable("tech_stack", {
+export const techStack = pgTable("tech_stack", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull().unique(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => user.id),
 	createdAt: timestamp("created_at")
 		.$defaultFn(() => /* @__PURE__ */ new Date())
 		.notNull(),
@@ -17,27 +17,24 @@ export const techStackTable = pgTable("tech_stack", {
 		.notNull(),
 });
 
-export const techStackRelations = relations(
-	techStackTable,
-	({ one, many }) => ({
-		user: one(userTable, {
-			fields: [techStackTable.userId],
-			references: [userTable.id],
-		}),
-		trackToTechStack: many(trackToTechStackTable),
-	})
-);
+export const techStackRelations = relations(techStack, ({ one, many }) => ({
+	user: one(user, {
+		fields: [techStack.userId],
+		references: [user.id],
+	}),
+	trackToTechStack: many(trackToTechStack),
+}));
 
 // New junction table for many-to-many relationship between tracks and techStack
-export const trackToTechStackTable = pgTable(
+export const trackToTechStack = pgTable(
 	"track_to_tech_stack",
 	{
 		trackId: text("track_id")
 			.notNull()
-			.references(() => trackTable.id, { onDelete: "cascade" }),
+			.references(() => track.id, { onDelete: "cascade" }),
 		techStackId: text("tech_stack_id")
 			.notNull()
-			.references(() => techStackTable.id, { onDelete: "cascade" }),
+			.references(() => techStack.id, { onDelete: "cascade" }),
 		createdAt: timestamp("created_at")
 			.$defaultFn(() => /* @__PURE__ */ new Date())
 			.notNull(),
@@ -52,15 +49,15 @@ export const trackToTechStackTable = pgTable(
 
 // Define relations for trackToTechStack
 export const trackToTechStackRelations = relations(
-	trackToTechStackTable,
+	trackToTechStack,
 	({ one }) => ({
-		track: one(trackTable, {
-			fields: [trackToTechStackTable.trackId],
-			references: [trackTable.id],
+		track: one(track, {
+			fields: [trackToTechStack.trackId],
+			references: [track.id],
 		}),
-		techStack: one(techStackTable, {
-			fields: [trackToTechStackTable.techStackId],
-			references: [techStackTable.id],
+		techStack: one(techStack, {
+			fields: [trackToTechStack.techStackId],
+			references: [techStack.id],
 		}),
 	})
 );
