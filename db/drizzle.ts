@@ -1,15 +1,14 @@
 import * as schema from "@/db/schema";
-import { connectionString as neonConnection, localConnection } from "@/env/db";
+import { localConnection } from "@/env/db";
 import { env } from "@/env/schema";
 import { neon, neonConfig } from "@neondatabase/serverless";
 import "dotenv/config";
 import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 import { drizzle } from "drizzle-orm/node-postgres";
 
-let connectionString = neonConnection;
+let connectionString = env.DB_URL!;
 
 if (env.ENV === "testing") {
-	connectionString = "postgres://postgres:postgres@localhost:5432/main";
 	neonConfig.fetchEndpoint = (host) => {
 		const [protocol, port] =
 			host === "db.localtest.me" ? ["http", 4444] : ["https", 443];
