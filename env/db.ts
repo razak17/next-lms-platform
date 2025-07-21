@@ -1,9 +1,7 @@
-import { env } from "./schema";
-
 export const localConnection = {
-	password: env.DB_PASSWORD!,
-	user: env.DB_USER!,
-	database: env.DB_NAME!,
-	host: env.DB_HOST!,
+	password: process.env.DB_PASSWORD!,
+	user: process.env.DB_USER!,
+	database: process.env.DB_NAME!,
+	host: process.env.DB_HOST!,
 	ssl: false,
 };
