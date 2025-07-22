@@ -26,7 +26,7 @@ import Link from "next/link";
 import { Icons } from "@/components/icons";
 import { authClient } from "@/lib/auth/client";
 import { otpVerificationSchema } from "@/lib/validations/auth";
-import { sendVerificationOtp } from "@/server/users";
+import { sendVerificationOtp } from "@/server/auth";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

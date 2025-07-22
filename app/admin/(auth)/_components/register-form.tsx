@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-import { sendVerificationOtp, signUp } from "@/server/users";
+import { sendVerificationOtp, signUp } from "@/server/auth";
 
 import { Icons } from "@/components/icons";
 import { registerSchema } from "@/lib/validations/auth";
