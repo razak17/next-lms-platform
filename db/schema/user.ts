@@ -1,4 +1,7 @@
-import { pgTable, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { userToCourse } from "./course";
+import { userToTrack } from "./track";
 
 export const userRoleEnums = pgEnum("user_in_community_role", [
 	"admin",
@@ -71,3 +74,8 @@ export const verification = pgTable("verification", {
 		() => /* @__PURE__ */ new Date()
 	),
 });
+
+export const userRelations = relations(user, ({ many }) => ({
+	userToTrack: many(userToTrack),
+	userToCourse: many(userToCourse),
+}));

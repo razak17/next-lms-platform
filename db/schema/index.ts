@@ -1,3 +1,3 @@
 export * from "./user";
 export * from "./track";
-export * from "./techStack";
+export * from "./course";
