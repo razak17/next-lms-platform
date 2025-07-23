@@ -1,2 +1,8 @@
 ignoredBuiltDependencies:
   - '@parcel/watcher'
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - esbuild
+  - msgpackr-extract
+  - sharp
+  - unrs-resolver
