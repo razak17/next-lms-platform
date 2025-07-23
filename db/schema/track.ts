@@ -1,21 +1,27 @@
+import { StoredFile } from "@/types";
+import { relations } from "drizzle-orm";
 import {
 	boolean,
 	integer,
+	json,
 	pgTable,
 	primaryKey,
 	text,
 	timestamp,
+	varchar,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
-import { user } from "./user";
 import { trackToCourse } from "./course";
+import { user } from "./user";
+import { generateId } from "@/lib/id";
 
 export const track = pgTable("track", {
-	id: text("id").primaryKey(),
+	id: varchar("id", { length: 30 })
+		.$defaultFn(() => generateId())
+		.primaryKey(), // prefix_ + nanoid (12)
 	name: text("name").notNull(),
 	duration: text("duration").notNull(),
 	description: text("description").notNull(),
-	imageUrl: text("image_url"),
+	image: json("image").$type<StoredFile | null>().default(null),
 	instructor: text("instructor").notNull(),
 	price: integer("price").notNull(),
 	isPopular: boolean("is_popular").default(false).notNull(),
@@ -32,7 +38,7 @@ export const track = pgTable("track", {
 
 export const trackRelations = relations(track, ({ many }) => ({
 	userToTrack: many(userToTrack),
-  trackToCourse: many(trackToCourse),
+	trackToCourse: many(trackToCourse),
 }));
 
 export const userToTrack = pgTable(
@@ -41,7 +47,7 @@ export const userToTrack = pgTable(
 		userId: text("user_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
-		trackId: text("track_id")
+		trackId: varchar("product_id", { length: 30 })
 			.notNull()
 			.references(() => track.id, { onDelete: "cascade" }),
 	},
@@ -58,3 +64,6 @@ export const userToTrackRelations = relations(userToTrack, ({ one }) => ({
 		references: [track.id],
 	}),
 }));
+
+export type Track = typeof track.$inferSelect;
+export type TrackInsert = typeof track.$inferInsert;

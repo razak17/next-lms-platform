@@ -25,5 +25,5 @@ export const sql = neon(connectionString);
 
 export const db =
 	env.ENV === "development"
-		? drizzle({ schema, connection: localConnection })
-		: drizzleNeon(sql, { schema });
+		? drizzle({ schema, connection: localConnection, logger: true })
+		: drizzleNeon(sql, { schema, logger: true });

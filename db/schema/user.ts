@@ -79,3 +79,6 @@ export const userRelations = relations(user, ({ many }) => ({
 	userToTrack: many(userToTrack),
 	userToCourse: many(userToCourse),
 }));
+
+export type User = typeof user.$inferSelect;
+export type UserInsert = typeof user.$inferInsert;

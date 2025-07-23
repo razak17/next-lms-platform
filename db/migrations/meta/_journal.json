@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1752180161210,
-      "tag": "0000_young_shaman",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1752184602488,
-      "tag": "0001_burly_natasha_romanoff",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1753210421590,
-      "tag": "0002_magical_payback",
+      "when": 1753297049447,
+      "tag": "0000_fast_dracula",
       "breakpoints": true
     }
   ]
