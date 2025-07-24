@@ -157,12 +157,12 @@ export function FileUploader(props: FileUploaderProps) {
 							<div className="flex flex-col items-center justify-center gap-4 sm:px-5">
 								<div className="rounded-full border border-dashed p-3">
 									<UploadIcon
-										className="text-muted-foreground size-7"
+										className="text-muted-foreground size-6"
 										aria-hidden="true"
 									/>
 								</div>
 								<div className="space-y-px">
-									<p className="text-muted-foreground font-medium">
+									<p className="text-muted-foreground text-sm font-medium">
 										{maxFiles > 1
 											? `Click or drag up to ${maxFiles === Infinity ? "multiple" : maxFiles} files`
 											: "Click or drag a file "}

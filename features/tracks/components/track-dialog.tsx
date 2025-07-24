@@ -1,24 +1,29 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
-	DialogClose,
 	DialogContent,
 	DialogDescription,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { IconPlus } from "@tabler/icons-react";
-import TrackForm from "./track-form";
+import { useState } from "react";
+import { TrackForm } from "./track-form";
 
 interface TrackDialogProps {
-  children: React.ReactNode;
+	userId: string;
 }
 
-export function TrackDialog({ children }: TrackDialogProps) {
+export function TrackDialog({ userId }: TrackDialogProps) {
+	const [open, setOpen] = useState(false);
+
+	const handleSuccess = () => setOpen(false);
+
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button className="flex w-48 items-center gap-2" size="lg">
 					<IconPlus />
@@ -30,8 +35,11 @@ export function TrackDialog({ children }: TrackDialogProps) {
 					<DialogTitle className="text-center text-2xl">
 						Add New Track
 					</DialogTitle>
+					<DialogDescription className="text-muted-foreground text-center">
+						Fill in the details below to create a new track.
+					</DialogDescription>
 				</DialogHeader>
-        { children}
+				<TrackForm userId={userId} onSuccess={handleSuccess} />
 			</DialogContent>
 		</Dialog>
 	);

@@ -1,8 +1,9 @@
+import { generateId } from "@/lib/id";
 import { StoredFile } from "@/types";
 import { relations } from "drizzle-orm";
 import {
 	boolean,
-	integer,
+	decimal,
 	json,
 	pgTable,
 	primaryKey,
@@ -12,7 +13,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { trackToCourse } from "./course";
 import { user } from "./user";
-import { generateId } from "@/lib/id";
 
 export const track = pgTable("track", {
 	id: varchar("id", { length: 30 })
@@ -23,7 +23,7 @@ export const track = pgTable("track", {
 	description: text("description").notNull(),
 	image: json("image").$type<StoredFile | null>().default(null),
 	instructor: text("instructor").notNull(),
-	price: integer("price").notNull(),
+	price: decimal("price", { precision: 10, scale: 2 }).notNull().default("0"),
 	isPopular: boolean("is_popular").default(false).notNull(),
 	userId: text("user_id")
 		.notNull()

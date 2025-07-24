@@ -1,3 +1,4 @@
+import { generateId } from "@/lib/id";
 import { relations } from "drizzle-orm";
 import {
 	pgTable,

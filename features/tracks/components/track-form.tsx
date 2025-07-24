@@ -15,33 +15,31 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import Link from "next/link";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useUploadFile } from "@/hooks/use-upload-file";
 import { FileUploader } from "@/components/file-uploader";
-import { Files } from "@/components/files";
 import { StoredFile } from "@/types";
 import { createTrack } from "../actions/tracks";
 import { getErrorMessage } from "@/lib/handle-error";
 
 interface TrackFormProps {
 	userId: string;
+	onSuccess?: () => void;
 }
 
-export function TrackForm({ userId }: TrackFormProps) {
+export function TrackForm({ userId, onSuccess }: TrackFormProps) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { uploadFiles, progresses, uploadedFiles, isUploading } =
-		useUploadFile("trackImage");
+	const { uploadFiles, progresses, isUploading } = useUploadFile("trackImage");
 
 	const router = useRouter();
 	const form = useForm<z.infer<typeof createTrackSchema>>({
 		resolver: zodResolver(createTrackSchema),
 		defaultValues: {
 			name: "",
-			price: undefined,
+			price: "",
 			duration: "",
 			instructor: "",
 			image: null,
@@ -68,13 +66,17 @@ export function TrackForm({ userId }: TrackFormProps) {
 				throw new Error(newTrack.error);
 			}
 			toast.success("Track created successfully");
+			if (onSuccess) onSuccess();
 		} catch (error) {
 			console.error("Error creating track:", error);
 			toast.error(getErrorMessage(error));
 		} finally {
 			setIsLoading(false);
 			router.refresh();
-			form.reset();
+			form.reset({
+				...form.getValues(),
+				image: [],
+			});
 		}
 	}
 
@@ -106,19 +108,7 @@ export function TrackForm({ userId }: TrackFormProps) {
 									<FormItem>
 										<FormLabel>Price</FormLabel>
 										<FormControl>
-											<Input
-												type="number"
-												{...field}
-												step={1}
-												min={0}
-												onChange={(e) =>
-													field.onChange(
-														isNaN(e.target.valueAsNumber)
-															? ""
-															: e.target.valueAsNumber
-													)
-												}
-											/>
+											<Input {...field} onChange={field.onChange} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -165,7 +155,7 @@ export function TrackForm({ userId }: TrackFormProps) {
 											<FormLabel>Picture</FormLabel>
 											<FormControl>
 												<FileUploader
-                          className="h-38 flex flex-col items-center justify-center"
+													className="flex h-38 flex-col items-center justify-center"
 													value={field.value ?? undefined}
 													onValueChange={field.onChange}
 													maxFiles={1}
@@ -202,7 +192,7 @@ export function TrackForm({ userId }: TrackFormProps) {
 						</div>
 						<Button type="submit" className="w-full" disabled={isLoading}>
 							{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
-							Create Track
+							{isLoading ? "Creating Track..." : "Create Track"}
 						</Button>
 					</div>
 				</div>
