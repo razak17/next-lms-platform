@@ -1,14 +1,12 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { track, course } from "@/db/schema";
+import { TrackInsert, track } from "@/db/schema";
 import { getCurrentUser } from "@/server/user";
-import { eq, desc } from "drizzle-orm";
-import { TrackInsert } from "@/db/schema/track";
-import { unstable_noStore as noStore, revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function createTrack(data: Omit<TrackInsert, "id">) {
-	console.warn("DEBUGPRINT[1088]: tracks.ts:9: data=", data);
 	try {
 		const { currentUser } = await getCurrentUser();
 		if (!currentUser) return { error: "Unauthorized" };
@@ -19,7 +17,7 @@ export async function createTrack(data: Omit<TrackInsert, "id">) {
 		const [newTrack] = await db.insert(track).values(data).returning();
 		if (!newTrack) throw new Error("Failed to create track");
 
-		revalidatePath("/adminn/tracks/");
+		revalidatePath("/admin/tracks");
 
 		return {
 			data: newTrack,
@@ -29,31 +27,6 @@ export async function createTrack(data: Omit<TrackInsert, "id">) {
 	} catch (error) {
 		console.error("Error creating track:", error);
 		return { error: "Failed to create track" };
-	}
-}
-
-export async function getTracks(userId: string) {
-	try {
-		const results = await db
-			.select()
-			.from(track)
-			.where(eq(track.userId, userId))
-			.orderBy(desc(track.createdAt));
-		return results;
-	} catch (error) {
-		console.error("Error fetching tracks:", error);
-		return { error: "Failed to fetch tracks" };
-	}
-}
-
-export async function getTrackById(trackId: string) {
-	try {
-		const [result] = await db.select().from(track).where(eq(track.id, trackId));
-		if (!result) return { error: "Track not found" };
-		return result;
-	} catch (error) {
-		console.error("Error fetching track:", error);
-		return { error: "Failed to fetch track" };
 	}
 }
 

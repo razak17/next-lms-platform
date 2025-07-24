@@ -3,6 +3,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import * as React from "react";
 
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import {
 	Sidebar,
 	SidebarContent,
@@ -15,12 +17,10 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { navItems } from "@/constants/data";
+import { User } from "@/db/schema/user";
 import { authClient } from "@/lib/auth/client";
-import { User } from "@/types";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 
 export function AdminSidebar({
 	...props

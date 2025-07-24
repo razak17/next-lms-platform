@@ -1,15 +1,14 @@
-import { auth } from "@/lib/auth/auth";
-import { redirect } from "next/navigation";
-import { Heading } from "@/components/ui/heading";
 import { SearchInput } from "@/components/search-input";
+import { Heading } from "@/components/ui/heading";
 import { tracksCardData } from "@/constants/data";
-import { TracksCards } from "../dashboard/_components/tracks-cards";
-import { TrackDialog } from "@/features/tracks/components/track-dialog";
-import { TrackForm } from "@/features/tracks/components/track-form";
-import { headers } from "next/headers";
-import { redirects } from "@/lib/constants";
-import { getTracks } from "@/features/tracks/actions/tracks";
 import { TrackCard } from "@/features/tracks/components/track-card";
+import { TrackDialog } from "@/features/tracks/components/track-dialog";
+import { getTracks } from "@/features/tracks/queries/tracks";
+import { auth } from "@/lib/auth/auth";
+import { redirects } from "@/lib/constants";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { TracksCards } from "../dashboard/_components/tracks-cards";
 
 interface TracksPageProps {
 	searchParams: Promise<{ title?: string }>;

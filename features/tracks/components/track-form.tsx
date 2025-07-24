@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createTrackSchema } from "../schema/tracks";
+import { CreateTrackSchema, createTrackSchema } from "../validations/tracks";
 import {
 	Form,
 	FormControl,
@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,20 +23,23 @@ import { FileUploader } from "@/components/file-uploader";
 import { StoredFile } from "@/types";
 import { createTrack } from "../actions/tracks";
 import { getErrorMessage } from "@/lib/handle-error";
+import { Track } from "@/db/schema/track";
 
 interface TrackFormProps {
 	userId: string;
+	// track?: Track;
+	track?: CreateTrackSchema;
 	onSuccess?: () => void;
 }
 
-export function TrackForm({ userId, onSuccess }: TrackFormProps) {
+export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { uploadFiles, progresses, isUploading } = useUploadFile("trackImage");
 
 	const router = useRouter();
-	const form = useForm<z.infer<typeof createTrackSchema>>({
+	const form = useForm<CreateTrackSchema>({
 		resolver: zodResolver(createTrackSchema),
-		defaultValues: {
+		defaultValues: track ?? {
 			name: "",
 			price: "",
 			duration: "",
@@ -47,7 +49,7 @@ export function TrackForm({ userId, onSuccess }: TrackFormProps) {
 		},
 	});
 
-	async function onSubmit(values: z.infer<typeof createTrackSchema>) {
+	async function onSubmit(values: CreateTrackSchema) {
 		setIsLoading(true);
 
 		try {
