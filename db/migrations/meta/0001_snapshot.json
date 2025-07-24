@@ -1,6 +1,6 @@
 {
-  "id": "099cabc3-f756-40b5-9cf2-9e6201041eae",
-  "prevId": "c3443508-4ba1-4dd6-8d40-6d6b34ec4976",
+  "id": "97c0d331-c2f4-4981-8ecb-4ab8d212154d",
+  "prevId": "b8f569c6-eb3e-41a0-ad8c-d7727425e47b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -26,11 +26,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "image_url": {
-          "name": "image_url",
-          "type": "text",
+        "image": {
+          "name": "image",
+          "type": "json",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'null'::json"
         },
         "user_id": {
           "name": "user_id",
@@ -38,8 +39,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "product_id": {
-          "name": "product_id",
+        "track_id": {
+          "name": "track_id",
           "type": "varchar(30)",
           "primaryKey": false,
           "notNull": true
@@ -69,20 +70,20 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "course_product_id_track_id_fk": {
-          "name": "course_product_id_track_id_fk",
+        "course_track_id_track_id_fk": {
+          "name": "course_track_id_track_id_fk",
           "tableFrom": "course",
           "tableTo": "track",
           "columnsFrom": [
-            "product_id"
+            "track_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -96,126 +97,6 @@
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.track_to_course": {
-      "name": "track_to_course",
-      "schema": "",
-      "columns": {
-        "track_id": {
-          "name": "track_id",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "product_id": {
-          "name": "product_id",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "track_to_course_track_id_track_id_fk": {
-          "name": "track_to_course_track_id_track_id_fk",
-          "tableFrom": "track_to_course",
-          "tableTo": "track",
-          "columnsFrom": [
-            "track_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "track_to_course_product_id_course_id_fk": {
-          "name": "track_to_course_product_id_course_id_fk",
-          "tableFrom": "track_to_course",
-          "tableTo": "course",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "track_to_course_track_id_product_id_pk": {
-          "name": "track_to_course_track_id_product_id_pk",
-          "columns": [
-            "track_id",
-            "product_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.user_to_course": {
-      "name": "user_to_course",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "product_id": {
-          "name": "product_id",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_to_course_user_id_user_id_fk": {
-          "name": "user_to_course_user_id_user_id_fk",
-          "tableFrom": "user_to_course",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "user_to_course_product_id_course_id_fk": {
-          "name": "user_to_course_product_id_course_id_fk",
-          "tableFrom": "user_to_course",
-          "tableTo": "course",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "user_to_course_user_id_product_id_pk": {
-          "name": "user_to_course_user_id_product_id_pk",
-          "columns": [
-            "user_id",
-            "product_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -474,7 +355,7 @@
         },
         "role": {
           "name": "role",
-          "type": "user_in_community_role",
+          "type": "user_role",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
@@ -649,7 +530,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -658,71 +539,11 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
-    },
-    "public.user_to_track": {
-      "name": "user_to_track",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "product_id": {
-          "name": "product_id",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_to_track_user_id_user_id_fk": {
-          "name": "user_to_track_user_id_user_id_fk",
-          "tableFrom": "user_to_track",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "user_to_track_product_id_track_id_fk": {
-          "name": "user_to_track_product_id_track_id_fk",
-          "tableFrom": "user_to_track",
-          "tableTo": "track",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "user_to_track_user_id_product_id_pk": {
-          "name": "user_to_track_user_id_product_id_pk",
-          "columns": [
-            "user_id",
-            "product_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
     }
   },
   "enums": {
-    "public.user_in_community_role": {
-      "name": "user_in_community_role",
+    "public.user_role": {
+      "name": "user_role",
       "schema": "public",
       "values": [
         "admin",

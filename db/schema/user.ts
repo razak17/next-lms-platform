@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { userToCourse } from "./course";
-import { userToTrack } from "./track";
+import { course } from "./course";
+import { track } from "./track";
 
-export const userRoleEnums = pgEnum("user_in_community_role", [
+export const userRoleEnums = pgEnum("user_role", [
 	"admin",
 	"learner",
 ]);
@@ -76,8 +76,8 @@ export const verification = pgTable("verification", {
 });
 
 export const userRelations = relations(user, ({ many }) => ({
-	userToTrack: many(userToTrack),
-	userToCourse: many(userToCourse),
+	userTracks: many(track),
+	userCourse: many(course),
 }));
 
 export type User = typeof user.$inferSelect;

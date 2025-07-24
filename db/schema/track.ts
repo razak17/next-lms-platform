@@ -6,12 +6,11 @@ import {
 	decimal,
 	json,
 	pgTable,
-	primaryKey,
 	text,
 	timestamp,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { trackToCourse } from "./course";
+import { course } from "./course";
 import { user } from "./user";
 
 export const track = pgTable("track", {
@@ -27,7 +26,7 @@ export const track = pgTable("track", {
 	isPopular: boolean("is_popular").default(false).notNull(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => user.id),
+		.references(() => user.id, { onDelete: "cascade" }),
 	createdAt: timestamp("created_at")
 		.$defaultFn(() => /* @__PURE__ */ new Date())
 		.notNull(),
@@ -36,33 +35,12 @@ export const track = pgTable("track", {
 		.notNull(),
 });
 
-export const trackRelations = relations(track, ({ many }) => ({
-	userToTrack: many(userToTrack),
-	trackToCourse: many(trackToCourse),
-}));
-
-export const userToTrack = pgTable(
-	"user_to_track",
-	{
-		userId: text("user_id")
-			.notNull()
-			.references(() => user.id, { onDelete: "cascade" }),
-		trackId: varchar("product_id", { length: 30 })
-			.notNull()
-			.references(() => track.id, { onDelete: "cascade" }),
-	},
-	(t) => [primaryKey({ columns: [t.userId, t.trackId] })]
-);
-
-export const userToTrackRelations = relations(userToTrack, ({ one }) => ({
-	user: one(user, {
-		fields: [userToTrack.userId],
-		references: [user.id],
-	}),
-	track: one(track, {
-		fields: [userToTrack.trackId],
-		references: [track.id],
-	}),
+export const trackRelations = relations(track, ({ many, one }) => ({
+  userTracks: one(user, {
+    fields: [track.userId],
+    references: [user.id],
+  }),
+	trackCourses: many(course),
 }));
 
 export type Track = typeof track.$inferSelect;

@@ -125,8 +125,8 @@ export function CourseForm({
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												{tracks.map((track) => (
-													<SelectItem key={track.id} value={track.id}>
+												{tracks.map((track, i) => (
+													<SelectItem key={i} value={track.id}>
 														{track.name}
 													</SelectItem>
 												))}

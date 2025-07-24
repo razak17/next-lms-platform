@@ -1,7 +1,8 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Course, Track } from "@/db/schema";
-import { Calendar } from "lucide-react";
+import { Calendar, UserRound } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const courseColorClasses = [
 	{ bg: "bg-blue-100", text: "text-blue-800" },
@@ -15,49 +16,64 @@ const courseColorClasses = [
 
 export function TrackCard({
 	track,
-	// courses,
+	showDescription = true,
+	showInstructor = true,
 }: {
-	track: Track;
-	// courses: Course[];
+	track: Track & { trackCourses: Course[] };
+	showDescription?: boolean;
+	showInstructor?: boolean;
 }) {
 	return (
-		<Card className="@container/card gap-0 p-0">
-			<div className="relative">
-				<Image
-					src={(track.image?.url as string) || ""}
-					alt={track.name}
-          width={400}
-          height={200}
-          loading="lazy"
-					className="h-40 w-full rounded-t-lg object-cover"
-				/>
-				<div className="bg-secondary text-foreground absolute top-4 right-4 rounded-full px-3 py-1 text-sm font-semibold">
-					${track.price}
+		<Link href={`/admin/tracks/${track.id}`} className="block">
+			<Card className="@container/card gap-0 p-0">
+				<div className="relative">
+					<Image
+						src={(track.image?.url as string) || ""}
+						alt={track.name}
+						width={400}
+						height={200}
+						loading="lazy"
+						className="h-40 w-full rounded-t-lg object-cover"
+					/>
+					<div className="bg-secondary text-foreground absolute top-4 right-4 rounded-full px-3 py-1 text-sm font-semibold">
+						${track.price}
+					</div>
 				</div>
-			</div>
-			<CardContent className="flex flex-col items-start gap-2 p-4">
-				<CardTitle className="text-lg font-semibold">{track.name}</CardTitle>
-				<div className="flex items-center gap-2 text-sm">
-					<Calendar size={16} />
-					<span className="text-muted-foreground">{track.duration}</span>
-				</div>
-				<div className="mt-2 flex flex-wrap gap-1">
-					{/* {courses?.map((course, courseIndex) => { */}
-					{/* 	const randomColorIndex = Math.floor( */}
-					{/* 		Math.random() * courseColorClasses.length */}
-					{/* 	); */}
-					{/* 	const color = courseColorClasses[randomColorIndex]; */}
-					{/* 	return ( */}
-					{/* 		<span */}
-					{/* 			key={courseIndex} */}
-					{/* 			className={`${color.bg} ${color.text} rounded-full px-4 py-2 text-xs font-medium`} */}
-					{/* 		> */}
-					{/* 			{course.title} */}
-					{/* 		</span> */}
-					{/* 	); */}
-					{/* })} */}
-				</div>
-			</CardContent>
-		</Card>
+				<CardContent className="flex flex-col items-start gap-2 p-4">
+					<CardTitle className="text-lg font-semibold">{track.name}</CardTitle>
+					{showDescription && (
+						<p className="text-sm">
+							{track.description || "No description available."}
+						</p>
+					)}
+					<div className="flex items-center gap-2 text-sm">
+						<Calendar size={16} />
+						<span className="text-muted-foreground">{track.duration}</span>
+					</div>
+					{showInstructor && (
+						<div className="flex items-center gap-2 text-sm">
+							<UserRound size={16} />
+							<span className="text-muted-foreground">{track.instructor}</span>
+						</div>
+					)}
+					<div className="mt-2 flex flex-wrap gap-1">
+						{track.trackCourses?.map((course, courseIndex) => {
+							const randomColorIndex = Math.floor(
+								Math.random() * courseColorClasses.length
+							);
+							const color = courseColorClasses[randomColorIndex];
+							return (
+								<span
+									key={courseIndex}
+									className={`${color.bg} ${color.text} rounded-full px-4 py-2 text-xs font-medium`}
+								>
+									{course.title}
+								</span>
+							);
+						})}
+					</div>
+				</CardContent>
+			</Card>
+		</Link>
 	);
 }

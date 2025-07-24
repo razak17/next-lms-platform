@@ -3,13 +3,13 @@ import { relations } from "drizzle-orm";
 import {
 	json,
 	pgTable,
-	primaryKey,
 	text,
 	timestamp,
 	varchar,
 } from "drizzle-orm/pg-core";
 import { track } from "./track";
 import { user } from "./user";
+import { StoredFile } from "@/types";
 
 export const course = pgTable("course", {
 	id: varchar("id", { length: 30 })
@@ -20,10 +20,10 @@ export const course = pgTable("course", {
 	image: json("image").$type<StoredFile | null>().default(null),
 	userId: text("user_id")
 		.notNull()
-		.references(() => user.id),
-	trackId: varchar("product_id", { length: 30 })
-		.notNull()
-		.references(() => track.id),
+		.references(() => user.id, { onDelete: "cascade" }),
+  trackId: varchar("track_id", { length: 30 })
+    .notNull()
+    .references(() => track.id, { onDelete: "cascade" }),
 	createdAt: timestamp("created_at")
 		.$defaultFn(() => /* @__PURE__ */ new Date())
 		.notNull(),
@@ -32,58 +32,17 @@ export const course = pgTable("course", {
 		.notNull(),
 });
 
-export const courseRelations = relations(course, ({ many }) => ({
-	userToCourse: many(userToCourse),
-	trackToCourse: many(trackToCourse),
+export const courseRelations = relations(course, ({ one }) => ({
+  userCourses: one(user, {
+    fields: [course.userId],
+    references: [user.id],
+  }),
+  track: one(track, {
+    fields: [course.trackId],
+    references: [track.id],
+  }),
 }));
 
-export const userToCourse = pgTable(
-	"user_to_course",
-	{
-		userId: text("user_id")
-			.notNull()
-			.references(() => user.id, { onDelete: "cascade" }),
-		courseId: varchar("product_id", { length: 30 })
-			.notNull()
-			.references(() => course.id, { onDelete: "cascade" }),
-	},
-	(t) => [primaryKey({ columns: [t.userId, t.courseId] })]
-);
-
-export const userToCourseRelations = relations(userToCourse, ({ one }) => ({
-	user: one(user, {
-		fields: [userToCourse.userId],
-		references: [user.id],
-	}),
-	course: one(course, {
-		fields: [userToCourse.courseId],
-		references: [course.id],
-	}),
-}));
-
-export const trackToCourse = pgTable(
-	"track_to_course",
-	{
-		trackId: varchar("track_id", { length: 30 })
-			.notNull()
-			.references(() => track.id, { onDelete: "cascade" }),
-		courseId: varchar("product_id", { length: 30 })
-			.notNull()
-			.references(() => course.id, { onDelete: "cascade" }),
-	},
-	(t) => [primaryKey({ columns: [t.trackId, t.courseId] })]
-);
-
-export const trackToCourseRelations = relations(trackToCourse, ({ one }) => ({
-	track: one(track, {
-		fields: [trackToCourse.trackId],
-		references: [track.id],
-	}),
-	course: one(course, {
-		fields: [trackToCourse.courseId],
-		references: [course.id],
-	}),
-}));
 
 export type Course = typeof course.$inferSelect;
 export type CourseInsert = typeof course.$inferInsert;
