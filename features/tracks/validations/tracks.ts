@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const createTrackSchema = z.object({
 	name: z.string().min(1, "Name is required"),
-	description: z.string().min(1, "Description is required"),
 	duration: z.string().min(1, "Duratiion is required"),
 	instructor: z.string().min(1, "Instructor is required"),
 	price: z.string().regex(/^\d+(\.\d{1,2})?$/, {
@@ -10,6 +9,7 @@ export const createTrackSchema = z.object({
 	}),
 	isPopular: z.boolean().optional(),
 	image: z.custom<File[] | undefined | null>().optional().nullable(),
+	description: z.string().min(1, "Description is required"),
 });
 
 export type CreateTrackSchema = z.infer<typeof createTrackSchema>;

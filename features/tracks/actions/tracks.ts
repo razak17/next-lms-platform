@@ -5,6 +5,7 @@ import { TrackInsert, track } from "@/db/schema";
 import { getCurrentUser } from "@/server/user";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirects } from "@/lib/constants";
 
 export async function createTrack(data: Omit<TrackInsert, "id">) {
 	try {
@@ -17,7 +18,7 @@ export async function createTrack(data: Omit<TrackInsert, "id">) {
 		const [newTrack] = await db.insert(track).values(data).returning();
 		if (!newTrack) throw new Error("Failed to create track");
 
-		revalidatePath("/admin/tracks");
+		revalidatePath(redirects.adminToTracks);
 
 		return {
 			data: newTrack,

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { CreateTrackSchema, createTrackSchema } from "../validations/tracks";
+import { CreateCourseSchema, createCourseSchema } from "../validations/courses";
 import {
 	Form,
 	FormControl,
@@ -21,35 +21,46 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUploadFile } from "@/hooks/use-upload-file";
 import { FileUploader } from "@/components/file-uploader";
 import { StoredFile } from "@/types";
-import { createTrack } from "../actions/tracks";
+import { createCourse } from "../actions/courses";
 import { getErrorMessage } from "@/lib/handle-error";
-import { Track } from "@/db/schema/track";
+import { Course, Track } from "@/db/schema";
+import {
+	Select,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+	SelectContent,
+} from "@/components/ui/select";
 
-interface TrackFormProps {
+interface CourseFormProps {
 	userId: string;
-	track?: CreateTrackSchema;
+	tracks?: Track[];
+	course?: CreateCourseSchema;
 	onSuccess?: () => void;
 }
 
-export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
+export function CourseForm({
+	userId,
+	tracks,
+	course,
+	onSuccess,
+}: CourseFormProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { uploadFiles, progresses, isUploading } =
 		useUploadFile("imageUploader");
 
 	const router = useRouter();
-	const form = useForm<CreateTrackSchema>({
-		resolver: zodResolver(createTrackSchema),
-		defaultValues: track ?? {
-			name: "",
-			price: "",
-			duration: "",
-			instructor: "",
+	const form = useForm<CreateCourseSchema>({
+		resolver: zodResolver(createCourseSchema),
+		defaultValues: course ?? {
+			title: "",
+			trackId: "",
 			image: null,
 			description: "",
 		},
 	});
 
-	async function onSubmit(values: CreateTrackSchema) {
+	async function onSubmit(values: CreateCourseSchema) {
 		setIsLoading(true);
 		try {
 			const uploaded = await uploadFiles(values.image ?? []);
@@ -57,20 +68,20 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 			if (uploaded && uploaded.length > 0) {
 				imageToSave = uploaded[0];
 			}
-			const newTrack = await createTrack({
+			const newCourse = await createCourse({
 				...values,
 				userId,
 				image: JSON.stringify(imageToSave) as unknown as StoredFile,
 			});
-			if (newTrack.error) {
+			if (newCourse.error) {
 				setIsLoading(false);
-				throw new Error(newTrack.error);
+				throw new Error(newCourse.error);
 			}
-			toast.success("Track created successfully");
-			form.reset({ ...form.getValues(), image: [] });
+			toast.success("Course created successfully");
+      form.reset({ ...form.getValues(), image: [] });
 			if (onSuccess) onSuccess();
 		} catch (error) {
-			console.error("Error creating track:", error);
+			console.error("Error creating course:", error);
 			toast.error(getErrorMessage(error));
 		} finally {
 			setIsLoading(false);
@@ -85,10 +96,10 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 						<div className="grid gap-3">
 							<FormField
 								control={form.control}
-								name="name"
+								name="title"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Track Name</FormLabel>
+										<FormLabel>Title</FormLabel>
 										<FormControl>
 											<Input {...field} />
 										</FormControl>
@@ -100,43 +111,27 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 						<div className="grid gap-3">
 							<FormField
 								control={form.control}
-								name="price"
+								name="trackId"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Price</FormLabel>
-										<FormControl>
-											<Input {...field} onChange={field.onChange} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
-						<div className="grid gap-3">
-							<FormField
-								control={form.control}
-								name="duration"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Duration</FormLabel>
-										<FormControl>
-											<Input {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
-						<div className="grid gap-3">
-							<FormField
-								control={form.control}
-								name="instructor"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Instructor</FormLabel>
-										<FormControl>
-											<Input {...field} />
-										</FormControl>
+										<FormLabel>Track</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl className="w-full">
+												<SelectTrigger>
+													<SelectValue />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{tracks.map((track) => (
+													<SelectItem key={track.id} value={track.id}>
+														{track.name}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -163,9 +158,6 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 											</FormControl>
 											<FormMessage />
 										</FormItem>
-										{/* {uploadedFiles.length > 0 ? ( */}
-										{/* 	<Files files={uploadedFiles} /> */}
-										{/* ) : null} */}
 									</div>
 								)}
 							/>
@@ -189,7 +181,7 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 						</div>
 						<Button type="submit" className="w-full" disabled={isLoading}>
 							{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
-							{isLoading ? "Creating Track..." : "Create Track"}
+							{isLoading ? "Creating Course..." : "Create Course"}
 						</Button>
 					</div>
 				</div>

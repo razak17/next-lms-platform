@@ -1,6 +1,7 @@
 import { generateId } from "@/lib/id";
 import { relations } from "drizzle-orm";
 import {
+	json,
 	pgTable,
 	primaryKey,
 	text,
@@ -16,7 +17,7 @@ export const course = pgTable("course", {
 		.primaryKey(), // prefix_ + nanoid (12)
 	title: text("title").notNull().unique(),
 	description: text("description").notNull(),
-	imageUrl: text("image_url"),
+	image: json("image").$type<StoredFile | null>().default(null),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id),
