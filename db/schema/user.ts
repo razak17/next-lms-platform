@@ -76,8 +76,8 @@ export const verification = pgTable("verification", {
 });
 
 export const userRelations = relations(user, ({ many }) => ({
-	userTracks: many(track),
-	userCourse: many(course),
+	tracks: many(track),
+	courses: many(course),
 }));
 
 export type User = typeof user.$inferSelect;

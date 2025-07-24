@@ -19,7 +19,7 @@ export function TrackCard({
 	showDescription = true,
 	showInstructor = true,
 }: {
-	track: Track & { trackCourses: Course[] };
+	track: Track & { courses: Course[] };
 	showDescription?: boolean;
 	showInstructor?: boolean;
 }) {
@@ -57,7 +57,7 @@ export function TrackCard({
 						</div>
 					)}
 					<div className="mt-2 flex flex-wrap gap-1">
-						{track.trackCourses?.map((course, courseIndex) => {
+						{track.courses?.map((course, courseIndex) => {
 							const randomColorIndex = Math.floor(
 								Math.random() * courseColorClasses.length
 							);

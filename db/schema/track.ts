@@ -36,11 +36,11 @@ export const track = pgTable("track", {
 });
 
 export const trackRelations = relations(track, ({ many, one }) => ({
-  userTracks: one(user, {
+  user: one(user, {
     fields: [track.userId],
     references: [user.id],
   }),
-	trackCourses: many(course),
+	courses: many(course),
 }));
 
 export type Track = typeof track.$inferSelect;

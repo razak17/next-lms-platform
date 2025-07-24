@@ -28,12 +28,26 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 
 	const { title } = await searchParams;
 
-	const tracks = await getTracks(session.user.id);
+	// const tracks = await getTracks(session.user.id);
 
 	const tracksWithCourses = await getTracksWithCourses(session.user.id);
 
-	const filteredTracks = tracksCardData.filter((track) => {
-		return track.title.toLowerCase().includes(title?.toLowerCase() || "");
+	if ("error" in tracksWithCourses) {
+		return (
+			<div className="flex h-screen flex-col items-center justify-center">
+				<Heading
+					title="Error"
+					description="Unable to load tracks. Please try again later."
+				/>
+				<p className="mt-2 text-red-500">
+					{tracksWithCourses.error || "An unexpected error occurred."}
+				</p>
+			</div>
+		);
+	}
+
+	const filteredTracks = tracksWithCourses.filter((track) => {
+		return track.name.toLowerCase().includes(title?.toLowerCase() || "");
 	});
 
 	return (
@@ -50,19 +64,16 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 			</div>
 			<div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
 				<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-					{"length" in tracksWithCourses && tracksWithCourses.length === 0 && (
+					{tracksWithCourses.length === 0 && (
 						<div className="text-muted-foreground col-span-full text-center">
 							No tracks found. Please create a new track.
 						</div>
 					)}
-					{"length" in tracksWithCourses &&
-						tracksWithCourses.length > 0 &&
-						Array.isArray(tracksWithCourses) &&
+					{tracksWithCourses.length > 0 &&
 						tracksWithCourses.map((track, i) => (
 							<TrackCard track={track} key={i} />
 						))}
 				</div>
-				<TracksCards tracksCardData={filteredTracks} />
 			</div>
 		</div>
 	);
