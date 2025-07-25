@@ -16,7 +16,7 @@ import { Track } from "@/db/schema";
 
 interface CourseDialogProps {
 	userId: string;
-	tracks?: Track[];
+	tracks: Track[];
 }
 
 export function CourseDialog({ userId, tracks }: CourseDialogProps) {

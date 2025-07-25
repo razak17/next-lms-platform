@@ -23,7 +23,7 @@ import { FileUploader } from "@/components/file-uploader";
 import { StoredFile } from "@/types";
 import { createCourse } from "../actions/courses";
 import { getErrorMessage } from "@/lib/handle-error";
-import { Course, Track } from "@/db/schema";
+import { Track } from "@/db/schema";
 import {
 	Select,
 	SelectItem,
@@ -34,7 +34,7 @@ import {
 
 interface CourseFormProps {
 	userId: string;
-	tracks?: Track[];
+	tracks: Track[];
 	course?: CreateCourseSchema;
 	onSuccess?: () => void;
 }
@@ -125,7 +125,7 @@ export function CourseForm({
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												{tracks.map((track, i) => (
+												{tracks?.map((track, i) => (
 													<SelectItem key={i} value={track.id}>
 														{track.name}
 													</SelectItem>

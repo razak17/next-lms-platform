@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Course, Track } from "@/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { ArrowUpDown } from "lucide-react";
+import { CourseTableActions } from "./course-table-actions";
 
 export const coursesTableColumns: ColumnDef<Course & { track: Track }>[] = [
 	{
@@ -70,18 +70,9 @@ export const coursesTableColumns: ColumnDef<Course & { track: Track }>[] = [
 	{
 		id: "actions",
 		cell: ({ row }) => {
-			const { id } = row.original;
+			const course = row.original;
 
-			return (
-					<div className="flex gap-2">
-						<Link href={`/admin/courses/${id}`} className="text-blue-600 hover:text-blue-800">
-							<Pencil className="h-4 w-4" />
-						</Link>
-						<Button variant="ghost" className="h-4 w-8 p-0 text-red-700 hover:bg-red-100">
-							<Trash2 />
-						</Button>
-					</div>
-			);
+			return <CourseTableActions course={course} />;
 		},
 	},
 ];
