@@ -126,11 +126,10 @@ export function OTPVerificationForm({
 									className="w-full"
 									disabled={isLoading || isResendingCode}
 								>
-									{isLoading ? (
-										<Loader2 className="size-4 animate-spin" />
-									) : (
-										"Verify"
+									{isLoading && (
+										<Loader2 className="mr-2 size-4 animate-spin" />
 									)}
+									{isLoading ? "Verifying..." : "Verify Account"}
 								</Button>
 							</div>
 							<div className="text-center text-sm">

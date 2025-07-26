@@ -135,11 +135,8 @@ export function LoginForm({
 										</div>
 									</div>
 									<Button type="submit" className="w-full" disabled={isLoading}>
-										{isLoading ? (
-											<Loader2 className="size-4 animate-spin" />
-										) : (
-											"Login"
-										)}
+							      {isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
+										{isLoading ? "Logging in..." : "Login"}
 									</Button>
 								</div>
 								<div className="text-center text-sm">
