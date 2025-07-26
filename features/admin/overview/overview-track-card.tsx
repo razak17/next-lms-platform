@@ -15,7 +15,7 @@ const courseColorClasses = [
 	{ bg: "bg-red-100", text: "text-red-800" },
 ];
 
-export function TrackCard({
+export function OverviewTrackCard({
 	track,
 	showDescription = true,
 	showInstructor = true,
@@ -25,8 +25,8 @@ export function TrackCard({
 	showInstructor?: boolean;
 }) {
 	return (
-		<Link href={`/admin/tracks/${track.id}`} className="block h-full">
-			<Card className="@container/card flex h-full min-h-[24rem] flex-col gap-0 p-0">
+		<Link href={`/admin/tracks/${track.id}`} className="block">
+			<Card className="@container/card flex flex-col gap-0 p-0">
 				<div className="relative">
 					<Image
 						src={track.image?.url || "/placeholders/placeholder-md.jpg"}

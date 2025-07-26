@@ -74,10 +74,9 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 							No tracks found. Please create a new track.
 						</div>
 					)}
-					{filteredTracks.length > 0 &&
-						filteredTracks.map((track, i) => (
-							<TrackCard track={track} key={i} />
-						))}
+					{filteredTracks.map((track, i) => (
+						<TrackCard track={track} key={i} />
+					))}
 				</div>
 			</div>
 		</div>

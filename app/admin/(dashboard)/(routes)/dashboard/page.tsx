@@ -1,11 +1,45 @@
+import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { cardData, tracksCardData } from "@/constants/data";
-import { DashboardCards } from "./_components/dashboard-cards";
-import { LatestInvoice } from "./_components/latest-invoice";
-import { RecentRevenue } from "./_components/recent-revenue";
-import { TracksCards } from "./_components/tracks-cards";
+import { cardData } from "@/constants/data";
+import { LatestInvoice } from "@/features/admin/overview/latest-invoice";
+import { OverviewStatsCard } from "@/features/admin/overview/overview-stats-card";
+import { OverviewTrackCard } from "@/features/admin/overview/overview-track-card";
+import { RecentRevenue } from "@/features/admin/overview/recent-revenue";
+import { getTracksWithCourses } from "@/features/tracks/queries/tracks";
+import { auth } from "@/lib/auth/auth";
+import { redirects } from "@/lib/constants";
+import { IconArrowRight } from "@tabler/icons-react";
+import { headers } from "next/headers";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function DashbordOverviewPage() {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+	if (!session) {
+		redirect(redirects.adminToLogin);
+	}
+
+	const tracksWithCourses = await getTracksWithCourses(session.user.id);
+
+	if ("error" in tracksWithCourses) {
+		return (
+			<div className="flex h-screen flex-col items-center justify-center">
+				<Heading
+					title="Error"
+					description="Unable to load tracks. Please try again later."
+				/>
+				<p className="mt-2 text-red-500">
+					{tracksWithCourses.error || "An unexpected error occurred."}
+				</p>
+			</div>
+		);
+	}
+
+	const firstFourTracks = tracksWithCourses.slice(0, 4);
+
 	return (
 		<div className="@container/main flex flex-1 flex-col gap-2">
 			<div className="mt-4 flex items-center justify-between px-4 lg:px-6">
@@ -15,12 +49,38 @@ export default async function DashbordOverviewPage() {
 				/>
 			</div>
 			<div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-				<DashboardCards cardData={cardData} />
+				<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-6 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
+					{cardData?.map((card, index) => (
+						<OverviewStatsCard key={index} card={card} />
+					))}
+				</div>
 				<div className="flex flex-col gap-4">
-					<h2 className="px-4 text-xl font-semibold tracking-tight lg:px-6">
-						Tracks
-					</h2>
-					<TracksCards tracksCardData={tracksCardData} />
+					<div className="flex items-center justify-between px-4 lg:px-6">
+						<h2 className="px-4 text-xl font-semibold tracking-tight lg:px-6">
+							Tracks
+						</h2>
+						<Link href={`${redirects.adminToTracks}`}>
+							<Button variant="ghost" size="sm" className="px-4 lg:px-6">
+								<IconArrowRight className="mr-2 h-4 w-4" />
+								See All
+							</Button>
+						</Link>
+					</div>
+					<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+						{firstFourTracks.length === 0 && (
+							<div className="text-muted-foreground col-span-full text-center">
+								No tracks created yet.
+							</div>
+						)}
+						{firstFourTracks.map((track, i) => (
+							<OverviewTrackCard
+								showDescription={false}
+								showInstructor={false}
+								track={track}
+								key={i}
+							/>
+						))}
+					</div>
 				</div>
 				<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-1 @5xl/main:grid-cols-2">
 					<RecentRevenue />

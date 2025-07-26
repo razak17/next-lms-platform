@@ -50,7 +50,7 @@ export const auth = betterAuth({
 			defaultRole: "learner",
 		}),
 		emailOTP({
-      sendVerificationOnSignUp: true,
+			sendVerificationOnSignUp: true,
 			allowedAttempts: 5, // Allow 5 attempts before invalidating the OTP
 			expiresIn: 600, //
 			async sendVerificationOTP({ email, otp }) {
