@@ -40,7 +40,7 @@ export function AdminSidebar({
 					<SidebarMenuItem>
 						<SidebarMenuButton
 							asChild
-							className="hover:bg-sidebar-foreground data-[slot=sidebar-menu-button]:!p-1.5"
+							className="hover:bg-sidebar-foreground active:bg-sidebar-foreground/80 data-[slot=sidebar-menu-button]:!p-1.5"
 						>
 							<Icons.logo className="h-10 w-18" aria-hidden="true" />
 						</SidebarMenuButton>
@@ -58,7 +58,10 @@ export function AdminSidebar({
 										<SidebarMenuButton
 											asChild
 											tooltip={item.title}
-											isActive={pathname === item.url}
+											isActive={
+												pathname === item.url ||
+												pathname.startsWith(item.url + "/")
+											}
 											className="h-14 px-4"
 										>
 											<Link href={item.url}>

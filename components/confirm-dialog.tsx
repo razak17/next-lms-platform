@@ -19,9 +19,14 @@ import { toast } from "sonner";
 interface ConfirmDialogProps {
 	children: React.ReactNode;
 	onConfirm: () => Promise<{ error: boolean; message: string }>;
+	onSuccess?: () => void;
 }
 
-export const ConfirmDialog = ({ children, onConfirm }: ConfirmDialogProps) => {
+export const ConfirmDialog = ({
+	children,
+	onConfirm,
+	onSuccess,
+}: ConfirmDialogProps) => {
 	const [isLoading, startTransition] = useTransition();
 
 	function performAction() {
@@ -31,6 +36,9 @@ export const ConfirmDialog = ({ children, onConfirm }: ConfirmDialogProps) => {
 				toast.error(data.message);
 			} else {
 				toast.success(data.message);
+				if (onSuccess) {
+					onSuccess();
+				}
 			}
 		});
 	}

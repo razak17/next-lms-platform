@@ -78,7 +78,7 @@ export function CourseForm({
 				throw new Error(newCourse.error);
 			}
 			toast.success("Course created successfully");
-      form.reset({ ...form.getValues(), image: [] });
+			form.reset({ ...form.getValues(), image: [] });
 			if (onSuccess) onSuccess();
 		} catch (error) {
 			console.error("Error creating course:", error);

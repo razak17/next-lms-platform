@@ -34,8 +34,10 @@ export async function getTracksWithCourses(userId: string) {
 
 export async function getTrackById(trackId: string) {
 	try {
-		const [result] = await db.select().from(track).where(eq(track.id, trackId));
-		if (!result) return { error: "Track not found" };
+		const result = await db.query.track.findFirst({
+			where: eq(track.id, trackId),
+			with: { courses: true },
+		});
 		return result;
 	} catch (error) {
 		console.error("Error fetching track:", error);

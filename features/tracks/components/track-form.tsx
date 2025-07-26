@@ -21,31 +21,36 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUploadFile } from "@/hooks/use-upload-file";
 import { FileUploader } from "@/components/file-uploader";
 import { StoredFile } from "@/types";
-import { createTrack } from "../actions/tracks";
+import { createTrack, updateTrack } from "../actions/tracks";
 import { getErrorMessage } from "@/lib/handle-error";
 import { Track } from "@/db/schema/track";
+import { Files } from "@/components/files";
 
 interface TrackFormProps {
 	userId: string;
-	track?: CreateTrackSchema;
+	track?: Track;
 	onSuccess?: () => void;
 }
 
 export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
+	console.warn("DEBUGPRINT[1101]: track-form.tsx:34: track=", track?.image);
 	const [isLoading, setIsLoading] = useState(false);
-	const { uploadFiles, progresses, isUploading } =
-		useUploadFile("imageUploader");
+	const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
+		"imageUploader",
+		{
+			defaultUploadedFiles: track?.image ? [track?.image] : [],
+		}
+	);
 
 	const router = useRouter();
 	const form = useForm<CreateTrackSchema>({
 		resolver: zodResolver(createTrackSchema),
-		defaultValues: track ?? {
-			name: "",
-			price: "",
-			duration: "",
-			instructor: "",
-			image: null,
-			description: "",
+		defaultValues: {
+			name: track?.name || "",
+			price: track?.price || "",
+			duration: track?.duration || "",
+			instructor: track?.instructor || "",
+			description: track?.description || "",
 		},
 	});
 
@@ -56,19 +61,24 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 			let imageToSave = null;
 			if (uploaded && uploaded.length > 0) {
 				imageToSave = uploaded[0];
+			} else if (track && track.image) {
+				imageToSave = track.image;
 			}
-			const newTrack = await createTrack({
+			const action = track ? updateTrack.bind(null, track.id) : createTrack;
+			const data = await action({
 				...values,
+				image: imageToSave,
 				userId,
-				image: JSON.stringify(imageToSave) as unknown as StoredFile,
 			});
-			if (newTrack.error) {
-				setIsLoading(false);
-				throw new Error(newTrack.error);
+			if (data.error) {
+				toast.error(data.message || "Failed to create track");
+				return;
 			}
-			toast.success("Track created successfully");
-			form.reset({ ...form.getValues(), image: [] });
-			if (onSuccess) onSuccess();
+			toast.success(data.message || "Track created successfully");
+			if (onSuccess) {
+				onSuccess();
+			}
+			router.refresh();
 		} catch (error) {
 			console.error("Error creating track:", error);
 			toast.error(getErrorMessage(error));
@@ -153,7 +163,7 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 											<FormControl>
 												<FileUploader
 													className="flex h-38 flex-col items-center justify-center"
-													value={field.value ?? undefined}
+													value={field.value ?? []}
 													onValueChange={field.onChange}
 													maxFiles={1}
 													maxSize={4 * 1024 * 1024}
@@ -163,9 +173,9 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 											</FormControl>
 											<FormMessage />
 										</FormItem>
-										{/* {uploadedFiles.length > 0 ? ( */}
-										{/* 	<Files files={uploadedFiles} /> */}
-										{/* ) : null} */}
+										{!field.value?.length && uploadedFiles.length > 0 ? (
+											<Files files={uploadedFiles} />
+										) : null}
 									</div>
 								)}
 							/>
@@ -189,7 +199,9 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 						</div>
 						<Button type="submit" className="w-full" disabled={isLoading}>
 							{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
-							{isLoading ? "Creating Track..." : "Create Track"}
+							{track
+								? `${isLoading ? "Updating" : "Update"} Track`
+								: `${isLoading ? "Creating" : "Create"} Track`}
 						</Button>
 					</div>
 				</div>

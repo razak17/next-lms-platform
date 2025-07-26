@@ -3,11 +3,11 @@ import Image from "next/image";
 
 import { EmptyCard } from "@/components/empty-card";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
@@ -25,9 +25,9 @@ export function Files({ files }: FilesProps) {
 			<CardContent>
 				{files.length > 0 ? (
 					<ScrollArea className="pb-4">
-						<div className="flex w-max space-x-2.5">
+						<div className="flex w-full space-x-2.5">
 							{files.map((file) => (
-								<div key={file.id} className="relative aspect-video w-64">
+								<div key={file.id} className="relative aspect-video w-full">
 									<Image
 										src={file.url}
 										alt={file.name}

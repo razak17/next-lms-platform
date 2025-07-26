@@ -10,7 +10,7 @@ import {
 	timestamp,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { course } from "./course";
+import { Course, course } from "./course";
 import { user } from "./user";
 
 export const track = pgTable("track", {
@@ -36,12 +36,15 @@ export const track = pgTable("track", {
 });
 
 export const trackRelations = relations(track, ({ many, one }) => ({
-  user: one(user, {
-    fields: [track.userId],
-    references: [user.id],
-  }),
+	user: one(user, {
+		fields: [track.userId],
+		references: [user.id],
+	}),
 	courses: many(course),
 }));
 
 export type Track = typeof track.$inferSelect;
 export type TrackInsert = typeof track.$inferInsert;
+export type TrackWithCourses = Track & {
+	courses: Course[];
+};

@@ -1,17 +1,14 @@
 import { SearchInput } from "@/components/search-input";
+import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { tracksCardData } from "@/constants/data";
 import { TrackCard } from "@/features/tracks/components/track-card";
 import { TrackDialog } from "@/features/tracks/components/track-dialog";
-import {
-	getTracks,
-	getTracksWithCourses,
-} from "@/features/tracks/queries/tracks";
+import { getTracksWithCourses } from "@/features/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
+import { IconPlus } from "@tabler/icons-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { TracksCards } from "../dashboard/_components/tracks-cards";
 
 interface TracksPageProps {
 	searchParams: Promise<{ title?: string }>;
@@ -60,17 +57,25 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 			</div>
 			<div className="flex justify-between px-6 pt-6">
 				<SearchInput placeholder="Search Track" />
-				<TrackDialog userId={session.user.id} />
+				<TrackDialog
+					userId={session.user.id}
+					trigger={
+						<Button className="flex w-48 items-center gap-2" size="lg">
+							<IconPlus />
+							Add Track
+						</Button>
+					}
+				/>
 			</div>
 			<div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
 				<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-					{tracksWithCourses.length === 0 && (
+					{filteredTracks.length === 0 && (
 						<div className="text-muted-foreground col-span-full text-center">
 							No tracks found. Please create a new track.
 						</div>
 					)}
-					{tracksWithCourses.length > 0 &&
-						tracksWithCourses.map((track, i) => (
+					{filteredTracks.length > 0 &&
+						filteredTracks.map((track, i) => (
 							<TrackCard track={track} key={i} />
 						))}
 				</div>

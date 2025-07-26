@@ -23,7 +23,7 @@ export async function createTrack(data: Omit<TrackInsert, "id">) {
 		return {
 			data: newTrack,
 			message: "Track created successfully",
-			error: null,
+			error: false,
 		};
 	} catch (error) {
 		console.error("Error creating track:", error);
@@ -37,16 +37,29 @@ export async function updateTrack(
 ) {
 	try {
 		const { currentUser } = await getCurrentUser();
-		if (!currentUser) return { error: "Unauthorized" };
+		if (!currentUser)
+			return {
+				error: true,
+				message: "Unauthorized",
+			};
 
 		// Ensure the user owns the track OR is admin (pseudo logic, adjust as needed)
 		const [existingTrack] = await db
 			.select()
 			.from(track)
 			.where(eq(track.id, trackId));
-		if (!existingTrack) return { error: "Track not found" };
+
+		if (!existingTrack)
+			return {
+				error: true,
+				message: "Track not found",
+			};
+
 		if (existingTrack.userId !== currentUser.id /* && !currentUser.isAdmin */) {
-			return { error: "Forbidden" };
+			return {
+				error: true,
+				message: "Forbidden",
+			};
 		}
 
 		const [updatedTrack] = await db
@@ -54,9 +67,14 @@ export async function updateTrack(
 			.set({ ...data, updatedAt: new Date() })
 			.where(eq(track.id, trackId))
 			.returning();
+
 		if (!updatedTrack) throw new Error("Failed to update track");
 
-		return updatedTrack;
+		return {
+			data: updatedTrack,
+			message: "Track updated successfully",
+			error: false,
+		};
 	} catch (error) {
 		console.error("Error updating track:", error);
 		return { error: "Failed to update track" };
@@ -66,27 +84,48 @@ export async function updateTrack(
 export async function deleteTrack(trackId: string) {
 	try {
 		const { currentUser } = await getCurrentUser();
-		if (!currentUser) return { error: "Unauthorized" };
+		if (!currentUser)
+			return {
+				error: true,
+				message: "Unauthorized",
+			};
 
-		// Ensure the user owns the track OR is admin (pseudo logic)
 		const [existingTrack] = await db
 			.select()
 			.from(track)
 			.where(eq(track.id, trackId));
-		if (!existingTrack) return { error: "Track not found" };
+
+		if (!existingTrack)
+			return {
+				error: true,
+				message: "Track not found",
+			};
+
 		if (existingTrack.userId !== currentUser.id /* && !currentUser.isAdmin */) {
-			return { error: "Forbidden" };
+			return {
+				error: true,
+				message: "Forbidden",
+			};
 		}
 
 		const [deletedTrack] = await db
 			.delete(track)
 			.where(eq(track.id, trackId))
 			.returning();
+
 		if (!deletedTrack) throw new Error("Failed to delete track");
 
-		return deletedTrack;
+		revalidatePath(redirects.adminToTracks);
+
+		return {
+			error: false,
+			message: "Track deleted successfully",
+		};
 	} catch (error) {
 		console.error("Error deleting track:", error);
-		return { error: "Failed to delete track" };
+		return {
+			error: true,
+			message: "Failed to delete track",
+		};
 	}
 }

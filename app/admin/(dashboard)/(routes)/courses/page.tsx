@@ -57,7 +57,7 @@ export default async function CoursesPage() {
 					description="Create, edit, and manage your courses effectively"
 				/>
 			</div>
-			<div className="flex flex-col gap-4 md:gap-6 py-2">
+			<div className="flex flex-col gap-4 py-2 md:gap-6">
 				<div className="px-6">
 					<CoursesTable
 						columns={coursesTableColumns}

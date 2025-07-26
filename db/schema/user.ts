@@ -3,10 +3,7 @@ import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { course } from "./course";
 import { track } from "./track";
 
-export const userRoleEnums = pgEnum("user_role", [
-	"admin",
-	"learner",
-]);
+export const userRoleEnums = pgEnum("user_role", ["admin", "learner"]);
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),

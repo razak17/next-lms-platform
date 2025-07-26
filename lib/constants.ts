@@ -14,6 +14,6 @@ export const redirects = {
 	adminAfterLogout: "/admin/login",
 	adminToVerify: "/verify-email",
 	adminAfterVerify: "/admin/dashboard",
-  adminToTracks: "/admin/tracks",
-  adminToCourses: "/admin/courses"
+	adminToTracks: "/admin/tracks",
+	adminToCourses: "/admin/courses",
 } as const;

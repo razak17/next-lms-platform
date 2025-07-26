@@ -6,7 +6,6 @@ import { deleteCourse } from "@/features/courses/actions/courses";
 import { Course } from "@/db/schema";
 
 export function CourseTableActions({ course }: { course: Course }) {
-
 	return (
 		<div className="flex gap-2">
 			<Link

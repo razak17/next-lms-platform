@@ -1,19 +1,14 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from "@/components/ui/card";
-import {
-    ChartConfig,
-    ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
-    ChartTooltip,
-    ChartTooltipContent,
+	ChartConfig,
+	ChartContainer,
+	ChartLegend,
+	ChartLegendContent,
+	ChartTooltip,
+	ChartTooltipContent,
 } from "@/components/ui/chart";
 
 export const description = "A stacked bar chart with a legend";
@@ -25,12 +20,12 @@ const chartData = [
 	{ month: "April", revenue: 3300 },
 	{ month: "May", revenue: 2090 },
 	{ month: "June", revenue: 2140 },
-  { month: "July", revenue: 1500 },
-  { month: "August", revenue: 3000 },
-  { month: "September", revenue: 2500 },
-  { month: "October", revenue: 4000 },
-  { month: "November", revenue: 3500 },
-  { month: "December", revenue: 5000 },
+	{ month: "July", revenue: 1500 },
+	{ month: "August", revenue: 3000 },
+	{ month: "September", revenue: 2500 },
+	{ month: "October", revenue: 4000 },
+	{ month: "November", revenue: 3500 },
+	{ month: "December", revenue: 5000 },
 ];
 
 const chartConfig = {
@@ -44,7 +39,7 @@ export function RecentRevenue() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle className="text-2xl pb-4 border-b">Recent Revenue</CardTitle>
+				<CardTitle className="border-b pb-4 text-2xl">Recent Revenue</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<ChartContainer config={chartConfig}>
@@ -57,12 +52,12 @@ export function RecentRevenue() {
 							axisLine={false}
 							tickFormatter={(value) => value.slice(0, 3)}
 						/>
-            <YAxis
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => `$${value}`}
-            />
+						<YAxis
+							tickLine={false}
+							tickMargin={10}
+							axisLine={false}
+							tickFormatter={(value) => `$${value}`}
+						/>
 						<ChartTooltip content={<ChartTooltipContent hideLabel />} />
 						<ChartLegend content={<ChartLegendContent />} />
 						<Bar

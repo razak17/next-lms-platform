@@ -9,7 +9,7 @@ import {
 import { CardItem } from "@/types";
 
 interface DashboardCardsProps {
-  cardData?: CardItem[];
+	cardData?: CardItem[];
 }
 
 export function DashboardCards({ cardData }: DashboardCardsProps) {
@@ -18,7 +18,9 @@ export function DashboardCards({ cardData }: DashboardCardsProps) {
 			{cardData?.map((card, index) => (
 				<Card key={index} className="@container/card">
 					<CardContent>
-						<CardDescription className="text-foreground text-md">{card.title}</CardDescription>
+						<CardDescription className="text-foreground text-md">
+							{card.title}
+						</CardDescription>
 						<div className="mt-2 flex items-center justify-between">
 							<div className="flex flex-col items-center gap-4">
 								<CardTitle className="w-full text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
