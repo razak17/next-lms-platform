@@ -5,74 +5,85 @@ import { Course, Track } from "@/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { CourseTableActions } from "./course-table-actions";
+import Image from "next/image";
+import { StoredFile } from "@/types";
 
 export const coursesTableColumns: ColumnDef<Course & { track: Track }>[] = [
 	{
 		accessorKey: "title",
-		header: ({ column }) => {
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				className="text-muted-foreground"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Title
+				<ArrowUpDown className="ml-2 h-4 w-4" />
+			</Button>
+		),
+		cell: ({ row }) => {
+			const { image, title } = row.original as Course & { track: Track };
+
 			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Title
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
+				<div className="flex items-center gap-2">
+					<Image
+						src={image?.url || "/placeholders/placeholder-md.jpg"}
+						alt={title}
+						width={40}
+						height={40}
+						className="h-10 w-10 rounded-full object-cover"
+					/>
+					{title}
+				</div>
 			);
 		},
 	},
 	{
 		accessorKey: "track",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Tracks
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			);
-		},
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				className="text-muted-foreground"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Tracks
+				<ArrowUpDown className="ml-2 h-4 w-4" />
+			</Button>
+		),
 		cell: ({ row }) => {
-			const track = row.getValue("track") as Track;
-
-			return <div>{track.name}</div>;
+			const track = row.getValue("track") as Track | undefined;
+			return <div>{track?.name || "—"}</div>;
 		},
 	},
 	{
 		accessorKey: "createdAt",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Created At
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			);
-		},
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				className="text-muted-foreground"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Created At
+				<ArrowUpDown className="ml-2 h-4 w-4" />
+			</Button>
+		),
 		cell: ({ row }) => {
-			const track = row.getValue("track") as Track;
-
+			const createdAt = row.getValue("createdAt") as string | Date | undefined;
 			return (
-				<div className="text-muted-foreground text-sm">
-					{new Date(track.createdAt).toLocaleDateString("en-US", {
-						year: "numeric",
-						month: "short",
-						day: "numeric",
-					})}
+				<div className="text-sm">
+					{createdAt
+						? new Date(createdAt).toLocaleDateString("en-US", {
+								year: "numeric",
+								month: "short",
+								day: "numeric",
+							})
+						: "—"}
 				</div>
 			);
 		},
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => {
-			const course = row.original;
-
-			return <CourseTableActions course={course} />;
-		},
+		cell: ({ row }) => <CourseTableActions course={row.original} />,
 	},
 ];
