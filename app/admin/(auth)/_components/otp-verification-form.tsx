@@ -40,7 +40,7 @@ export function OTPVerificationForm({
 }: React.ComponentProps<"div"> & { email: string }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isResendingCode, setIsResendingCode] = useState(false); // New state for resending
-	const [cooldown, setCooldown] = useState(0);
+	const [cooldown, setCooldown] = useState(60);
 
 	const router = useRouter();
 	const form = useForm<z.infer<typeof otpVerificationSchema>>({
@@ -65,7 +65,7 @@ export function OTPVerificationForm({
 		const result = await sendVerificationOtp(email);
 		if (result.success) {
 			toast.success(result.message);
-			setCooldown(120); // 2 minutes cooldown (120 seconds)
+			setCooldown(60); // 2 minutes cooldown (60 seconds)
 		} else {
 			toast.error(result.message);
 		}

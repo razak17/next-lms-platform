@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-import { sendVerificationOtp, signUp } from "@/server/auth";
+import { signUp } from "@/server/auth";
 
 import { Icons } from "@/components/icons";
 import { registerSchema } from "@/lib/validations/auth";
@@ -66,16 +66,10 @@ export function RegisterForm({
 		});
 
 		if (success) {
-			const { success: otpSuccess } = await sendVerificationOtp(email);
-
-			if (otpSuccess) {
-				toast.success(
-					`${message} Please check your email for your verification code.`
-				);
-				router.push(
-					`/admin/otp-verification?email=${encodeURIComponent(email)}`
-				);
-			}
+			toast.success(
+				`${message} Please check your email for your verification code.`
+			);
+			router.push(`/admin/otp-verification?email=${encodeURIComponent(email)}`);
 		} else {
 			toast.error(message);
 		}
@@ -172,7 +166,9 @@ export function RegisterForm({
 										</div>
 									</div>
 									<Button type="submit" className="w-full" disabled={isLoading}>
-							      {isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
+										{isLoading && (
+											<Loader2 className="mr-2 size-4 animate-spin" />
+										)}
 										{isLoading ? "Signing up..." : "SIgn up"}
 									</Button>
 								</div>
