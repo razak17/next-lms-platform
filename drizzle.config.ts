@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Config, defineConfig } from "drizzle-kit";
-import { localConnection } from "./env/db";
-import { env } from "./env/schema";
+import { localConnection } from "./config/db";
+import { env } from "./config/schema";
 
 export default defineConfig({
 	schema: "./db/schema",
@@ -10,5 +10,5 @@ export default defineConfig({
 	strict: true,
 	verbose: true,
 	dbCredentials:
-		env.ENV === "development" ? localConnection : { url: env.DB_URL },
+		env.ENV === "development" ? localConnection : { url: env.DB_URL! },
 });

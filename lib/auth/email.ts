@@ -1,4 +1,4 @@
-import { env } from "@/env/schema";
+import { env } from "@/config/schema";
 import { Resend } from "resend";
 
 const resend = new Resend(env.RESEND_API_KEY);
