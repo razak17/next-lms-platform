@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 
 import { Icons } from "@/components/icons";
 import { PasswordInput } from "@/components/password-input";
+import { redirects } from "@/lib/constants";
 import { loginSchema } from "@/lib/validations/auth";
 import { sendVerificationOtp, signIn } from "@/server/auth";
 import { Loader2 } from "lucide-react";
@@ -58,7 +59,7 @@ export function LoginForm({
 
 		if (success) {
 			toast.success(message);
-			router.push("/admin/dashboard");
+			router.push(redirects.adminToDashboard);
 		} else {
 			if (statusCode === 403) {
 				const { success: otpSuccess } = await sendVerificationOtp(values.email);
@@ -68,7 +69,7 @@ export function LoginForm({
 						`${message} Please check your email for your verification code.`
 					);
 					router.push(
-						`/admin/otp-verification?email=${encodeURIComponent(values.email)}`
+						`${redirects.adminToVerify}?email=${encodeURIComponent(values.email)}`
 					);
 				}
 			} else {
@@ -127,7 +128,7 @@ export function LoginForm({
 												)}
 											/>
 											<Link
-												href="/admin/forgot-password"
+												href={`${redirects.adminToForgotPassword}`}
 												className="text-sidebar mr-auto text-sm underline-offset-4 hover:underline"
 											>
 												Forgot your password?
@@ -135,14 +136,16 @@ export function LoginForm({
 										</div>
 									</div>
 									<Button type="submit" className="w-full" disabled={isLoading}>
-							      {isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
+										{isLoading && (
+											<Loader2 className="mr-2 size-4 animate-spin" />
+										)}
 										{isLoading ? "Logging in..." : "Login"}
 									</Button>
 								</div>
 								<div className="text-center text-sm">
 									Don&apos;t have an account?{" "}
 									<Link
-										href="/admin/register"
+										href={`${redirects.adminToSignup}`}
 										className="text-sidebar underline-offset-4 hover:underline"
 									>
 										Sign up

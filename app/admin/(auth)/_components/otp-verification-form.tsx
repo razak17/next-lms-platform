@@ -22,12 +22,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-import Link from "next/link";
 import { Icons } from "@/components/icons";
 import { authClient } from "@/lib/auth/client";
+import { redirects } from "@/lib/constants";
 import { otpVerificationSchema } from "@/lib/validations/auth";
 import { sendVerificationOtp } from "@/server/auth";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -84,7 +85,7 @@ export function OTPVerificationForm({
 			toast.error(verifyResult.error.message);
 		} else {
 			toast.success("Your account has been verified.");
-			router.push("/admin/dashboard");
+			router.push(redirects.adminToDashboard);
 		}
 
 		setIsLoading(false);
@@ -152,7 +153,7 @@ export function OTPVerificationForm({
 							</div>
 							<div className="text-center text-sm">
 								<Link
-									href="/admin/login"
+									href={`${redirects.adminToLogin}`}
 									className="text-sidebar underline-offset-4 hover:underline"
 								>
 									Back to login

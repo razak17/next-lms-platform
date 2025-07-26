@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { redirects } from "@/lib/constants";
 
 import { Icons } from "@/components/icons";
 import { authClient } from "@/lib/auth/client";
@@ -49,7 +50,7 @@ export function ForgotPasswordForm({
 
 		const { error } = await authClient.forgetPassword({
 			email: values.email,
-			redirectTo: "/admin/reset-password",
+			redirectTo: `${redirects.adminToResetPassword}`,
 		});
 
 		if (error) {
@@ -101,7 +102,7 @@ export function ForgotPasswordForm({
 							</div>
 							<div className="text-center text-sm">
 								<Link
-									href="/admin/login"
+									href={`${redirects.adminToLogin}`}
 									className="text-sidebar underline-offset-4 hover:underline"
 								>
 									Back to login

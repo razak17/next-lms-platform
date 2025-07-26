@@ -20,11 +20,13 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { redirects } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 import { signUp } from "@/server/auth";
 
 import { Icons } from "@/components/icons";
+import { PasswordInput } from "@/components/password-input";
 import { registerSchema } from "@/lib/validations/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -32,7 +34,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { PasswordInput } from "@/components/password-input";
 
 export function RegisterForm({
 	className,
@@ -69,7 +70,9 @@ export function RegisterForm({
 			toast.success(
 				`${message} Please check your email for your verification code.`
 			);
-			router.push(`/admin/otp-verification?email=${encodeURIComponent(email)}`);
+			router.push(
+				`${redirects.adminToVerify}??email=${encodeURIComponent(email)}`
+			);
 		} else {
 			toast.error(message);
 		}
@@ -175,7 +178,7 @@ export function RegisterForm({
 								<div className="text-center text-sm">
 									Already have an account?{" "}
 									<Link
-										href="/admin/login"
+										href={`${redirects.adminToLogin}`}
 										className="text-sidebar underline-offset-4 hover:underline"
 									>
 										Login
