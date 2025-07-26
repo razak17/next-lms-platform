@@ -1,9 +1,9 @@
 import { SearchInput } from "@/components/search-input";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { TrackCard } from "@/features/tracks/components/track-card";
-import { TrackDialog } from "@/features/tracks/components/track-dialog";
-import { getTracksWithCourses } from "@/features/tracks/queries/tracks";
+import { TrackCard } from "@/features/admin/tracks/components/track-card";
+import { TrackDialog } from "@/features/admin/tracks/components/track-dialog";
+import { getTracksWithCourses } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { IconPlus } from "@tabler/icons-react";

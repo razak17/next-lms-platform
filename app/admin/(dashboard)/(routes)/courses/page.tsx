@@ -1,8 +1,8 @@
 import { Heading } from "@/components/ui/heading";
-import { CoursesTable } from "@/features/courses/components/courses-table";
-import { coursesTableColumns } from "@/features/courses/components/courses-table-columns";
-import { getCoursesWithTrack } from "@/features/courses/queries/courses";
-import { getTracks } from "@/features/tracks/queries/tracks";
+import { CoursesTable } from "@/features/admin/courses/components/courses-table";
+import { coursesTableColumns } from "@/features/admin/courses/components/courses-table-columns";
+import { getCoursesWithTrack } from "@/features/admin/courses/queries/courses";
+import { getTracks } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";

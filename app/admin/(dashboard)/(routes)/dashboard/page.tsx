@@ -5,7 +5,7 @@ import { LatestInvoice } from "@/features/admin/overview/latest-invoice";
 import { OverviewStatsCard } from "@/features/admin/overview/overview-stats-card";
 import { OverviewTrackCard } from "@/features/admin/overview/overview-track-card";
 import { RecentRevenue } from "@/features/admin/overview/recent-revenue";
-import { getTracksWithCourses } from "@/features/tracks/queries/tracks";
+import { getTracksWithCourses } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -61,8 +61,8 @@ export default async function DashbordOverviewPage() {
 						</h2>
 						<Link href={`${redirects.adminToTracks}`}>
 							<Button variant="ghost" size="sm" className="px-4 lg:px-6">
-								<IconArrowRight className="mr-2 h-4 w-4" />
 								See All
+								<IconArrowRight className="mr-2 h-4 w-4" />
 							</Button>
 						</Link>
 					</div>

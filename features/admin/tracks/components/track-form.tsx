@@ -20,7 +20,6 @@ import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useUploadFile } from "@/hooks/use-upload-file";
 import { FileUploader } from "@/components/file-uploader";
-import { StoredFile } from "@/types";
 import { createTrack, updateTrack } from "../actions/tracks";
 import { getErrorMessage } from "@/lib/handle-error";
 import { Track } from "@/db/schema/track";
@@ -200,8 +199,8 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 						<Button type="submit" className="w-full" disabled={isLoading}>
 							{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
 							{track
-								? `${isLoading ? "Updating" : "Update"} Track`
-								: `${isLoading ? "Creating" : "Create"} Track`}
+								? `${isLoading ? "Updating" : "Update"} Track${isLoading ? "..." : ""}`
+								: `${isLoading ? "Creating" : "Create"} Track${isLoading ? "..." : ""}`}
 						</Button>
 					</div>
 				</div>

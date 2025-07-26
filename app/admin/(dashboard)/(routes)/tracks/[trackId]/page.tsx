@@ -1,6 +1,6 @@
 import { Heading } from "@/components/ui/heading";
-import { TrackDetails } from "@/features/tracks/components/track-details";
-import { getTrackById } from "@/features/tracks/queries/tracks";
+import { TrackDetails } from "@/features/admin/tracks/components/track-details";
+import { getTrackById } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";
