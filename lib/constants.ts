@@ -8,8 +8,8 @@ export const redirects = {
 	afterLogout: "/",
 	toVerify: "/verify-email",
 	afterVerify: "/dashboard",
-  toResetPassword: "/reset-password",
-  toForgotPassword: "/forgot-password",
+	toResetPassword: "/reset-password",
+	toForgotPassword: "/forgot-password",
 	toDashboard: "/dashboard",
 
 	adminToLogin: "/admin/login",

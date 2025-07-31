@@ -24,8 +24,8 @@ export default async function Layout({
 	if (session && session.user.role === "admin") {
 		redirect(redirects.adminToDashboard);
 	} else if (session && session.user.role !== "admin") {
-    redirect(redirects.toDashboard);
-  }
+		redirect(redirects.toDashboard);
+	}
 
 	return (
 		<div className="relative flex min-h-screen w-full flex-col items-center justify-center">

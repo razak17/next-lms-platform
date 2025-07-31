@@ -6,8 +6,8 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
-import { AdminSidebar } from "./_components/admin-sidebar";
 import { redirects } from "@/lib/constants";
+import { AdminSidebar } from "@/features/admin/shared/components/admin-sidebar";
 
 export const metadata: Metadata = {
 	title: "Admin Dashboard - E-Learning Platform",
