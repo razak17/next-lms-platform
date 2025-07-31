@@ -29,10 +29,11 @@ export function TrackDialog({ userId, trigger, track }: TrackDialogProps) {
 			<DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle className="text-center text-2xl">
-						Add New Track
+						{track ? "Update" : "Add New"} Track
 					</DialogTitle>
 					<DialogDescription className="text-muted-foreground text-center">
-						Fill in the details below to create a new track.
+						Fill in the details below to {track ? "update" : "create a new"}{" "}
+						track.
 					</DialogDescription>
 				</DialogHeader>
 				<TrackForm userId={userId} track={track} onSuccess={handleSuccess} />

@@ -32,7 +32,6 @@ interface TrackFormProps {
 }
 
 export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
-	console.warn("DEBUGPRINT[1101]: track-form.tsx:34: track=", track?.image);
 	const [isLoading, setIsLoading] = useState(false);
 	const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
 		"imageUploader",

@@ -1,6 +1,5 @@
 import { Heading } from "@/components/ui/heading";
 import { CoursesTable } from "@/features/admin/courses/components/courses-table";
-import { coursesTableColumns } from "@/features/admin/courses/components/courses-table-columns";
 import { getCoursesWithTrack } from "@/features/admin/courses/queries/courses";
 import { getTracks } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
@@ -60,7 +59,6 @@ export default async function CoursesPage() {
 			<div className="flex flex-col gap-4 py-2 md:gap-6">
 				<div className="px-6">
 					<CoursesTable
-						columns={coursesTableColumns}
 						data={coursesWithTrack}
 						userId={session.user.id}
 						tracks={tracks}

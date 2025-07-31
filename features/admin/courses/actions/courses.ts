@@ -36,24 +36,44 @@ export async function updateCourse(
 ) {
 	try {
 		const { currentUser } = await getCurrentUser();
-		if (!currentUser) return { error: "Unauthorized" };
+		if (!currentUser)
+			return {
+				error: true,
+				message: "Unauthorized",
+			};
 
 		// Ensure user owns the course (add admin check as needed)
 		const [existingCourse] = await db
 			.select()
 			.from(course)
 			.where(eq(course.id, courseId));
-		if (!existingCourse) return { error: "Course not found" };
+
+		if (!existingCourse) {
+			return {
+				error: true,
+				message: "Course not found",
+			};
+		}
+
 		if (existingCourse.userId !== currentUser.id /* && !currentUser.isAdmin */)
-			return { error: "Forbidden" };
+			return {
+				error: true,
+				message: "Forbidden",
+			};
 
 		const [updatedCourse] = await db
 			.update(course)
 			.set({ ...data, updatedAt: new Date() })
 			.where(eq(course.id, courseId))
 			.returning();
+
 		if (!updatedCourse) throw new Error("Failed to update course");
-		return updatedCourse;
+
+		return {
+			data: updatedCourse,
+			message: "Course updated successfully",
+			error: false,
+		};
 	} catch (error) {
 		console.error("Error updating course:", error);
 		return { error: "Failed to update course" };

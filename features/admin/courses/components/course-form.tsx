@@ -1,8 +1,14 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { CreateCourseSchema, createCourseSchema } from "../validations/courses";
+import { FileUploader } from "@/components/file-uploader";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -12,30 +18,31 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-import { useUploadFile } from "@/hooks/use-upload-file";
-import { FileUploader } from "@/components/file-uploader";
-import { StoredFile } from "@/types";
-import { createCourse } from "../actions/courses";
-import { getErrorMessage } from "@/lib/handle-error";
-import { Track } from "@/db/schema";
 import {
 	Select,
+	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-	SelectContent,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Course, Track } from "@/db/schema";
+import { useUploadFile } from "@/hooks/use-upload-file";
+import { getErrorMessage } from "@/lib/handle-error";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { createCourse, updateCourse } from "../actions/courses";
+import { CreateCourseSchema, createCourseSchema } from "../validations/courses";
 
 interface CourseFormProps {
 	userId: string;
 	tracks: Track[];
-	course?: CreateCourseSchema;
+	course?: Course;
 	onSuccess?: () => void;
 }
 
@@ -46,17 +53,20 @@ export function CourseForm({
 	onSuccess,
 }: CourseFormProps) {
 	const [isLoading, setIsLoading] = useState(false);
-	const { uploadFiles, progresses, isUploading } =
-		useUploadFile("imageUploader");
+	const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
+		"imageUploader",
+		{
+			defaultUploadedFiles: course?.image ? [course?.image] : [],
+		}
+	);
 
 	const router = useRouter();
 	const form = useForm<CreateCourseSchema>({
 		resolver: zodResolver(createCourseSchema),
-		defaultValues: course ?? {
-			title: "",
-			trackId: "",
-			image: null,
-			description: "",
+		defaultValues: {
+			title: course?.title || "",
+			trackId: course?.trackId || "",
+			description: course?.description || "",
 		},
 	});
 
@@ -67,19 +77,24 @@ export function CourseForm({
 			let imageToSave = null;
 			if (uploaded && uploaded.length > 0) {
 				imageToSave = uploaded[0];
+			} else if (course && course.image) {
+				imageToSave = course.image;
 			}
-			const newCourse = await createCourse({
+			const action = course ? updateCourse.bind(null, course.id) : createCourse;
+			const data = await action({
 				...values,
+				image: imageToSave,
 				userId,
-				image: JSON.stringify(imageToSave) as unknown as StoredFile,
 			});
-			if (newCourse.error) {
-				setIsLoading(false);
-				throw new Error(newCourse.error);
+			if (data.error) {
+				toast.error(data.message || "Failed to create course");
+				return;
 			}
-			toast.success("Course created successfully");
-			form.reset({ ...form.getValues(), image: [] });
-			if (onSuccess) onSuccess();
+			toast.success(data.message || "Course created successfully");
+			if (onSuccess) {
+				onSuccess();
+			}
+			router.refresh();
 		} catch (error) {
 			console.error("Error creating course:", error);
 			toast.error(getErrorMessage(error));
@@ -158,6 +173,35 @@ export function CourseForm({
 											</FormControl>
 											<FormMessage />
 										</FormItem>
+										{!field.value?.length && uploadedFiles.length > 0 ? (
+											<Card>
+												<CardHeader>
+													<CardTitle>Uploaded files</CardTitle>
+													<CardDescription>
+														View the uploaded files here
+													</CardDescription>
+												</CardHeader>
+												<CardContent>
+													{uploadedFiles.map((file) => (
+														<div
+															key={file.id}
+															className="jusify-center flex w-full flex-col items-center"
+														>
+															<Image
+																src={file.url}
+																alt={file.name}
+																// fill
+																width={62}
+																height={62}
+																sizes="(min-width: 640px) 640px, 100vw"
+																loading="lazy"
+																className="rounded-md object-cover"
+															/>
+														</div>
+													))}
+												</CardContent>
+											</Card>
+										) : null}
 									</div>
 								)}
 							/>
@@ -181,7 +225,9 @@ export function CourseForm({
 						</div>
 						<Button type="submit" className="w-full" disabled={isLoading}>
 							{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
-							{isLoading ? "Creating Course..." : "Create Course"}
+							{course
+								? `${isLoading ? "Updating" : "Update"} Course${isLoading ? "..." : ""}`
+								: `${isLoading ? "Creating" : "Create"} Course${isLoading ? "..." : ""}`}
 						</Button>
 					</div>
 				</div>
