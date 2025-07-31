@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 import { AdminSidebar } from "./_components/admin-sidebar";
+import { redirects } from "@/lib/constants";
 
 export const metadata: Metadata = {
 	title: "Admin Dashboard - E-Learning Platform",
@@ -23,7 +24,11 @@ export default async function Layout({
 	});
 
 	if (!session) {
-		redirect("/admin/login");
+		redirect(redirects.adminToLogin);
+	}
+
+	if (session.user.role !== "admin") {
+		redirect(redirects.toDashboard);
 	}
 
 	return (

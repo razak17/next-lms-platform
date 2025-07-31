@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { EyeNoneIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Eye, EyeOff } from "lucide-react";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
@@ -30,9 +30,9 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
 					disabled={props.value === "" || props.disabled}
 				>
 					{showPassword ? (
-						<EyeNoneIcon className="size-4" aria-hidden="true" />
+						<EyeOff className="size-5 text-muted-foreground" aria-hidden="true" />
 					) : (
-						<EyeOpenIcon className="size-4" aria-hidden="true" />
+						<Eye className="size-5 text-muted-foreground" aria-hidden="true" />
 					)}
 					<span className="sr-only">
 						{showPassword ? "Hide password" : "Show password"}

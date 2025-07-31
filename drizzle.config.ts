@@ -8,7 +8,7 @@ export default defineConfig({
 	out: "./db/migrations",
 	dialect: env.DB_TYPE as Config["dialect"],
 	strict: true,
-	verbose: false,
+	verbose: true,
 	dbCredentials:
 		env.ENV === "development" ? localConnection : { url: env.DB_URL! },
 });

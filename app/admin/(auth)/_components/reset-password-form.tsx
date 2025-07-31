@@ -99,8 +99,6 @@ export function ResetPasswordForm({
 											</FormItem>
 										)}
 									/>
-								</div>
-								<div className="grid gap-3">
 									<FormField
 										control={form.control}
 										name="confirmPassword"

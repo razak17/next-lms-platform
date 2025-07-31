@@ -37,12 +37,14 @@ export const signUp = async ({
 	password,
 	firstName,
 	lastName,
+	gender,
 	role = "learner",
 }: {
 	email: string;
 	password: string;
 	firstName: string;
 	lastName: string;
+	gender: string;
 	role?: "learner" | "admin";
 }) => {
 	try {
@@ -50,7 +52,8 @@ export const signUp = async ({
 			body: {
 				email,
 				password,
-				name: firstName,
+				name: `${firstName} ${lastName}`,
+				gender,
 			},
 		});
 		await db

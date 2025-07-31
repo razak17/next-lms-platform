@@ -35,7 +35,7 @@ export function AdminSidebar({
 
 	return (
 		<Sidebar collapsible="offcanvas" {...props}>
-			<SidebarHeader className="p-0">
+			<SidebarHeader className="p-0 px-2">
 				<SidebarMenu className="flex h-20 items-center justify-center rounded-sm bg-white">
 					<SidebarMenuItem>
 						<SidebarMenuButton

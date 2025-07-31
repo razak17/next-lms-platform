@@ -8,6 +8,9 @@ export const redirects = {
 	afterLogout: "/",
 	toVerify: "/verify-email",
 	afterVerify: "/dashboard",
+  toResetPassword: "/reset-password",
+  toForgotPassword: "/forgot-password",
+	toDashboard: "/dashboard",
 
 	adminToLogin: "/admin/login",
 	adminToSignup: "/admin/register",
@@ -20,4 +23,6 @@ export const redirects = {
 	adminToDashboard: "/admin/dashboard",
 	adminToTracks: "/admin/tracks",
 	adminToCourses: "/admin/courses",
+	adminToInvoices: "/admin/invoices",
+	adminToLearners: "/admin/learners",
 } as const;

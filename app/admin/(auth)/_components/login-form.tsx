@@ -111,29 +111,25 @@ export function LoginForm({
 												</FormItem>
 											)}
 										/>
-									</div>
-									<div className="grid gap-3">
-										<div className="flex flex-col gap-2">
-											<FormField
-												control={form.control}
-												name="password"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Password</FormLabel>
-														<FormControl>
-															<PasswordInput {...field} />
-														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-											<Link
-												href={`${redirects.adminToForgotPassword}`}
-												className="text-sidebar mr-auto text-sm underline-offset-4 hover:underline"
-											>
-												Forgot your password?
-											</Link>
-										</div>
+										<FormField
+											control={form.control}
+											name="password"
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Password</FormLabel>
+													<FormControl>
+														<PasswordInput {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+										<Link
+											href={`${redirects.adminToForgotPassword}`}
+											className="text-sidebar mr-auto text-sm underline-offset-4 hover:underline"
+										>
+											Forgot your password?
+										</Link>
 									</div>
 									<Button type="submit" className="w-full" disabled={isLoading}>
 										{isLoading && (

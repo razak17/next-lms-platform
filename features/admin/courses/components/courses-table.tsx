@@ -27,7 +27,7 @@ import {
 import { Course, Track } from "@/db/schema";
 import { IconPlus } from "@tabler/icons-react";
 import { ArrowUpDown } from "lucide-react";
-import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CourseDialog } from "./course-dialog";
 import { CourseTableActions } from "./course-table-actions";
 
@@ -61,13 +61,17 @@ export function CoursesTable({ data, userId, tracks }: CoursesTableProps) {
 
 				return (
 					<div className="flex items-center gap-2">
-						<Image
-							src={image?.url || "/placeholders/placeholder-md.jpg"}
-							alt={title}
-							width={40}
-							height={40}
-							className="h-10 w-10 rounded-full object-cover"
-						/>
+						<Avatar className="h-10 w-10 rounded-full">
+							<AvatarImage src={image?.url} alt={title} />
+							<AvatarFallback className="text-sidebar-accent-foreground rounded-full">
+								{title
+									? title
+											.split(" ")
+											.map((n) => n[0])
+											.join("")
+									: "C"}
+							</AvatarFallback>
+						</Avatar>
 						{title}
 					</div>
 				);
@@ -148,8 +152,8 @@ export function CoursesTable({ data, userId, tracks }: CoursesTableProps) {
 	});
 
 	return (
-		<div>
-			<div className="flex items-center justify-between py-4">
+		<div className="space-y-4">
+			<div className="flex items-center justify-between">
 				<div className="relative">
 					<Search className="absolute top-3 left-3 h-4 w-4 text-slate-600" />
 					<Input

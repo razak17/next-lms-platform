@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
 import AuthBackdrop from "../../../assets/images/auth-backdrop.jpg";
+import { redirects } from "@/lib/constants";
 
 export const metadata: Metadata = {
 	title: "Admin Auth - E-Learning Platform",
@@ -20,9 +21,11 @@ export default async function Layout({
 		headers: await headers(),
 	});
 
-	if (session) {
-		redirect("/admin/dashboard");
-	}
+	if (session && session.user.role === "admin") {
+		redirect(redirects.adminToDashboard);
+	} else if (session && session.user.role !== "admin") {
+    redirect(redirects.toDashboard);
+  }
 
 	return (
 		<div className="relative flex min-h-screen w-full flex-col items-center justify-center">

@@ -56,14 +56,12 @@ export default async function CoursesPage() {
 					description="Create, edit, and manage your courses effectively"
 				/>
 			</div>
-			<div className="flex flex-col gap-4 py-2 md:gap-6">
-				<div className="px-6">
-					<CoursesTable
-						data={coursesWithTrack}
-						userId={session.user.id}
-						tracks={tracks}
-					/>
-				</div>
+			<div className="flex flex-col px-6 pt-6">
+				<CoursesTable
+					data={coursesWithTrack}
+					userId={session.user.id}
+					tracks={tracks}
+				/>
 			</div>
 		</div>
 	);

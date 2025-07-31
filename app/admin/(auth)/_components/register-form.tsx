@@ -20,6 +20,13 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { redirects } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -47,22 +54,30 @@ export function RegisterForm({
 		defaultValues: {
 			firstName: "",
 			lastName: "",
+			gender: "male",
 			email: "",
 			password: "",
 			confirmPassword: "",
 		},
 	});
 
+	const genderOptions = [
+		{ value: "male", label: "Male" },
+		{ value: "femaile", label: "Female" },
+		{ value: "other", label: "Other" },
+	];
+
 	async function onSubmit(values: z.infer<typeof registerSchema>) {
 		setIsLoading(true);
 
-		const { email, password, firstName, lastName } = values;
+		const { email, password, firstName, lastName, gender } = values;
 
 		const { success, message } = await signUp({
 			email,
 			password,
 			firstName,
 			lastName,
+			gender,
 			role: "admin",
 		});
 
@@ -71,7 +86,7 @@ export function RegisterForm({
 				`${message} Please check your email for your verification code.`
 			);
 			router.push(
-				`${redirects.adminToVerify}??email=${encodeURIComponent(email)}`
+				`${redirects.adminToVerify}?email=${encodeURIComponent(email)}`
 			);
 		} else {
 			toast.error(message);
@@ -97,7 +112,7 @@ export function RegisterForm({
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 							<div className="grid gap-6">
 								<div className="grid gap-6">
-									<div className="grid gap-3">
+									<div className="grid gap-4">
 										<FormField
 											control={form.control}
 											name="firstName"
@@ -126,6 +141,33 @@ export function RegisterForm({
 										/>
 										<FormField
 											control={form.control}
+											name="gender"
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Gender</FormLabel>
+													<Select
+														onValueChange={field.onChange}
+														defaultValue={field.value}
+													>
+														<FormControl className="w-full">
+															<SelectTrigger>
+																<SelectValue />
+															</SelectTrigger>
+														</FormControl>
+														<SelectContent>
+															{genderOptions?.map((genderOption, i) => (
+																<SelectItem key={i} value={genderOption.value}>
+																	{genderOption.label}
+																</SelectItem>
+															))}
+														</SelectContent>
+													</Select>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+										<FormField
+											control={form.control}
 											name="email"
 											render={({ field }) => (
 												<FormItem>
@@ -137,36 +179,32 @@ export function RegisterForm({
 												</FormItem>
 											)}
 										/>
-									</div>
-									<div className="grid gap-3">
-										<div className="flex flex-col gap-2">
-											<FormField
-												control={form.control}
-												name="password"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Password</FormLabel>
-														<FormControl>
-															<PasswordInput {...field} />
-														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-											<FormField
-												control={form.control}
-												name="confirmPassword"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Confirm Password</FormLabel>
-														<FormControl>
-															<PasswordInput {...field} />
-														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-										</div>
+										<FormField
+											control={form.control}
+											name="password"
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Password</FormLabel>
+													<FormControl>
+														<PasswordInput {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
+										<FormField
+											control={form.control}
+											name="confirmPassword"
+											render={({ field }) => (
+												<FormItem>
+													<FormLabel>Confirm Password</FormLabel>
+													<FormControl>
+														<PasswordInput {...field} />
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)}
+										/>
 									</div>
 									<Button type="submit" className="w-full" disabled={isLoading}>
 										{isLoading && (

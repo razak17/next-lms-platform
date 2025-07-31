@@ -21,14 +21,14 @@ export const invoice = pgTable("invoice", {
 		.$defaultFn(() => generateId())
 		.primaryKey(), // prefix_ + nanoid (12)
 	amount: decimal("amount", { precision: 10, scale: 2 }).notNull().default("0"),
-	details: text("last_name"),
+	details: text("details"),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
-	learnerId: text("user_id")
+	learnerId: text("learner_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
-	status: invoiceStatusEnums(),
+	status: invoiceStatusEnums().notNull().default("pending"),
 	dueDate: timestamp("due_date").$defaultFn(() => /* @__PURE__ */ new Date()),
 	createdAt: timestamp("created_at")
 		.$defaultFn(() => /* @__PURE__ */ new Date())

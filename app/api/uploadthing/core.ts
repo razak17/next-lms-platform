@@ -2,7 +2,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 import { ratelimit } from "@/lib/rate-limit";
-import { getCurrentUser } from "@/server/user";
+import { getCurrentUser } from "@/features/admin/users/queries/users";
 
 const f = createUploadthing();
 
