@@ -17,7 +17,7 @@ export const course = pgTable("course", {
 		.references(() => user.id, { onDelete: "cascade" }),
 	trackId: varchar("track_id", { length: 30 })
 		.notNull()
-		.references(() => track.id, { onDelete: "cascade" }),
+		.references(() => track.id, { onDelete: "no action" }),
 	createdAt: timestamp("created_at")
 		.$defaultFn(() => /* @__PURE__ */ new Date())
 		.notNull(),

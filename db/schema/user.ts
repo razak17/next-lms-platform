@@ -2,14 +2,21 @@ import { relations } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { course } from "./course";
 import { track } from "./track";
+import { invoice } from "./invoice";
 
 export const userRoleEnums = pgEnum("user_role", ["admin", "learner"]);
+export const userGenderEnums = pgEnum("user_gender", [
+	"male",
+	"female",
+	"other",
+]);
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	firstName: text("first_name"),
 	lastName: text("last_name"),
+	gender: userGenderEnums(),
 	email: text("email").notNull().unique(),
 	emailVerified: boolean("email_verified")
 		.$defaultFn(() => false)
@@ -75,6 +82,8 @@ export const verification = pgTable("verification", {
 export const userRelations = relations(user, ({ many }) => ({
 	tracks: many(track),
 	courses: many(course),
+	invoice: many(invoice),
+	learner: many(user, { relationName: "learner" }),
 }));
 
 export type User = typeof user.$inferSelect;

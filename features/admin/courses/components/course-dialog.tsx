@@ -17,7 +17,7 @@ interface CourseDialogProps {
 	userId: string;
 	trigger: React.ReactNode;
 	tracks: Track[];
-	course: Course;
+	course?: Course;
 }
 
 export function CourseDialog({

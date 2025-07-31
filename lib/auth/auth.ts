@@ -11,6 +11,16 @@ import { sendEmail } from "./email";
 import { ac, admin, learner } from "./permissions";
 
 export const auth = betterAuth({
+	user: {
+		additionalFields: {
+			gender: {
+				type: "string",
+				required: false,
+				defaultValue: null,
+				input: true,
+			},
+		},
+	},
 	database: drizzleAdapter(db, {
 		provider: "pg",
 		schema,
