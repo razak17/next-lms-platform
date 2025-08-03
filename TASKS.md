@@ -36,16 +36,16 @@
 
 ### Invoices
 
-- [ ] Invoice Table
-- [ ] Search Invoices
-- [ ] Add New Invoice
-- [ ] Update Invoice
-- [ ] Invoice Details Page
+- [x] Invoice Table
+- [x] Search Invoices
+- [x] Add New Invoice
+- [x] Update Invoice
+- [x] Invoice Details Page
 
 ### Learners
 
-- [ ] Learners Table
-- [ ] View Learner Info
+- [x] Learners Table
+- [x] View Learner Info
 
 ### Profile
 
@@ -78,8 +78,8 @@
 - [ ] Search Courses
 - [ ] Preview Course
 - [ ] Purchase Course
-  - [ ] Checkout Form
-  - [ ] Stripe/Paystack integration
+- [ ] Checkout Form
+- [ ] Stripe/Paystack integration
 
 # Bugs
 - [ ] Sign user in once they verify their email
@@ -88,4 +88,5 @@
 - [x] Use Avatar for courses page
 - [x] Use Badge for invoice page status
 - [x] Invoice table search
+- [x] Delete Course Not Working
 
