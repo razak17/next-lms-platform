@@ -8,6 +8,7 @@ import { IconPlus } from "@tabler/icons-react";
 import { DataTable } from "../../shared/components/data-table";
 import { CourseDialog } from "./course-dialog";
 import { CourseTableActions } from "./course-table-actions";
+import { formatDate } from "@/lib/utils";
 
 interface CoursesTableProps {
 	data: (Course & { track: Track })[];
@@ -50,17 +51,7 @@ export function CoursesTable({ data, userId, tracks }: CoursesTableProps) {
 			header: "Created At",
 			cell: ({ row }) => {
 				const { createdAt } = row.original;
-				return (
-					<div className="text-sm">
-						{createdAt
-							? new Date(createdAt).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-								})
-							: "—"}
-					</div>
-				);
+				return <span>{createdAt ? formatDate(createdAt) : "—"}</span>;
 			},
 		},
 		{

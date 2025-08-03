@@ -61,11 +61,8 @@ export function LearnerDialog({ trigger, user, track }: InvoiceDialogProps) {
 							<Badge className="text-md bg-sidebar-accent text-sidebar-accent-foreground inline-block rounded-full px-3 py-1 font-semibold">
 								Gender
 							</Badge>
-							<span className="font-bold">
-								{user?.gender
-									? user?.gender?.charAt(0).toUpperCase() +
-										user?.gender?.slice(1)
-									: "Not Specified"}
+							<span className="font-bold capitalize">
+								{user?.gender || "Not Specified"}
 							</span>
 						</div>
 						<div className="grid grid-cols-[120px_1fr] items-center">

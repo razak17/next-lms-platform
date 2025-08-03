@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LearnerTrack, Track, User } from "@/db/schema";
 import { DataTable } from "../../shared/components/data-table";
 import { LearnerTableActions } from "./learner-table-actions";
+import { formatDate, formatPrice } from "@/lib/utils";
 
 interface LearnersTableProps {
 	data: {
@@ -24,7 +25,7 @@ export function LearnersTable({ data }: LearnersTableProps) {
 				const learner = row.original.user;
 				return (
 					<div className="flex items-center gap-2">
-						<Avatar>
+						<Avatar className="h-10 w-10 rounded-full">
 							<AvatarImage
 								src={learner?.image ? learner?.image : undefined}
 								alt={learner?.name}
@@ -35,7 +36,7 @@ export function LearnersTable({ data }: LearnersTableProps) {
 											.split(" ")
 											.map((n) => n[0])
 											.join("")
-									: "U"}
+									: "L"}
 							</AvatarFallback>
 						</Avatar>
 						<span>{learner?.name}</span>
@@ -65,11 +66,7 @@ export function LearnersTable({ data }: LearnersTableProps) {
 				return (
 					<span>
 						{learner_track?.createdAt
-							? new Date(learner_track?.createdAt).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-								})
+							? formatDate(learner_track?.createdAt)
 							: "—"}
 					</span>
 				);
@@ -79,13 +76,7 @@ export function LearnersTable({ data }: LearnersTableProps) {
 			id: "amount",
 			accessorFn: (row) => row.track?.price,
 			header: "Amount",
-			cell: ({ row }) => {
-				const { price } = row.original.track;
-				const amountNumber = parseFloat(price);
-				return (
-					<span>${!isNaN(amountNumber) ? amountNumber.toFixed(2) : price}</span>
-				);
-			},
+			cell: ({ row }) => formatPrice(row.original.track.price),
 			sortingFn: (rowA, rowB, _) => {
 				const a = parseFloat(rowA.original.track.price);
 				const b = parseFloat(rowB.original.track.price);
@@ -99,7 +90,10 @@ export function LearnersTable({ data }: LearnersTableProps) {
 			id: "gender",
 			accessorFn: (row) => row.user?.gender,
 			header: "Gender",
-			cell: ({ row }) => row.original.user?.gender || "Not specified",
+			cell: ({ row }) => {
+				const gender = row.original.user?.gender;
+				return <span className="capitalize">{gender || "Not Specified"}</span>;
+			},
 		},
 		{
 			id: "actions",

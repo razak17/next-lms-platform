@@ -4,6 +4,7 @@ import { Calendar, UserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { formatPrice } from "@/lib/utils";
 
 const courseColorClasses = [
 	{ bg: "bg-blue-100", text: "text-blue-800" },
@@ -37,7 +38,7 @@ export function TrackCard({
 						className="h-40 w-full rounded-t-lg object-cover"
 					/>
 					<div className="bg-secondary text-foreground absolute top-4 right-4 rounded-full px-3 py-1 text-sm font-semibold">
-						${track.price}
+						{formatPrice(track.price)}
 					</div>
 				</div>
 				<CardContent className="flex h-full flex-1 flex-col items-start gap-2 p-4">

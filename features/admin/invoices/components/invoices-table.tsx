@@ -9,6 +9,7 @@ import { IconPlus } from "@tabler/icons-react";
 import { DataTable } from "../../shared/components/data-table";
 import { InvoiceDialog } from "./invoice-dialog";
 import { InvoiceTableActions } from "./invoice-table-actions";
+import { formatDate, formatPrice, toTitleCase } from "@/lib/utils";
 
 interface InvoicesTableProps {
 	data: (Invoice & { learner: User })[];
@@ -26,7 +27,7 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 				const { learner } = row.original;
 				return (
 					<div className="flex items-center gap-2">
-						<Avatar className="h-8 w-8 rounded-full grayscale">
+						<Avatar className="h-10 w-10 rounded-full">
 							<AvatarImage
 								src={learner?.image ? learner?.image : undefined}
 								alt={learner?.name}
@@ -45,7 +46,7 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 				);
 			},
 			filterFn: (row, _, filterValue) => {
-				const {learner} = row.original;
+				const { learner } = row.original;
 				if (!learner || !learner.name) return false;
 				return learner.name
 					.toLowerCase()
@@ -63,31 +64,13 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 			header: "Due Date",
 			cell: ({ row }) => {
 				const { dueDate } = row.original;
-				return (
-					<span>
-						{dueDate
-							? new Date(dueDate).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-								})
-							: "—"}
-					</span>
-				);
+				return <span>{dueDate ? formatDate(dueDate) : "—"}</span>;
 			},
 		},
 		{
 			accessorKey: "amount",
 			header: "Amount",
-			cell: ({ row }) => {
-				const { amount } = row.original;
-				const amountNumber = parseFloat(amount);
-				return (
-					<span>
-						${!isNaN(amountNumber) ? amountNumber.toFixed(2) : amount}
-					</span>
-				);
-			},
+			cell: ({ cell }) => formatPrice(cell.getValue() as number),
 			sortingFn: (rowA, rowB, columnId) => {
 				const a = parseFloat(rowA.getValue(columnId));
 				const b = parseFloat(rowB.getValue(columnId));
@@ -111,11 +94,7 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 					<Badge
 						className={`text-${statusColors[status]}-500 bg-${statusColors[status]}-100 rounded-full font-medium`}
 					>
-						{status ? (
-							<>{status?.charAt(0).toUpperCase() + status?.slice(1)}</>
-						) : (
-							"-"
-						)}
+						{status ? toTitleCase(status) : "Unknown"}
 					</Badge>
 				);
 			},
