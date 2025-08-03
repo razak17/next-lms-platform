@@ -63,7 +63,7 @@ export function RegisterForm({
 
 	const genderOptions = [
 		{ value: "male", label: "Male" },
-		{ value: "femaile", label: "Female" },
+		{ value: "female", label: "Female" },
 		{ value: "other", label: "Other" },
 	];
 
@@ -97,7 +97,7 @@ export function RegisterForm({
 
 	return (
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
-			<Card>
+			<Card className="max-h-[92vh] overflow-y-auto sm:max-w-md">
 				<div className="flex w-full items-center justify-center">
 					<Icons.logo className="h-12 w-24" aria-hidden="true" />
 				</div>
