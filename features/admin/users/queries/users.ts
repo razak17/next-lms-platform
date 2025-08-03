@@ -62,9 +62,7 @@ export async function getUserByEmail(email: string) {
 		return result;
 	} catch (error) {
 		console.error("Error fetching user by email:", error);
-		return {
-			error: "Failed to fetch user by email",
-		};
+		return { error: "Failed to fetch user by email" };
 	}
 }
 

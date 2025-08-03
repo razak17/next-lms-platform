@@ -29,7 +29,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth/client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { resetPasswordSchema } from "@/lib/validations/auth";
+import { resetPasswordSchema } from "@/features/admin/auth/validations/auth";
 import { Icons } from "@/components/icons";
 
 export function ResetPasswordForm({

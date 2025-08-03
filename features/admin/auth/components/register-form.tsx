@@ -27,14 +27,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { redirects } from "@/lib/constants";
+import { genderOptions, redirects } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 import { signUp } from "@/features/auth/actions/auth";
 
 import { Icons } from "@/components/icons";
 import { PasswordInput } from "@/components/password-input";
-import { registerSchema } from "@/lib/validations/auth";
+import { registerSchema } from "@/features/admin/auth/validations/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -60,12 +60,6 @@ export function RegisterForm({
 			confirmPassword: "",
 		},
 	});
-
-	const genderOptions = [
-		{ value: "male", label: "Male" },
-		{ value: "female", label: "Female" },
-		{ value: "other", label: "Other" },
-	];
 
 	async function onSubmit(values: z.infer<typeof registerSchema>) {
 		setIsLoading(true);

@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { authClient } from "@/lib/auth/client";
 import { redirects } from "@/lib/constants";
-import { otpVerificationSchema } from "@/lib/validations/auth";
+import { otpVerificationSchema } from "@/features/admin/auth/validations/auth";
 import { sendVerificationOtp } from "@/features/auth/actions/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";

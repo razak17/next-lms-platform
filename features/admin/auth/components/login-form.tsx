@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { PasswordInput } from "@/components/password-input";
 import { redirects } from "@/lib/constants";
-import { loginSchema } from "@/lib/validations/auth";
+import { loginSchema } from "@/features/admin/auth/validations/auth";
 import { sendVerificationOtp, signIn } from "@/features/auth/actions/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";

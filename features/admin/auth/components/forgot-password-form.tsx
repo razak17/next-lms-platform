@@ -25,7 +25,7 @@ import { redirects } from "@/lib/constants";
 
 import { Icons } from "@/components/icons";
 import { authClient } from "@/lib/auth/client";
-import { forgotPasswordSchema } from "@/lib/validations/auth";
+import { forgotPasswordSchema } from "@/features/admin/auth/validations/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";

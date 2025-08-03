@@ -25,4 +25,11 @@ export const redirects = {
 	adminToCourses: "/admin/courses",
 	adminToInvoices: "/admin/invoices",
 	adminToLearners: "/admin/learners",
+	adminToProfile: "/admin/profile",
 } as const;
+
+export const genderOptions = [
+	{ value: "male", label: "Male" },
+	{ value: "female", label: "Female" },
+	{ value: "other", label: "Other" },
+];

@@ -49,8 +49,9 @@
 
 ### Profile
 
-- [ ] View Profile Info
-- [ ] Update Profile Info
+- [x] View Profile Info
+- [x] Update Profile Info
+- [ ] Update Profile Picture
 
 ## Learners Dashboard
 

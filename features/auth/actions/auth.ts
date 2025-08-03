@@ -79,20 +79,6 @@ export const signUp = async ({
 	}
 };
 
-export const getUserByEmail = async (email: string) => {
-	const currentUser = await db.query.user.findFirst({
-		where: eq(user.email, email),
-	});
-
-	if (!currentUser) {
-		redirect("/");
-	}
-
-	return {
-		currentUser,
-	};
-};
-
 export const sendVerificationOtp = async (email: string) => {
 	try {
 		const { currentUser } = await getUserByEmail(email);
