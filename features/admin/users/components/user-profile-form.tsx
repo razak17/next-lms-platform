@@ -157,6 +157,12 @@ export function UserProfileForm({ user }: { user: User }) {
 									<FormLabel>Phone</FormLabel>
 									<FormControl>
 										<PhoneInput
+											enableAreaCodeStretch
+											autoFormat
+											enableSearch
+											disableSearchIcon
+											autocompleteSearch
+											countryCodeEditable={true}
 											country={"gh"}
 											value={field.value}
 											onChange={field.onChange}

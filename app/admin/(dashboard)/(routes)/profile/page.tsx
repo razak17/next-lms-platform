@@ -1,12 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Heading } from "@/components/ui/heading";
 import { UserProfileDetails } from "@/features/admin/users/components/user-profile-details";
+import { getUserByEmail } from "@/features/admin/users/queries/users";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { User } from "@/db/schema";
-import { getUserByEmail } from "@/features/admin/users/queries/users";
 
 export default async function ProfilePage() {
 	const session = await auth.api.getSession({
