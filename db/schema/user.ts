@@ -5,12 +5,13 @@ import { track } from "./track";
 import { invoice } from "./invoice";
 import { learnerTrack } from "./learner-track";
 
-export const userRoleEnums = pgEnum("user_role", ["admin", "learner"]);
-export const userGenderEnums = pgEnum("user_gender", [
-	"male",
-	"female",
-	"other",
-]);
+export const userRoles = ["admin", "learner"] as const;
+export type UserRole = (typeof userRoles)[number];
+export const userRoleEnums = pgEnum("user_role", userRoles);
+
+export const userGenders = ["male", "female", "other"] as const;
+export type UserGender = (typeof userGenders)[number];
+export const userGenderEnums = pgEnum("user_gender", userGenders);
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),

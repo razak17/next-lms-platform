@@ -3,14 +3,22 @@
 import { db } from "@/db/drizzle";
 import { CourseInsert, course } from "@/db/schema";
 import { getCurrentUser } from "@/features/admin/users/queries/users";
+import { redirects } from "@/lib/constants";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirects } from "@/lib/constants";
+import { isAdmin } from "../../shared/utils/middleware";
 
 export async function createCourse(data: CourseInsert) {
 	try {
 		const { currentUser } = await getCurrentUser();
 		if (!currentUser) return { error: "Unauthorized" };
+
+		if (!isAdmin(currentUser.role)) {
+			return {
+				error: true,
+				message: "You do not have permission to create a course",
+			};
+		}
 
 		if (!data.userId) data.userId = currentUser.id;
 
@@ -36,11 +44,19 @@ export async function updateCourse(
 ) {
 	try {
 		const { currentUser } = await getCurrentUser();
-		if (!currentUser)
+		if (!currentUser) {
 			return {
 				error: true,
 				message: "Unauthorized",
 			};
+		}
+
+		if (!isAdmin(currentUser.role)) {
+			return {
+				error: true,
+				message: "You do not have permission to update this course",
+			};
+		}
 
 		// Ensure user owns the course (add admin check as needed)
 		const [existingCourse] = await db
@@ -83,11 +99,19 @@ export async function updateCourse(
 export async function deleteCourse(courseId: string) {
 	try {
 		const { currentUser } = await getCurrentUser();
-		if (!currentUser)
+		if (!currentUser) {
 			return {
 				error: true,
 				message: "Unauthorized",
 			};
+		}
+
+		if (!isAdmin(currentUser.role)) {
+			return {
+				error: true,
+				message: "You do not have permission to delete this course",
+			};
+		}
 
 		const [existingCourse] = await db
 			.select()

@@ -3,14 +3,22 @@
 import { db } from "@/db/drizzle";
 import { TrackInsert, track } from "@/db/schema";
 import { getCurrentUser } from "@/features/admin/users/queries/users";
+import { redirects } from "@/lib/constants";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirects } from "@/lib/constants";
+import { isAdmin } from "../../shared/utils/middleware";
 
 export async function createTrack(data: Omit<TrackInsert, "id">) {
 	try {
 		const { currentUser } = await getCurrentUser();
 		if (!currentUser) return { error: "Unauthorized" };
+
+		if (!isAdmin(currentUser.role)) {
+			return {
+				error: true,
+				message: "You do not have permission to create a track",
+			};
+		}
 
 		// Optional: assign userId
 		if (!data.userId) data.userId = currentUser.id;
@@ -37,11 +45,19 @@ export async function updateTrack(
 ) {
 	try {
 		const { currentUser } = await getCurrentUser();
-		if (!currentUser)
+		if (!currentUser) {
 			return {
 				error: true,
 				message: "Unauthorized",
 			};
+		}
+
+		if (!isAdmin(currentUser.role)) {
+			return {
+				error: true,
+				message: "You do not have permission to update this track",
+			};
+		}
 
 		// Ensure the user owns the track OR is admin (pseudo logic, adjust as needed)
 		const [existingTrack] = await db
@@ -84,11 +100,19 @@ export async function updateTrack(
 export async function deleteTrack(trackId: string) {
 	try {
 		const { currentUser } = await getCurrentUser();
-		if (!currentUser)
+		if (!currentUser) {
 			return {
 				error: true,
 				message: "Unauthorized",
 			};
+		}
+
+		if (!isAdmin(currentUser.role)) {
+			return {
+				error: true,
+				message: "You do not have permission to delete this track",
+			};
+		}
 
 		const [existingTrack] = await db
 			.select()

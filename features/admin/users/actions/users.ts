@@ -2,7 +2,8 @@
 
 import { db } from "@/db/drizzle";
 import { user, User } from "@/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { getCurrentUser } from "@/features/admin/users/queries/users";
+import { eq } from "drizzle-orm";
 
 export async function updateUser(
 	userId: string,
@@ -12,6 +13,14 @@ export async function updateUser(
 	>
 ): Promise<User | { error: string }> {
 	try {
+		const { currentUser } = await getCurrentUser();
+
+		if (!currentUser) return { error: "Unauthorized" };
+
+    if (currentUser.id !== userId) {
+      return { error: "You do not have permission to update this user" };
+    }
+
 		const [updatedUser] = await db
 			.update(user)
 			.set({
