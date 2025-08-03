@@ -19,6 +19,8 @@ export const user = pgTable("user", {
 	lastName: text("last_name"),
 	gender: userGenderEnums(),
 	email: text("email").notNull().unique(),
+	phone: text("phone"),
+	bio: text("bio"),
 	emailVerified: boolean("email_verified")
 		.$defaultFn(() => false)
 		.notNull(),
@@ -86,7 +88,7 @@ export const userRelations = relations(user, ({ many }) => ({
 	invoice: many(invoice),
 	learner: many(user, { relationName: "learner" }),
 	learnerTrack: many(learnerTrack),
-  createdBy: many(user, { relationName: "createdBy" }),
+	createdBy: many(user, { relationName: "createdBy" }),
 }));
 
 export type User = typeof user.$inferSelect;
