@@ -12,6 +12,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { Course, course } from "./course";
 import { user } from "./user";
+import { learnerTrack } from "./learner-track";
 
 export const track = pgTable("track", {
 	id: varchar("id", { length: 30 })
@@ -41,6 +42,7 @@ export const trackRelations = relations(track, ({ many, one }) => ({
 		references: [user.id],
 	}),
 	courses: many(course),
+	learnerTrack: many(learnerTrack),
 }));
 
 export type Track = typeof track.$inferSelect;

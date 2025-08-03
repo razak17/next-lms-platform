@@ -3,6 +3,7 @@ import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { course } from "./course";
 import { track } from "./track";
 import { invoice } from "./invoice";
+import { learnerTrack } from "./learner-track";
 
 export const userRoleEnums = pgEnum("user_role", ["admin", "learner"]);
 export const userGenderEnums = pgEnum("user_gender", [
@@ -84,6 +85,8 @@ export const userRelations = relations(user, ({ many }) => ({
 	courses: many(course),
 	invoice: many(invoice),
 	learner: many(user, { relationName: "learner" }),
+	learnerTrack: many(learnerTrack),
+  createdBy: many(user, { relationName: "createdBy" }),
 }));
 
 export type User = typeof user.$inferSelect;
