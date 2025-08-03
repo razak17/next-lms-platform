@@ -1,14 +1,16 @@
 import OTPVerificationEmail from "@/components/emails/otp-verification";
 import ResetPasswordEmail from "@/components/emails/reset-password";
+import { env } from "@/config/schema";
 import { db } from "@/db/drizzle";
 import * as schema from "@/db/schema";
-import { env } from "@/config/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin as adminPlugin, emailOTP } from "better-auth/plugins";
-import { sendEmail } from "./email";
+import { resend } from "../resend";
 import { ac, admin, learner } from "./permissions";
+
+const EMAIL_FROM = `${env.EMAIL_SENDER_NAME} <${env.EMAIL_SENDER_ADDRESS}>`;
 
 export const auth = betterAuth({
 	user: {
@@ -50,7 +52,8 @@ export const auth = betterAuth({
 		enabled: true,
 		requireEmailVerification: true,
 		sendResetPassword: async ({ user, url }) => {
-			sendEmail({
+			resend.emails.send({
+				from: EMAIL_FROM,
 				to: user.email,
 				subject: "Reset your password",
 				react: ResetPasswordEmail({
@@ -82,7 +85,8 @@ export const auth = betterAuth({
 			allowedAttempts: 5, // Allow 5 attempts before invalidating the OTP
 			expiresIn: 600, //
 			async sendVerificationOTP({ email, otp }) {
-				sendEmail({
+				resend.emails.send({
+					from: EMAIL_FROM,
 					to: email,
 					subject: "Verify your account",
 					react: OTPVerificationEmail({ userEmail: email, otpCode: otp }),

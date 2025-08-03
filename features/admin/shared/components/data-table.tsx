@@ -183,7 +183,7 @@ export function DataTable<TData, TValue>({
 								}
 								variant={pageIdx === currentPage ? "default" : "outline"}
 								onClick={() => table.setPageIndex(pageIdx)}
-								// disabled={pageIdx === currentPage}
+								disabled={pageIdx === currentPage}
 							>
 								{pageIdx + 1}
 							</Button>
