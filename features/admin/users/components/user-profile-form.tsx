@@ -32,6 +32,7 @@ import "react-phone-input-2/lib/style.css";
 import { toast } from "sonner";
 import { z } from "zod";
 import { updateUser } from "../actions/users";
+import { getErrorMessage } from "@/lib/handle-error";
 
 export function UserProfileForm({ user }: { user: User }) {
 	const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +63,7 @@ export function UserProfileForm({ user }: { user: User }) {
 				bio: values.bio || null,
 				phone: values.phone || null,
 				location: values.location || null,
+				image: user.image,
 			});
 
 			if ("error" in updatedUser) {
@@ -72,7 +74,7 @@ export function UserProfileForm({ user }: { user: User }) {
 			router.push(redirects.adminToProfile);
 		} catch (error) {
 			console.error("Error updating user profile:", error);
-			toast.error("Failed to update profile. Please try again.");
+			toast.error(getErrorMessage(error));
 		} finally {
 			setIsLoading(false);
 		}
@@ -209,11 +211,10 @@ export function UserProfileForm({ user }: { user: User }) {
 							)}
 						/>
 					</div>
-					<div className="flex w-full items-center justify-between gap-4">
+					<div className="flex justify-end gap-4">
 						<Button
 							type="button"
 							variant="secondary"
-							className="flex-1"
 							onClick={() => {
 								form.reset();
 							}}
@@ -223,7 +224,6 @@ export function UserProfileForm({ user }: { user: User }) {
 						<Button
 							type="submit"
 							disabled={isLoading || !form.formState.isDirty}
-							className="flex-1"
 						>
 							{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
 							{`${isLoading ? "Saving" : "Save"} Changes${isLoading ? "..." : ""}`}

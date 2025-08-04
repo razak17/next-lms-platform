@@ -1,15 +1,25 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
 	Card,
-	CardHeader,
-	CardDescription,
 	CardContent,
+	CardDescription,
+	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
 import { User } from "@/db/schema";
+import { Camera } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ProfileImageUploadModal } from "./profile-image-upload-modal";
 import { UserProfileForm } from "./user-profile-form";
 
 export function UserProfileDetails({ user }: { user: User }) {
+	const [showUploadModal, setShowUploadModal] = useState(false);
+	const router = useRouter();
+
 	return (
 		<Card>
 			<CardHeader>
@@ -20,26 +30,51 @@ export function UserProfileDetails({ user }: { user: User }) {
 			</CardHeader>
 			<CardContent>
 				<div className="flex flex-col items-center gap-4">
-					<Avatar className="h-42 w-42 rounded-full grayscale">
-						<AvatarImage
-							src={user?.image ? user?.image : undefined}
-							alt={user?.name}
-						/>
-						<AvatarFallback className="text-sidebar-accent-foreground rounded-full text-6xl">
-							{user?.name
-								? user.name
-										.split(" ")
-										.map((n) => n[0])
-										.join("")
-								: "U"}
-						</AvatarFallback>
-					</Avatar>
-					<p>Change profile picture</p>
+					<div className="relative">
+						<Avatar className="h-42 w-42 rounded-full">
+							<AvatarImage
+								src={user?.image ? user?.image : undefined}
+								alt={user?.name}
+							/>
+							<AvatarFallback className="text-sidebar-accent-foreground rounded-full text-6xl">
+								{user?.name
+									? user.name
+											.split(" ")
+											.map((n) => n[0])
+											.join("")
+									: "U"}
+							</AvatarFallback>
+						</Avatar>
+						<Button
+							variant="outline"
+							size="icon"
+							className="absolute right-2 -bottom-2 h-12 w-12 rounded-full"
+							onClick={() => setShowUploadModal(true)}
+						>
+							<Camera className="size-5" />
+						</Button>
+					</div>
+					<Button
+						variant="link"
+						className="text-muted-foreground text-sm"
+						onClick={() => setShowUploadModal(true)}
+					>
+						Change profile picture
+					</Button>
 				</div>
-				<div className="flex flex-col items-center gap-2 mt-4">
-          <UserProfileForm user={user} />
-        </div>
+				<div className="mt-4 flex flex-col items-center gap-2">
+					<UserProfileForm user={user} />
+				</div>
 			</CardContent>
+
+			<ProfileImageUploadModal
+				user={user}
+				isOpen={showUploadModal}
+				onClose={() => setShowUploadModal(false)}
+				onSuccess={() => {
+					router.refresh();
+				}}
+			/>
 		</Card>
 	);
 }

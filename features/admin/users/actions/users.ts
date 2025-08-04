@@ -9,7 +9,14 @@ export async function updateUser(
 	userId: string,
 	data: Pick<
 		User,
-		"firstName" | "lastName" | "email" | "gender" | "bio" | "phone" | "location"
+		| "firstName"
+		| "lastName"
+		| "email"
+		| "gender"
+		| "bio"
+		| "phone"
+		| "location"
+		| "image"
 	>
 ): Promise<User | { error: string }> {
 	try {
@@ -17,20 +24,21 @@ export async function updateUser(
 
 		if (!currentUser) return { error: "Unauthorized" };
 
-    if (currentUser.id !== userId) {
-      return { error: "You do not have permission to update this user" };
-    }
+		if (currentUser.id !== userId) {
+			return { error: "You do not have permission to update this user" };
+		}
 
 		const [updatedUser] = await db
 			.update(user)
 			.set({
-        name: `${data.firstName} ${data.lastName}`,
+				name: `${data.firstName} ${data.lastName}`,
 				firstName: data.firstName,
 				lastName: data.lastName,
 				gender: data.gender,
 				bio: data.bio,
 				phone: data.phone,
 				location: data.location,
+				image: data.image,
 			})
 			.where(eq(user.id, userId))
 			.returning();
