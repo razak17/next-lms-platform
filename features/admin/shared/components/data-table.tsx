@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
 	item: string;
 	searchColumn?: string;
 	addButton?: React.ReactNode;
-  className?: string;
+	className?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -41,7 +41,7 @@ export function DataTable<TData, TValue>({
 	item,
 	searchColumn = "name",
 	addButton,
-  className = "",
+	className = "",
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(

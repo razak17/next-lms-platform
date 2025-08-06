@@ -1,26 +1,27 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { learnerTrack,LearnerTrackInsert} from "@/db/schema";
+import { learnerTrack, LearnerTrackInsert } from "@/db/schema";
 import { getCurrentUser } from "@/features/admin/users/queries/users";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirects } from "@/lib/constants";
 
-export async function addLearnerTrack(
-  data: LearnerTrackInsert
-): Promise<void> {
-  const user = await getCurrentUser();
-  
-  if (!user) {
-    throw new Error("User not found");
-  }
+export async function addLearnerTrack(data: LearnerTrackInsert): Promise<void> {
+	const user = await getCurrentUser();
 
-  const [newTrack] = await db.insert(learnerTrack).values({
-    ...data,
-  }).returning();
+	if (!user) {
+		throw new Error("User not found");
+	}
 
-  revalidatePath(redirects.adminToTracks);
+	const [newTrack] = await db
+		.insert(learnerTrack)
+		.values({
+			...data,
+		})
+		.returning();
 
-  return newTrack;
+	revalidatePath(redirects.adminToTracks);
+
+	return newTrack;
 }

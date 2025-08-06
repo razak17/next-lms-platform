@@ -40,10 +40,10 @@ export const learnerTrackRelations = relations(learnerTrack, ({ one }) => ({
 		fields: [learnerTrack.trackId],
 		references: [track.id],
 	}),
-  createdBy: one(user, {
-    fields: [learnerTrack.createdBy],
-    references: [user.id],
-  }),
+	createdBy: one(user, {
+		fields: [learnerTrack.createdBy],
+		references: [user.id],
+	}),
 }));
 
 export type LearnerTrack = typeof learnerTrack.$inferSelect;
