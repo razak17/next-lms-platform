@@ -11,3 +11,16 @@ export const userProfileSchema = z.object({
 	location: z.string().optional(),
 	bio: z.string().optional(),
 });
+
+export const changePasswordSchema = z
+	.object({
+		currentPassword: z.string().min(1, "Current password is required."),
+		newPassword: z
+			.string()
+			.min(8, "Password must be at least 8 characters long."),
+		confirmPassword: z.string().min(1, "Confirm password is required."),
+	})
+	.refine((data) => data.newPassword === data.confirmPassword, {
+		message: "Passwords do not match.",
+		path: ["confirmPassword"],
+	});

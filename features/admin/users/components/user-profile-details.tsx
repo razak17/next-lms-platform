@@ -10,14 +10,16 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { User } from "@/db/schema";
-import { Camera } from "lucide-react";
+import { Camera, KeyRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ChangePasswordModal } from "./change-password-modal";
 import { ProfileImageUploadModal } from "./profile-image-upload-modal";
 import { UserProfileForm } from "./user-profile-form";
 
 export function UserProfileDetails({ user }: { user: User }) {
 	const [showUploadModal, setShowUploadModal] = useState(false);
+	const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 	const router = useRouter();
 
 	return (
@@ -61,6 +63,14 @@ export function UserProfileDetails({ user }: { user: User }) {
 					>
 						Change profile picture
 					</Button>
+					<Button
+						variant="outline"
+						className="mt-2"
+						onClick={() => setShowChangePasswordModal(true)}
+					>
+						<KeyRound className="mr-2 h-4 w-4" />
+						Change Password
+					</Button>
 				</div>
 				<div className="mt-4 flex flex-col items-center gap-2">
 					<UserProfileForm user={user} />
@@ -74,6 +84,11 @@ export function UserProfileDetails({ user }: { user: User }) {
 				onSuccess={() => {
 					router.refresh();
 				}}
+			/>
+
+			<ChangePasswordModal
+				isOpen={showChangePasswordModal}
+				onClose={() => setShowChangePasswordModal(false)}
 			/>
 		</Card>
 	);
