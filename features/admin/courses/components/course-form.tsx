@@ -1,14 +1,11 @@
 "use client";
 
+import {
+	AvatarImagePreview,
+	AvatarUploadedFiles,
+} from "@/components/avatar-preview";
 import { FileUploader } from "@/components/file-uploader";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -31,7 +28,6 @@ import { useUploadFile } from "@/hooks/use-upload-file";
 import { getErrorMessage } from "@/lib/handle-error";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -169,38 +165,36 @@ export function CourseForm({
 													maxSize={4 * 1024 * 1024}
 													progresses={progresses}
 													disabled={isUploading}
+													preview={false}
 												/>
 											</FormControl>
 											<FormMessage />
 										</FormItem>
-										{!field.value?.length && uploadedFiles.length > 0 ? (
-											<Card>
-												<CardHeader>
-													<CardTitle>Uploaded files</CardTitle>
-													<CardDescription>
-														View the uploaded files here
-													</CardDescription>
-												</CardHeader>
-												<CardContent>
-													{uploadedFiles.map((file) => (
+										{field.value?.length ? (
+											<div className="space-y-4">
+												{field.value.map((file) => {
+													return (
 														<div
-															key={file.id}
-															className="jusify-center flex w-full flex-col items-center"
+															key={file.lastModified}
+															className="flex flex-col items-center gap-4"
 														>
-															<Image
-																src={file.url}
-																alt={file.name}
-																// fill
-																width={62}
-																height={62}
-																sizes="(min-width: 640px) 640px, 100vw"
-																loading="lazy"
-																className="rounded-md object-cover"
+															<AvatarImagePreview
+																file={file}
+																progress={progresses[file.name]}
+																isUploading={isUploading}
+																onRemove={() => {
+																	field.onChange(
+																		field.value?.filter((f) => f !== file)
+																	);
+																}}
 															/>
 														</div>
-													))}
-												</CardContent>
-											</Card>
+													);
+												})}
+											</div>
+										) : null}
+										{!field.value?.length && uploadedFiles.length > 0 ? (
+											<AvatarUploadedFiles uploadedFiles={uploadedFiles} />
 										) : null}
 									</div>
 								)}
