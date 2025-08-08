@@ -44,6 +44,21 @@ export const adminNav: NavItem[] = [
 	},
 ];
 
+export const mainCourses = [
+	"ReactJs",
+	"NextJs",
+	"NodeJs",
+	"Django",
+	"MongoDB",
+	"VueJS",
+	"AWS",
+	"Azure",
+	"PowerBI",
+	"Python",
+	"Excel",
+	"Tableau",
+];
+
 export const siteConfig = {
 	name: "G-Client",
 	description: "E-Learning Platform",

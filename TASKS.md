@@ -88,6 +88,7 @@
 - [ ] Dark Mode
 - [ ] Learner Details Card (Admin)
 - [ ] Redirect to origin
+- [ ] Dynamic colors for landing page courses badges borders
 
 # Bugs
 - [x] Sign user in once they verify their email
