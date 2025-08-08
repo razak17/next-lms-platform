@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { LatestInvoice } from "@/features/admin/overview/latest-invoice";
 import { OverviewStatsCard } from "@/features/admin/overview/overview-stats-card";
-import { OverviewTrackCard } from "@/features/admin/overview/overview-track-card";
+import { OverviewTrackCard } from "@/features/shared/components/overview-track-card";
 import { RecentRevenue } from "@/features/admin/overview/recent-revenue";
 import { getTracksWithCourses } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
@@ -102,6 +102,7 @@ export default async function DashbordOverviewPage() {
 								showDescription={false}
 								showInstructor={false}
 								track={track}
+								role="admin"
 								key={i}
 							/>
 						))}

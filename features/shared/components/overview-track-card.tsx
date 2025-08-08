@@ -1,9 +1,12 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { TrackWithCourses } from "@/db/schema";
+import { TrackWithCourses, UserRole } from "@/db/schema";
 import { Calendar, UserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { formatPrice } from "@/lib/utils";
+import { redirects } from "@/lib/constants";
+import { isAdmin } from "@/features/shared/utils/middleware";
 
 const courseColorClasses = [
 	{ bg: "bg-blue-100", text: "text-blue-800" },
@@ -15,17 +18,28 @@ const courseColorClasses = [
 	{ bg: "bg-red-100", text: "text-red-800" },
 ];
 
-export function OverviewTrackCard({
-	track,
-	showDescription = true,
-	showInstructor = true,
-}: {
+interface OverviewTrackCardProps {
 	track: TrackWithCourses;
+	role?: UserRole;
 	showDescription?: boolean;
 	showInstructor?: boolean;
-}) {
+}
+
+export function OverviewTrackCard({
+	track,
+	role,
+	showDescription = true,
+	showInstructor = true,
+}: OverviewTrackCardProps) {
 	return (
-		<Link href={`/admin/tracks/${track.id}`} className="block">
+		<Link
+			href={
+				isAdmin(role)
+					? `${redirects.adminToTracks}/${track.id}`
+					: `${redirects.toTracks}/${track.id}`
+			}
+			className="block"
+		>
 			<Card className="@container/card flex flex-col gap-0 p-0">
 				<div className="relative">
 					<Image
@@ -34,10 +48,10 @@ export function OverviewTrackCard({
 						width={400}
 						height={200}
 						loading="lazy"
-						className="h-40 w-full rounded-t-lg object-cover"
+						className="h-40 w-full rounded-t-xl object-cover"
 					/>
 					<div className="bg-secondary text-foreground absolute top-4 right-4 rounded-full px-3 py-1 text-sm font-semibold">
-						${track.price}
+						{formatPrice(track.price)}
 					</div>
 				</div>
 				<CardContent className="flex h-full flex-1 flex-col items-start gap-2 p-4">

@@ -6,7 +6,7 @@ import { getCurrentUser } from "@/features/admin/users/queries/users";
 import { redirects } from "@/lib/constants";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { isAdmin } from "../../shared/utils/middleware";
+import { isAdmin } from "@/features/shared/utils/middleware";
 
 export async function createTrack(data: Omit<TrackInsert, "id">) {
 	try {

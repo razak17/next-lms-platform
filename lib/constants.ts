@@ -11,6 +11,8 @@ export const redirects = {
 	toResetPassword: "/reset-password",
 	toForgotPassword: "/forgot-password",
 	toDashboard: "/dashboard",
+	toTracks: "/tracks",
+	toCourses: "/courses",
 
 	adminToLogin: "/admin/login",
 	adminToSignup: "/admin/register",
@@ -33,3 +35,5 @@ export const genderOptions = [
 	{ value: "female", label: "Female" },
 	{ value: "other", label: "Other" },
 ];
+
+export const LANDING_PAGE_ADMIN_ID = "XUI80kJaNyiYaKNPWXYgt48BNPd67aA9";
