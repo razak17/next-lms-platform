@@ -14,7 +14,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { adminNavItems } from "@/data/site";
+import { siteConfig } from "@/data/site";
 import { User } from "@/db/schema/user";
 import { authClient } from "@/lib/auth/client";
 import Link from "next/link";
@@ -51,7 +51,7 @@ export function AppSidebar({
 				<SidebarGroup>
 					<SidebarGroupContent className="flex flex-col gap-2">
 						<SidebarMenu className="mt-6">
-							{adminNavItems.map((item) => {
+							{siteConfig.adminNav?.map((item) => {
 								const Icon = item.icon ? Icons[item.icon] : Icons.dashboard;
 								return (
 									<SidebarMenuItem key={item.title}>

@@ -1,4 +1,4 @@
-import { navItems } from "@/data/site";
+import { siteConfig } from "@/data/site";
 import { MainNav } from "@/features/learner/shared/layouts/main-nav";
 import type { Metadata } from "next";
 import React from "react";
@@ -17,7 +17,7 @@ export default async function Layout({
 		<div className="@container/main flex flex-1 flex-col">
 			<header className="bg-background sticky top-0 z-50 w-full border-b">
 				<div className="flex h-16 items-center">
-					<MainNav items={navItems} />
+					<MainNav items={siteConfig.mainNav} />
 				</div>
 			</header>
 			<div className="flex-1">{children}</div>

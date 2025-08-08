@@ -18,14 +18,14 @@ export function LandingBanner() {
 				priority
 			/>
 			<div className="absolute inset-0 z-10 hidden bg-black/25 md:block"></div>
-			<div className="absolute inset-0 z-10 hidden bg-gradient-to-r from-blue-600/20 to-transparent md:block"></div>
+			<div className="absolute inset-0 z-10 hidden bg-gradient-to-r from-blue-600/30 to-transparent md:block"></div>
 			<div className="flex w-full flex-col items-center">
-				<div className="px-4 md:w-6xl">
-					<div className="relative z-20 md:w-[400px]">
+				<div className="z-10 px-4 md:w-6xl">
+					<div className="relative md:w-[400px]">
 						<h1 className="text-2xl font-bold text-black md:text-4xl md:text-white">
 							Unlock Your Potential with Industry-Leading Courses!
 						</h1>
-						<p className="mt-4 text-lg text-black md:w-[350px] md:text-white">
+						<p className="mt-4 text-lg text-black md:w-[320px] md:text-white">
 							"Join thousands of learners gaining real-world skills and
 							advancing their careers. Our expert-led courses are designed to
 							empower you to succeed."

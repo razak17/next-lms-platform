@@ -1,6 +1,6 @@
 import { NavItem } from "@/types";
 
-export const navItems: NavItem[] = [
+export const mainNav: NavItem[] = [
 	{
 		title: "Home",
 		url: "/",
@@ -11,7 +11,7 @@ export const navItems: NavItem[] = [
 	},
 ];
 
-export const adminNavItems: NavItem[] = [
+export const adminNav: NavItem[] = [
 	{
 		title: "Dashboard",
 		url: "/admin/dashboard",
@@ -43,3 +43,11 @@ export const adminNavItems: NavItem[] = [
 		icon: "dashboard",
 	},
 ];
+
+export const siteConfig = {
+	name: "G-Client",
+	description: "E-Learning Platform",
+	url: "https://g-client.vercel.app",
+	mainNav,
+	adminNav,
+};
