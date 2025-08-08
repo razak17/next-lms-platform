@@ -1,13 +1,13 @@
-import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { auth } from "@/lib/auth/auth";
 import { User } from "@/db/schema/user";
+import { SiteHeader } from "@/features/admin/overview/components/site-header";
+import { AdminSidebar } from "@/features/admin/shared/components/admin-sidebar";
+import { auth } from "@/lib/auth/auth";
+import { redirects } from "@/lib/constants";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
-import { redirects } from "@/lib/constants";
-import { AdminSidebar } from "@/features/admin/shared/components/admin-sidebar";
 
 export const metadata: Metadata = {
 	title: "Admin Dashboard - E-Learning Platform",
