@@ -59,6 +59,7 @@
 ### Landing Page
 
 - [ ] Navbar
+- [ ] Mobile Nav
 - [ ] Footer
 - [ ] Banner
 - [ ] Stats
@@ -86,6 +87,7 @@
 # UI
 - [ ] Dark Mode
 - [ ] Learner Details Card (Admin)
+- [ ] Redirect to origin
 
 # Bugs
 - [x] Sign user in once they verify their email
