@@ -1,7 +1,7 @@
 export default function LandingPage() {
 	return (
-		<div>
-			<h1>Landing Page</h1>
+		<div className="flex flex-col gap-2">
+			<div>Banner</div>
 		</div>
 	);
 }
