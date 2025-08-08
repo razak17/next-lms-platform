@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { cardData } from "@/constants/data";
 import { LatestInvoice } from "@/features/admin/overview/latest-invoice";
 import { OverviewStatsCard } from "@/features/admin/overview/overview-stats-card";
 import { OverviewTrackCard } from "@/features/admin/overview/overview-track-card";
@@ -12,6 +11,32 @@ import { IconArrowRight } from "@tabler/icons-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Icons } from "@/components/icons";
+import { CardItem } from "@/types";
+
+const cardData: CardItem[] = [
+	{
+		title: "Total Learners",
+		value: "12,450",
+		change: "+12%",
+		changeDirection: "up",
+		icon: <Icons.users />,
+	},
+	{
+		title: "Revenue",
+		value: "12,434",
+		change: "+20%",
+		changeDirection: "up",
+		icon: <Icons.earnings />,
+	},
+	{
+		title: "Invoice",
+		value: "100",
+		change: "-2%",
+		changeDirection: "down",
+		icon: <Icons.clipboard />,
+	},
+];
 
 export default async function DashbordOverviewPage() {
 	const session = await auth.api.getSession({

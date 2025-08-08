@@ -51,7 +51,8 @@
 
 - [x] View Profile Info
 - [x] Update Profile Info
-- [ ] Update Profile Picture
+- [x] Update Profile Picture
+- [x] Change User Password
 
 ## Learners Dashboard
 
@@ -82,8 +83,12 @@
 - [ ] Checkout Form
 - [ ] Stripe/Paystack integration
 
+# UI
+- [ ] Dark Mode
+- [ ] Learner Details Card (Admin)
+
 # Bugs
-- [ ] Sign user in once they verify their email
+- [x] Sign user in once they verify their email
 - [ ] Email does not get sent/is slow when sending otp during registration in prod
 - [x] Invoice Due Date in Update
 - [x] Use Avatar for courses page
