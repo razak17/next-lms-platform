@@ -1,3 +1,5 @@
+"use client";
+
 import GetStarted from "@/assets/images/get-started.jpg";
 import MockupMonitor from "@/assets/images/mockup-monitor.png";
 import MockupPhone from "@/assets/images/mockup-phone.png";
@@ -8,12 +10,16 @@ import { mainCourses } from "@/data/site";
 import { TrackWithCourses } from "@/db/schema";
 import { OverviewTrackCard } from "@/features/shared/components/overview-track-card";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { redirects } from "@/lib/constants";
 
 export function MainContent({
 	tracksWithCourses,
 }: {
 	tracksWithCourses: TrackWithCourses[];
 }) {
+	const router = useRouter();
+
 	return (
 		<div className="flex flex-col">
 			<div className="mx-auto mt-16 w-full max-w-6xl">
@@ -23,11 +29,12 @@ export function MainContent({
 					login, then explore a wide range
 				</p>
 				<div className="mt-8 grid grid-cols-1 gap-4 px-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-					{tracksWithCourses.map((track, i) => (
+					{tracksWithCourses?.map((track, i) => (
 						<OverviewTrackCard
 							showDescription={false}
 							showInstructor={false}
 							track={track}
+              role="learner"
 							key={i}
 						/>
 					))}
@@ -122,6 +129,7 @@ export function MainContent({
 						<Button
 							variant="outline"
 							className="border-background bg-sidebar h-12 w-32 rounded-sm font-semibold text-white"
+							onClick={() => router.push(redirects.toSignup)}
 						>
 							Get Started
 						</Button>
@@ -130,8 +138,8 @@ export function MainContent({
 			</div>
 			<div className="mx-auto w-full max-w-6xl">
 				<div className="mt-12 flex gap-2 px-4">
-					<p>Hello</p>
-					<p>Hello</p>
+					{/* <p>Card Here</p> */}
+					{/* <p>Card Here</p> */}
 				</div>
 			</div>
 		</div>

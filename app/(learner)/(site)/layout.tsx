@@ -1,5 +1,5 @@
-import { siteConfig } from "@/data/site";
-import { MainNav } from "@/features/learner/shared/layouts/main-nav";
+import { SiteFooter } from "@/features/learner/landing/components/site-footer";
+import { SiteHeader } from "@/features/learner/landing/components/site-header";
 import type { Metadata } from "next";
 import React from "react";
 
@@ -14,13 +14,10 @@ export default async function Layout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="@container/main flex flex-1 flex-col">
-			<header className="bg-background sticky top-0 z-50 w-full border-b">
-				<div className="flex h-16 items-center">
-					<MainNav items={siteConfig.mainNav} />
-				</div>
-			</header>
-			<div className="flex-1">{children}</div>
+		<div className="@container/main min-h-screen flex flex-1 flex-col">
+			<SiteHeader />
+			<main className="flex-1">{children}</main>
+			<SiteFooter />
 		</div>
 	);
 }

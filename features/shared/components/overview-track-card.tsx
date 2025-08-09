@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { TrackWithCourses, UserRole } from "@/db/schema";
 import { Calendar, UserRound } from "lucide-react";
@@ -72,8 +74,8 @@ export function OverviewTrackCard({
 						</div>
 					)}
 					<div className="mt-2 flex flex-wrap gap-1">
-						{track.courses && track.courses.length > 0 ? (
-							track.courses.map((course, courseIndex) => {
+						{track?.courses && track?.courses?.length > 0 ? (
+							track?.courses?.map((course, courseIndex) => {
 								const randomColorIndex = Math.floor(
 									Math.random() * courseColorClasses.length
 								);

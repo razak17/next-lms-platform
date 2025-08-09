@@ -1,3 +1,5 @@
+import { env } from "@/config/schema";
+
 export const unknownError =
 	"An unknown error occurred. Please try again later.";
 
@@ -36,4 +38,3 @@ export const genderOptions = [
 	{ value: "other", label: "Other" },
 ];
 
-export const LANDING_PAGE_ADMIN_ID = "XUI80kJaNyiYaKNPWXYgt48BNPd67aA9";
