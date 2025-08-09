@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { LatestInvoice } from "@/features/admin/overview/components/latest-invoice";
-import { OverviewStatsCard } from "@/features/admin/overview/components/overview-stats-card-stats-card";
+import { OverviewStatsCard } from "@/features/admin/overview/components/overview-stats-card";
 import { OverviewTrackCard } from "@/features/shared/components/overview-track-card";
 import { RecentRevenue } from "@/features/admin/overview/components/recent-revenue";
 import { getTracksWithCourses } from "@/features/admin/tracks/queries/tracks";
