@@ -76,10 +76,8 @@ export function OverviewTrackCard({
 					<div className="mt-2 flex flex-wrap gap-1">
 						{track?.courses && track?.courses?.length > 0 ? (
 							track?.courses?.map((course, courseIndex) => {
-								const randomColorIndex = Math.floor(
-									Math.random() * courseColorClasses.length
-								);
-								const color = courseColorClasses[randomColorIndex];
+								const color =
+									courseColorClasses[courseIndex % courseColorClasses.length];
 								return (
 									<Badge
 										key={courseIndex}
