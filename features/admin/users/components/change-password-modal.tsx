@@ -26,7 +26,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { changePassword } from "../../../shared/actions/usersactions/users";
+import { changePassword } from "../../../shared/actions/users";
 
 interface ChangePasswordModalProps {
 	isOpen: boolean;
