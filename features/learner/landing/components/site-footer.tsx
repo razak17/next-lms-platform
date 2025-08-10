@@ -27,15 +27,25 @@ export function SiteFooter() {
 						</div>
 						<div className="flex flex-col items-start gap-4 px-16">
 							<p className="text-lg font-semibold">Contact</p>
-							<p className="text-secondary">+233 012 345 6789</p>
+							<p className="text-secondary">+233 123 456 789</p>
 							<p className="text-secondary text-left">
 								New Reiss, Ghana, Accra
 							</p>
 						</div>
 						<div className="flex flex-col items-start gap-4">
 							<p className="text-lg font-semibold">Social</p>
-							<p className="text-secondary">LinkedIn</p>
-							<p className="text-secondary">Facebook</p>
+							<Link
+								href="https://linkedin.com"
+								className="text-secondary hover:text-white"
+							>
+								LinkedIn
+							</Link>
+							<Link
+								href="https://facebook.com"
+								className="text-secondary hover:text-white"
+							>
+								Facebook
+							</Link>
 						</div>
 					</div>
 				</div>

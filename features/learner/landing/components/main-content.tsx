@@ -9,9 +9,11 @@ import { Button } from "@/components/ui/button";
 import { mainCourses } from "@/data/site";
 import { TrackWithCourses } from "@/db/schema";
 import { OverviewTrackCard } from "@/features/shared/components/overview-track-card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { redirects } from "@/lib/constants";
+import { ArrowDown } from "lucide-react";
 
 export function MainContent({
 	tracksWithCourses,
@@ -34,7 +36,7 @@ export function MainContent({
 							showDescription={false}
 							showInstructor={false}
 							track={track}
-              role="learner"
+							role="learner"
 							key={i}
 						/>
 					))}
@@ -136,10 +138,116 @@ export function MainContent({
 					</div>
 				</div>
 			</div>
-			<div className="mx-auto w-full max-w-6xl">
-				<div className="mt-12 flex gap-2 px-4">
-					{/* <p>Card Here</p> */}
-					{/* <p>Card Here</p> */}
+			<div className="mx-auto my-12 w-full max-w-6xl">
+				<div className="flex gap-4 px-4">
+					<div className="flex w-full flex-3 flex-col gap-4">
+						<Card className="@container/card flex gap-4 rounded-lg p-6 shadow-lg">
+							<div className="flex gap-8">
+								<Icons.signup className="h-12 w-16" />
+								<div className="flex flex-col gap-2">
+									<h3 className="text-2xl font-bold">
+										Sign Up and Choose Your Course
+									</h3>
+									<p>
+										Create your account quickly with just your email or social
+										media login, then explore a wide range
+									</p>
+								</div>
+							</div>
+						</Card>
+						<ArrowDown size={32} className="text-sidebar mx-auto" />
+						<Card className="@container/card flex gap-4 rounded-lg p-6 shadow-lg">
+							<div className="flex gap-8">
+								<Icons.onboarding className="h-14 w-20" />
+								<div className="flex flex-col gap-2">
+									<h3 className="text-2xl font-bold">Onboarding</h3>
+									<p>
+										Get started seamlessly with a smooth onboarding experience.
+										Learn the essentials and set yourself up for success from
+										day one.
+									</p>
+								</div>
+							</div>
+						</Card>
+						<ArrowDown size={32} className="text-sidebar mx-auto" />
+						<Card className="@container/card flex gap-4 rounded-lg p-6 shadow-lg">
+							<div className="flex gap-8">
+								<Icons.startLearning className="h-12 w-20" />
+								<div className="flex flex-col gap-2">
+									<h3 className="text-2xl font-bold">Start Learning</h3>
+									<p>
+										Start your learning journey with practical, hands-on
+										experience. Develop the skills needed to build, implement,
+										and manage effective solutions.
+									</p>
+								</div>
+							</div>
+						</Card>
+					</div>
+					<div className="w-full flex-4 flex-col gap-2">
+						<Card className="@container/card flex h-full gap-8 rounded-lg px-4 py-6 shadow-lg">
+							<div className="flex gap-4">
+								<div className="flex w-full flex-col items-center justify-center gap-4">
+									<h3 className="text-md font-bold">1</h3>
+									<h3 className="text-md font-bold">Secure Login</h3>
+									<Icons.secureLogin className="h-32 w-42" />
+								</div>
+								<div className="flex w-full flex-col items-center justify-center gap-4">
+									<h3 className="text-md font-bold">2</h3>
+									<h3 className="text-md font-bold">Authentication</h3>
+									<Icons.authentication className="h-32 w-32" />
+								</div>
+							</div>
+							<div className="flex w-full flex-col justify-center gap-2">
+								<h3 className="text-md pl-14 font-bold">3</h3>
+								<h3 className="text-md font-bold">Choose a course</h3>
+
+								<div className="grid grid-cols-1 gap-2 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
+									<div className="flex gap-4">
+										<Card className="@container/card flex w-full gap-4 rounded-lg p-4 shadow-lg">
+											<Icons.softwareDev className="h-10 w-10" />
+											<h3 className="text-xs font-bold">
+												Software Development
+											</h3>
+											<p className="text-xs">
+												Unlock your potential with comprehensive training in
+												modern software development.
+											</p>
+											<p className="text-center text-xs font-bold">
+												Price: $350
+											</p>
+										</Card>
+									</div>
+									<div className="flex gap-4">
+										<Card className="@container/card flex w-full gap-4 rounded-lg p-4 shadow-lg">
+											<Icons.dataScience className="h-10 w-10" />
+											<h3 className="text-sm font-bold">Data Science</h3>
+											<p className="text-xs">
+												Equip yourself with the skills to analyze, interpret,
+												and leverage data, becoming an expert.
+											</p>
+											<p className="text-center text-xs font-bold">
+												Price: $350
+											</p>
+										</Card>
+									</div>
+									<div className="flex gap-4">
+										<Card className="@container/card flex w-full gap-4 rounded-lg p-4 shadow-lg">
+											<Icons.cloudComputing className="h-10 w-10" />
+											<h3 className="text-sm font-bold">Cloud Computing</h3>
+											<p className="text-xs">
+												Gain hands-on experience in cloud computing, preparing
+												you to design, deploy, and manage scalable solutions.
+											</p>
+											<p className="text-center text-xs font-bold">
+												Price: $350
+											</p>
+										</Card>
+									</div>
+								</div>
+							</div>
+						</Card>
+					</div>
 				</div>
 			</div>
 		</div>
