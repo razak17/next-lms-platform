@@ -12,7 +12,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
 	Form,
 	FormControl,
@@ -31,6 +30,8 @@ import { authClient } from "@/lib/auth/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPasswordSchema } from "@/features/shared/validations/auth";
 import { Icons } from "@/components/icons";
+import { redirects } from "@/lib/constants";
+import { PasswordInput } from "@/components/password-input";
 
 export function ResetPasswordForm({
 	className,
@@ -63,7 +64,7 @@ export function ResetPasswordForm({
 			toast.error(error.message);
 		} else {
 			toast.success("Password reset successfully");
-			router.push("/admin/login");
+			router.push(redirects.adminToLogin);
 		}
 
 		setIsLoading(false);
@@ -93,7 +94,7 @@ export function ResetPasswordForm({
 											<FormItem>
 												<FormLabel>Password</FormLabel>
 												<FormControl>
-													<Input {...field} type="password" />
+													<PasswordInput {...field} />
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -106,7 +107,7 @@ export function ResetPasswordForm({
 											<FormItem>
 												<FormLabel>Confirm Password</FormLabel>
 												<FormControl>
-													<Input {...field} type="password" />
+													<PasswordInput {...field} />
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -114,17 +115,16 @@ export function ResetPasswordForm({
 									/>
 								</div>
 								<Button type="submit" className="w-full" disabled={isLoading}>
-									{isLoading ? (
-										<Loader2 className="size-4 animate-spin" />
-									) : (
-										"Reset Password"
+									{isLoading && (
+										<Loader2 className="mr-2 size-4 animate-spin" />
 									)}
+									{isLoading ? "Resetting Password..." : "Reset Password"}
 								</Button>
 							</div>
 							<div className="text-center text-sm">
 								Don&apos;t have an account?{" "}
 								<Link
-									href="/admin/register"
+									href={redirects.adminToSignup}
 									className="text-sidebar underline-offset-4 hover:underline"
 								>
 									Sign up
