@@ -102,7 +102,7 @@ export function LoginForm({
 						<div className="text-center text-sm">
 							<span className="relative z-10">or</span>
 						</div>
-						<div className="grid gap-3">
+						<div className="grid gap-4">
 							<FormField
 								control={form.control}
 								name="email"

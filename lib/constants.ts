@@ -8,7 +8,7 @@ export const redirects = {
 	toSignup: "/register",
 	afterLogin: "/dashboard",
 	afterLogout: "/",
-	toVerify: "/verify-email",
+	toVerify: "/otp-verification",
 	afterVerify: "/dashboard",
 	toResetPassword: "/reset-password",
 	toForgotPassword: "/forgot-password",

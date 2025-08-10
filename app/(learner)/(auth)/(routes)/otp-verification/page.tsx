@@ -1,4 +1,4 @@
-import { OTPVerificationForm } from "@/features/admin/auth/components/otp-verification-form";
+import { OTPVerificationForm } from "@/features/learner/auth/components/otp-verification-form";
 import { redirects } from "@/lib/constants";
 import { redirect } from "next/navigation";
 
@@ -12,7 +12,7 @@ export default async function OTPVerificationPage({
 	const { email } = await searchParams;
 
 	if (!email) {
-		redirect(redirects.adminToSignup);
+		redirect(redirects.toSignup);
 	}
 
 	return <OTPVerificationForm email={email} />;

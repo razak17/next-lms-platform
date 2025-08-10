@@ -40,7 +40,7 @@ export function OTPVerificationForm({
 	...props
 }: React.ComponentProps<"div"> & { email: string }) {
 	const [isLoading, setIsLoading] = useState(false);
-	const [isResendingCode, setIsResendingCode] = useState(false); // New state for resending
+	const [isResendingCode, setIsResendingCode] = useState(false);
 	const [cooldown, setCooldown] = useState(60);
 
 	const router = useRouter();
@@ -62,15 +62,15 @@ export function OTPVerificationForm({
 	}, [cooldown]);
 
 	async function resendVerificaiontOtp() {
-		setIsResendingCode(true); // Use new state
+		setIsResendingCode(true);
 		const result = await sendVerificationOtp(email);
 		if (result.success) {
 			toast.success(result.message);
-			setCooldown(60); // 2 minutes cooldown (60 seconds)
+			setCooldown(60);
 		} else {
 			toast.error(result.message);
 		}
-		setIsResendingCode(false); // Use new state
+		setIsResendingCode(false);
 	}
 
 	async function onSubmit(values: z.infer<typeof otpVerificationSchema>) {
@@ -142,7 +142,7 @@ export function OTPVerificationForm({
 									disabled={isResendingCode || cooldown > 0}
 									className="h-auto p-0 underline-offset-4 hover:underline"
 								>
-									{isResendingCode ? ( // Show loader when resending
+									{isResendingCode ? (
 										<Loader2 className="size-4 animate-spin" />
 									) : cooldown > 0 ? (
 										`Resend code in ${cooldown}s`
