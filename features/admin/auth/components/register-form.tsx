@@ -30,11 +30,11 @@ import {
 import { genderOptions, redirects } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-import { signUp } from "@/features/auth/actions/auth";
+import { signUp } from "@/features/shared/actions/auth";
 
 import { Icons } from "@/components/icons";
 import { PasswordInput } from "@/components/password-input";
-import { registerSchema } from "@/features/admin/auth/validations/auth";
+import { registerSchema } from "@/features/shared/validations/auth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

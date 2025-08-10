@@ -2,7 +2,7 @@
 
 import { db } from "@/db/drizzle";
 import { learnerTrack, LearnerTrackInsert } from "@/db/schema";
-import { getCurrentUser } from "@/features/admin/users/queries/users";
+import { getCurrentUser } from "@/features/shared/queries/users";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirects } from "@/lib/constants";

@@ -12,6 +12,7 @@ export const redirects = {
 	afterVerify: "/dashboard",
 	toResetPassword: "/reset-password",
 	toForgotPassword: "/forgot-password",
+	toLanding: "/",
 	toDashboard: "/dashboard",
 	toTracks: "/tracks",
 	toCourses: "/courses",
@@ -37,4 +38,3 @@ export const genderOptions = [
 	{ value: "female", label: "Female" },
 	{ value: "other", label: "Other" },
 ];
-

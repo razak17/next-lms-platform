@@ -1,6 +1,9 @@
+import { User } from "@/db/schema";
 import { SiteFooter } from "@/features/learner/landing/components/site-footer";
 import { SiteHeader } from "@/features/learner/landing/components/site-header";
+import { auth } from "@/lib/auth/auth";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -13,9 +16,13 @@ export default async function Layout({
 }: {
 	children: React.ReactNode;
 }) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
 	return (
-		<div className="@container/main min-h-screen flex flex-1 flex-col">
-			<SiteHeader />
+		<div className="@container/main flex min-h-screen flex-1 flex-col">
+			<SiteHeader user={session?.user ? (session.user as User) : null} />
 			<main className="flex-1">{children}</main>
 			<SiteFooter />
 		</div>

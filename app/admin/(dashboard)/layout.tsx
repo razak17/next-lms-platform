@@ -28,7 +28,7 @@ export default async function Layout({
 	}
 
 	if (session.user.role !== "admin") {
-		redirect(redirects.toDashboard);
+		redirect(redirects.toLanding);
 	}
 
 	return (

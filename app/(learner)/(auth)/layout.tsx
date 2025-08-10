@@ -4,7 +4,7 @@ import React from "react";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
-import AuthBackdrop from "../../../../assets/images/auth-backdrop.jpg";
+import Computer from "@/assets/images/computer.png";
 import { redirects } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -28,16 +28,18 @@ export default async function Layout({
 	}
 
 	return (
-		<div className="relative flex min-h-screen w-full flex-col items-center justify-center">
-			<Image
-				src={AuthBackdrop}
-				alt="Authentication Backdrop"
-				className="object-fit absolute inset-0 hidden h-full w-full md:block"
-				priority
-			/>
-			<div className="absolute inset-0 hidden bg-white/35 md:block"></div>
-			<div className="relative z-10 w-[300px] md:w-[350px]">{children}</div>
+		<div className="relative flex w-full flex-col items-center justify-center">
+			<div className="flex items-center gap-4 py-8 lg:mx-auto lg:w-2xl">
+				<div className="w-full">
+					<Image
+						src={Computer}
+						alt="Computer Backdrop"
+						className="object-fit inset-0 hidden h-full w-full md:block"
+						priority
+					/>
+				</div>
+				<div className="w-full">{children}</div>
+			</div>
 		</div>
 	);
 }
-

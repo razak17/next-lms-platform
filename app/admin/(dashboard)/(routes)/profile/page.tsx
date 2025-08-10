@@ -1,6 +1,6 @@
 import { Heading } from "@/components/ui/heading";
 import { UserProfileDetails } from "@/features/admin/users/components/user-profile-details";
-import { getUserByEmail } from "@/features/admin/users/queries/users";
+import { getUserByEmail } from "@/features/shared/queries/users";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";

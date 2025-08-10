@@ -2,7 +2,7 @@
 
 import { db } from "@/db/drizzle";
 import { user, User } from "@/db/schema";
-import { getCurrentUser } from "@/features/admin/users/queries/users";
+import { getCurrentUser } from "@/features/shared/queries/users";
 import { auth } from "@/lib/auth/auth";
 import { getErrorMessage } from "@/lib/handle-error";
 import { eq } from "drizzle-orm";

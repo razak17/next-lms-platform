@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { User } from "@/db/schema";
 import { useUploadFile } from "@/hooks/use-upload-file";
-import { updateUser } from "../actions/users";
+import { updateUser } from "../../../shared/actions/usersactions/users";
 
 interface ProfileImageUploadModalProps {
 	user: User;

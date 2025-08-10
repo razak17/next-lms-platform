@@ -31,7 +31,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { toast } from "sonner";
 import { z } from "zod";
-import { updateUser } from "../actions/users";
+import { updateUser } from "../../../shared/actions/usersactions/users";
 import { getErrorMessage } from "@/lib/handle-error";
 
 export function UserProfileForm({ user }: { user: User }) {

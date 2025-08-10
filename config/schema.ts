@@ -13,7 +13,7 @@ const common = {
 	EMAIL_SENDER_ADDRESS: z.string().min(1),
 	UPSTASH_REDIS_REST_URL: z.string().min(1),
 	UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
-  LANDING_PAGE_ADMIN_ID: z.string().min(1)
+	LANDING_PAGE_ADMIN_ID: z.string().min(1),
 };
 
 export const env = createEnv({

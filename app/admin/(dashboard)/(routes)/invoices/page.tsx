@@ -1,7 +1,7 @@
 import { Heading } from "@/components/ui/heading";
 import { InvoicesTable } from "@/features/admin/invoices/components/invoices-table";
 import { getInvoicesWithLearner } from "@/features/admin/invoices/queries/invoices";
-import { getLearners } from "@/features/admin/users/queries/users";
+import { getLearners } from "@/features/shared/queries/users";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";

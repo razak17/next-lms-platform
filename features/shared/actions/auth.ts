@@ -2,11 +2,11 @@
 
 import { db } from "@/db/drizzle";
 import { user } from "@/db/schema";
+import { getUserByEmail } from "@/features/shared/queries/users";
 import { auth } from "@/lib/auth/auth";
 import { authClient } from "@/lib/auth/client";
 import { APIError } from "better-auth";
 import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
 
 export const signIn = async (email: string, password: string) => {
 	try {
@@ -81,7 +81,14 @@ export const signUp = async ({
 
 export const sendVerificationOtp = async (email: string) => {
 	try {
-		const { currentUser } = await getUserByEmail(email);
+		const currentUser = await getUserByEmail(email);
+
+		if (!currentUser || "error" in currentUser) {
+			return {
+				success: false,
+				message: "User not found.",
+			};
+		}
 
 		await authClient.emailOtp.sendVerificationOtp({
 			email: currentUser.email,
