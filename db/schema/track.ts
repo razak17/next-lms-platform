@@ -4,6 +4,7 @@ import { relations } from "drizzle-orm";
 import {
 	boolean,
 	decimal,
+	integer,
 	json,
 	pgTable,
 	text,
@@ -11,8 +12,8 @@ import {
 	varchar,
 } from "drizzle-orm/pg-core";
 import { Course, course } from "./course";
-import { user } from "./user";
 import { learnerTrack } from "./learner-track";
+import { user } from "./user";
 
 export const track = pgTable("track", {
 	id: varchar("id", { length: 30 })
@@ -25,6 +26,7 @@ export const track = pgTable("track", {
 	instructor: text("instructor").notNull(),
 	price: decimal("price", { precision: 10, scale: 2 }).notNull().default("0"),
 	isPopular: boolean("is_popular").default(false).notNull(),
+	rating: integer("rating").notNull().default(0),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),

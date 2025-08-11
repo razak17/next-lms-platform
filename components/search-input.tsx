@@ -7,8 +7,15 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
+import { cn } from "@/lib/utils";
 
-export const SearchInput = ({ placeholder }: { placeholder?: string }) => {
+export const SearchInput = ({
+	placeholder,
+	className = "",
+}: {
+	placeholder?: string;
+	className?: string;
+}) => {
 	const [value, setValue] = useState("");
 	const debouncedValue = useDebounce(value);
 
@@ -34,12 +41,15 @@ export const SearchInput = ({ placeholder }: { placeholder?: string }) => {
 	}, [debouncedValue, currentCategoryId, router, pathname]);
 
 	return (
-		<div className="relative">
-			<Search className="absolute top-3 left-3 h-4 w-4 text-slate-600" />
+		<div className="relative flex flex-col justify-center items-center">
+			<Search className="absolute top-3 left-3 h-5 w-5 text-slate-600" />
 			<Input
 				onChange={(e) => setValue(e.target.value)}
 				value={value}
-				className="rounded-md pl-9 shadow-sm md:w-40 lg:w-[350px]"
+				className={cn(
+					"rounded-md pl-10 py-5 shadow-sm md:w-40 lg:w-[350px]",
+					className
+				)}
 				placeholder={placeholder ?? "Search"}
 			/>
 		</div>

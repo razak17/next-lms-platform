@@ -14,7 +14,7 @@ export function Rating({ rating }: RatingProps) {
 					key={i}
 					className={cn(
 						"size-6",
-						rating >= i + 1 ? "text-yellow-500" : "text-muted-foreground"
+						rating >= i + 1 ? "text-yellow-500" : "text-foreground"
 					)}
 					aria-hidden="true"
 				/>

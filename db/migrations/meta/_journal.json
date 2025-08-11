@@ -57,6 +57,13 @@
       "when": 1754217248831,
       "tag": "0007_sudden_morbius",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1754934304115,
+      "tag": "0008_blue_the_renegades",
+      "breakpoints": true
     }
   ]
 }
