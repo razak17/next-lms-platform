@@ -23,6 +23,7 @@ export const user = pgTable("user", {
 	phone: text("phone"),
 	bio: text("bio"),
 	location: text("location"),
+	disabled: boolean("disabled").$defaultFn(() => false),
 	emailVerified: boolean("email_verified")
 		.$defaultFn(() => false)
 		.notNull(),

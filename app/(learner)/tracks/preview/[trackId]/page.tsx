@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Rating } from "@/components/rating";
+import { Badge } from "@/components/ui/badge";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -9,24 +11,21 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { db } from "@/db/drizzle";
 import { track as tracksTable } from "@/db/schema";
-import { desc, eq } from "drizzle-orm";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { eq } from "drizzle-orm";
 import {
+	BookOpen,
+	CalendarDays,
 	Clock,
 	GraduationCap,
-	User,
-	CalendarDays,
-	BookOpen,
 	Star,
-	Users,
 	TrendingUp,
+	User,
+	Users,
 } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Rating } from "@/components/rating";
 
 export default async function TrackItemPreviewPage({
 	params,
@@ -142,7 +141,7 @@ export default async function TrackItemPreviewPage({
 			<div className="container mx-auto px-4 py-12 lg:max-w-6xl">
 				<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
 					<div className="space-y-8 lg:col-span-2">
-						<Card className="border-0 shadow-lg">
+						<Card className="border-0 rounded-sm shadow-lg">
 							<CardContent className="p-8">
 								<h2 className="mb-6 flex items-center gap-2 text-2xl font-bold">
 									<TrendingUp className="text-primary" size={24} />
@@ -166,7 +165,7 @@ export default async function TrackItemPreviewPage({
 							</CardContent>
 						</Card>
 
-						<Card className="border-0 shadow-lg">
+						<Card className="border-0 shadow-lg rounded-sm">
 							<CardContent className="p-8">
 								<h2 className="mb-6 flex items-center gap-2 text-2xl font-bold">
 									<BookOpen className="text-primary" size={24} />
@@ -186,14 +185,14 @@ export default async function TrackItemPreviewPage({
 														</span>
 													</div>
 													<div>
-														<h3 className="font-semibold">{course.name}</h3>
+														<h3 className="font-semibold">{course.title}</h3>
 														<p className="text-muted-foreground text-sm">
 															{course.description}
 														</p>
 													</div>
 												</div>
 												<Badge variant="outline">
-													{course.duration || "2 weeks"}
+													{track.duration || "2 weeks"}
 												</Badge>
 											</div>
 										</div>
@@ -207,7 +206,7 @@ export default async function TrackItemPreviewPage({
 							</CardContent>
 						</Card>
 
-						<Card className="border-0 shadow-lg">
+						<Card className="border-0 shadow-lg rounded-sm">
 							<CardContent className="p-8">
 								<h2 className="mb-6 text-2xl font-bold">Instructor</h2>
 								<div className="flex items-start gap-4">
@@ -238,7 +237,7 @@ export default async function TrackItemPreviewPage({
 
 					<div className="lg:col-span-1">
 						<div className="sticky top-6">
-							<Card className="overflow-hidden border-0 shadow-xl">
+							<Card className="overflow-hidden border-0 shadow-xl rounded-sm">
 								<div className="relative">
 									<Image
 										src={
@@ -259,10 +258,13 @@ export default async function TrackItemPreviewPage({
 
 								<CardContent className="p-6">
 									<Button
+										asChild
 										className="mb-6 w-full py-3 text-lg font-semibold"
 										size="lg"
 									>
-										Enroll Now
+										<Link href={`/tracks/checkout/${track?.id}`}>
+											Enroll Now
+										</Link>
 									</Button>
 
 									<div className="space-y-4">

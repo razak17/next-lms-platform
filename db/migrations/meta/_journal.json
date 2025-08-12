@@ -64,6 +64,13 @@
       "when": 1754934304115,
       "tag": "0008_blue_the_renegades",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1755024955950,
+      "tag": "0009_sleepy_master_chief",
+      "breakpoints": true
     }
   ]
 }
