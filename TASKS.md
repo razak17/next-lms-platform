@@ -58,29 +58,29 @@
 
 ### Landing Page
 
-- [ ] Navbar
+- [x] Navbar
 - [ ] Mobile Nav
-- [ ] Footer
-- [ ] Banner
-- [ ] Stats
-- [ ] CTA
-- [ ] Tracks
+- [x] Footer
+- [x] Banner
+- [x] Stats
+- [x] CTA
+- [x] Tracks
 
 ### Auth
 
-- [ ] Registration Form
-- [ ] Login Form
-- [ ] Google Login
-- [ ] Forgot Password
-- [ ] Reset Password
-- [ ] OTP Verification
+- [x] Registration Form
+- [x] Login Form
+- [x] Google Login
+- [x] Forgot Password
+- [x] Reset Password
+- [x] OTP Verification
 
-### Courses
+### Tracks
 
-- [ ] Course List
-- [ ] Search Courses
-- [ ] Preview Course
-- [ ] Purchase Course
+- [x] Track List
+- [x] Search Tracks
+- [ ] Preview Track
+- [ ] Purchase Track
 - [ ] Checkout Form
 - [ ] Stripe/Paystack integration
 
@@ -89,6 +89,7 @@
 - [ ] Learner Details Card (Admin)
 - [ ] Redirect to origin
 - [ ] Dynamic colors for landing page courses badges borders
+- [ ] Rate track
 
 # Bugs
 - [x] Sign user in once they verify their email
