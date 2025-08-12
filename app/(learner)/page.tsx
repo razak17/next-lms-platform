@@ -14,7 +14,7 @@ export default async function LandingPage() {
 	});
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex lg:min-h-screen flex-col">
 			<Banner />
 			<MainContent tracksWithCourses={tracksWithCourses} />
 		</div>

@@ -51,7 +51,6 @@ export default async function TrackItemPreviewPage({
 
 	return (
 		<div className="from-background to-muted/20 flex min-h-screen flex-col bg-gradient-to-br">
-			{/* Hero Section */}
 			<div className="from-sidebar to-sidebar/90 bg-gradient-to-r py-12 text-white">
 				<div className="container mx-auto px-4 lg:max-w-6xl">
 					<Breadcrumb className="mb-8">
@@ -140,12 +139,9 @@ export default async function TrackItemPreviewPage({
 				</div>
 			</div>
 
-			{/* Main Content */}
 			<div className="container mx-auto px-4 py-12 lg:max-w-6xl">
 				<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-					{/* Left Column - Course Content */}
 					<div className="space-y-8 lg:col-span-2">
-						{/* What You'll Learn */}
 						<Card className="border-0 shadow-lg">
 							<CardContent className="p-8">
 								<h2 className="mb-6 flex items-center gap-2 text-2xl font-bold">
@@ -170,7 +166,6 @@ export default async function TrackItemPreviewPage({
 							</CardContent>
 						</Card>
 
-						{/* Course Content */}
 						<Card className="border-0 shadow-lg">
 							<CardContent className="p-8">
 								<h2 className="mb-6 flex items-center gap-2 text-2xl font-bold">
@@ -212,7 +207,6 @@ export default async function TrackItemPreviewPage({
 							</CardContent>
 						</Card>
 
-						{/* Instructor */}
 						<Card className="border-0 shadow-lg">
 							<CardContent className="p-8">
 								<h2 className="mb-6 text-2xl font-bold">Instructor</h2>
@@ -242,7 +236,6 @@ export default async function TrackItemPreviewPage({
 						</Card>
 					</div>
 
-					{/* Right Column - Enrollment Card */}
 					<div className="lg:col-span-1">
 						<div className="sticky top-6">
 							<Card className="overflow-hidden border-0 shadow-xl">

@@ -41,7 +41,7 @@ export function MobileNav({ items, user }: MobileNavProps) {
 	};
 
 	return (
-		<div className="flex lg:hidden px-2">
+		<div className="flex px-2 lg:hidden">
 			<Sheet open={open} onOpenChange={setOpen}>
 				<SheetTrigger asChild>
 					<Button variant="ghost" size="icon" className="ml-auto">
@@ -52,7 +52,6 @@ export function MobileNav({ items, user }: MobileNavProps) {
 				<SheetContent side="left" className="w-[300px] p-0">
 					<ScrollArea className="h-full py-6 pr-6 pl-6">
 						<div className="flex flex-col space-y-6">
-							{/* Logo */}
 							<Link
 								href="/"
 								className="flex items-center px-2"
@@ -61,7 +60,6 @@ export function MobileNav({ items, user }: MobileNavProps) {
 								<Icons.logo className="h-20 w-24" aria-hidden="true" />
 							</Link>
 
-							{/* Navigation Items */}
 							{items && items.length > 0 && (
 								<nav className="flex flex-col space-y-1">
 									{items.map((item, index) => {
@@ -90,10 +88,8 @@ export function MobileNav({ items, user }: MobileNavProps) {
 
 							<Separator />
 
-							{/* User Section */}
 							{user ? (
 								<div className="flex flex-col space-y-4">
-									{/* User Info */}
 									<div className="flex items-center space-x-3 px-3">
 										<Avatar className="size-8">
 											<AvatarImage
@@ -122,7 +118,6 @@ export function MobileNav({ items, user }: MobileNavProps) {
 										</div>
 									</div>
 
-									{/* User Actions */}
 									<div className="flex flex-col space-y-1">
 										<Button
 											variant="ghost"
