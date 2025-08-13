@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Config, defineConfig } from "drizzle-kit";
 import { localConnection } from "./config/db";
-import { env } from "@/config/schema";
+import { env } from "@/config/server";
 
 export default defineConfig({
 	schema: "./db/schema",

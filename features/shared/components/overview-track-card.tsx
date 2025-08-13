@@ -38,7 +38,7 @@ export function OverviewTrackCard({
 			href={
 				isAdmin(role)
 					? `${redirects.adminToTracks}/${track.id}`
-					: `${redirects.toTracks}/${track.id}`
+					: `${redirects.toTracks}/${track.id}/preview`
 			}
 			className="block"
 		>

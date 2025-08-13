@@ -4,19 +4,20 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Rating } from "@/components/rating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrackWithCourses } from "@/db/schema";
+import { TrackWithCourses, User } from "@/db/schema";
 import { deleteTrack } from "@/features/admin/tracks/actions/tracks";
 import { redirects } from "@/lib/constants";
 import { Calendar, Pencil, Trash2, UserRound } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { TrackDialog } from "./track-dialog";
+import { TrackDialog } from "../../admin/tracks/components/track-dialog";
+import { isAdmin } from "@/features/shared/utils/middleware";
 
 export function TrackDetails({
-	userId,
+	user,
 	track,
 }: {
-	userId: string;
+	user: User;
 	track: TrackWithCourses;
 }) {
 	const router = useRouter();
@@ -67,31 +68,33 @@ export function TrackDetails({
 				</div>
 			</div>
 			<p className="text-md">{track.description}</p>
-			<div className="flex justify-end">
-				<TrackDialog
-					userId={userId}
-					track={trackWithoutCourses}
-					trigger={
+			{isAdmin(user.role) && (
+				<div className="flex justify-end">
+					<TrackDialog
+						userId={user.id}
+						track={trackWithoutCourses}
+						trigger={
+							<Button
+								variant="ghost"
+								className="h-12 w-18 text-blue-700 hover:bg-blue-100"
+							>
+								<Pencil />
+							</Button>
+						}
+					/>
+					<ConfirmDialog
+						onConfirm={deleteTrack.bind(null, track.id)}
+						onSuccess={() => router.push(redirects.adminToTracks)}
+					>
 						<Button
 							variant="ghost"
-							className="h-12 w-18 text-blue-700 hover:bg-blue-100"
+							className="h-12 w-18 text-red-700 hover:bg-red-100"
 						>
-							<Pencil />
+							<Trash2 />
 						</Button>
-					}
-				/>
-				<ConfirmDialog
-					onConfirm={deleteTrack.bind(null, track.id)}
-					onSuccess={() => router.push(redirects.adminToTracks)}
-				>
-					<Button
-						variant="ghost"
-						className="h-12 w-18 text-red-700 hover:bg-red-100"
-					>
-						<Trash2 />
-					</Button>
-				</ConfirmDialog>
-			</div>
+					</ConfirmDialog>
+				</div>
+			)}
 		</div>
 	);
 }

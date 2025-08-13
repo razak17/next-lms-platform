@@ -10,9 +10,8 @@ export async function enrollInTrack(
 	data: EnrollmentFormData & { trackId: string }
 ) {
 	try {
-		const { firstName, lastName, email, phone, trackId } = data;
+		const { name, email, phone, trackId } = data;
 
-		// Check if user already exists
 		let existingUser = await db.query.user.findFirst({
 			where: eq(user.email, email),
 		});
@@ -22,24 +21,19 @@ export async function enrollInTrack(
 		if (existingUser) {
 			userId = existingUser.id;
 
-			// Update user information if needed
 			await db
 				.update(user)
 				.set({
-					firstName,
-					lastName,
+					name,
 					phone,
 					updatedAt: new Date(),
 				})
 				.where(eq(user.id, existingUser.id));
 		} else {
-			// Create new user
 			userId = nanoid();
 			await db.insert(user).values({
 				id: userId,
-				name: `${firstName} ${lastName}`,
-				firstName,
-				lastName,
+				name,
 				email,
 				phone,
 				role: "learner",
@@ -47,7 +41,6 @@ export async function enrollInTrack(
 			});
 		}
 
-		// Check if user is already enrolled in this track
 		const existingEnrollment = await db.query.learnerTrack.findFirst({
 			where: and(
 				eq(learnerTrack.userId, userId),
@@ -62,7 +55,6 @@ export async function enrollInTrack(
 			};
 		}
 
-		// Enroll user in track
 		await db.insert(learnerTrack).values({
 			userId,
 			trackId,

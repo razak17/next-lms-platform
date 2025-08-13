@@ -1,5 +1,6 @@
 import { Heading } from "@/components/ui/heading";
-import { TrackDetails } from "@/features/admin/tracks/components/track-details";
+import { User } from "@/db/schema";
+import { TrackDetails } from "@/features/shared/components/track-details
 import { getTrackById } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
@@ -48,7 +49,7 @@ export default async function TrackDetailsPage({
 				/>
 			</div>
 			<div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-				<TrackDetails track={track} userId={session.user.id} />
+				<TrackDetails track={track} user={session.user as User} />
 			</div>
 		</div>
 	);

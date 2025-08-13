@@ -6,19 +6,21 @@ import MockupPhone from "@/assets/images/mockup-phone.png";
 import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { mainCourses } from "@/data/site";
 import { TrackWithCourses } from "@/db/schema";
 import { OverviewTrackCard } from "@/features/shared/components/overview-track-card";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { redirects } from "@/lib/constants";
 import { ArrowDown } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export function MainContent({
 	tracksWithCourses,
+	userId,
 }: {
 	tracksWithCourses: TrackWithCourses[];
+	userId?: string;
 }) {
 	const router = useRouter();
 
@@ -146,13 +148,7 @@ export function MainContent({
 								anyone, regardless of their scheduling commitments.
 							</p>
 						</div>
-						<Button
-							variant="outline"
-							className="border-background bg-sidebar h-12 w-36 flex-shrink-0 rounded-sm font-semibold text-white sm:w-40"
-							onClick={() => router.push(redirects.toSignup)}
-						>
-							Get Started
-						</Button>
+						<GetStartedButton userId={userId} />
 					</div>
 				</div>
 			</div>
@@ -285,5 +281,31 @@ export function MainContent({
 				</div>
 			</div>
 		</div>
+	);
+}
+
+function GetStartedButton({ userId }: { userId?: string }) {
+	const router = useRouter();
+
+	if (userId) {
+		return (
+			<Button
+				variant="outline"
+				className="border-background bg-sidebar h-12 w-36 flex-shrink-0 rounded-sm font-semibold text-white sm:w-48"
+				onClick={() => router.push(redirects.toDashboard)}
+			>
+				Go to Dashboard
+			</Button>
+		);
+	}
+
+	return (
+		<Button
+			variant="outline"
+			className="border-background bg-sidebar h-12 w-36 flex-shrink-0 rounded-sm font-semibold text-white sm:w-40"
+			onClick={() => router.push(redirects.toSignup)}
+		>
+			Get Started
+		</Button>
 	);
 }

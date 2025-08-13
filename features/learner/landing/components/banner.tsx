@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import BannerImage from "@/assets/images/banner.jpg";
 
-export function Banner() {
+export function Banner({ userId }: { userId?: string }) {
 	const router = useRouter();
 
 	return (
@@ -31,17 +31,37 @@ export function Banner() {
 							empower you to succeed."
 						</p>
 						<div className="mt-6 flex justify-center sm:mt-8 md:justify-start">
-							<Button
-								size="lg"
-								className="h-12 w-36 gap-2 rounded-sm text-sm font-semibold sm:w-40 sm:text-base"
-								onClick={() => router.push(redirects.toSignup)}
-							>
-								Get Started
-							</Button>
+							<CTAButton userId={userId} />
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	);
+}
+
+function CTAButton({ userId }: { userId?: string }) {
+	const router = useRouter();
+
+	if (userId) {
+		return (
+			<Button
+				size="lg"
+				className="h-12 w-36 gap-2 rounded-sm text-sm font-semibold sm:w-48 sm:text-base"
+				onClick={() => router.push(redirects.toDashboard)}
+			>
+				Go to Dashboard
+			</Button>
+		);
+	}
+
+	return (
+		<Button
+			size="lg"
+			className="h-12 w-36 gap-2 rounded-sm text-sm font-semibold sm:w-40 sm:text-base"
+			onClick={() => router.push(redirects.toSignup)}
+		>
+			Get Started
+		</Button>
 	);
 }

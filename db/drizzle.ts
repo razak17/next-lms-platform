@@ -1,5 +1,5 @@
 import { localConnection } from "@/config/db";
-import { env } from "@/config/schema";
+import { env } from "@/config/server";
 import * as schema from "@/db/schema";
 import { neon } from "@neondatabase/serverless";
 import "dotenv/config";

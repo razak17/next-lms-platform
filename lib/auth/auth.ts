@@ -1,6 +1,6 @@
 import OTPVerificationEmail from "@/components/emails/otp-verification";
 import ResetPasswordEmail from "@/components/emails/reset-password";
-import { env } from "@/config/schema";
+import { env } from "@/config/server";
 import { db } from "@/db/drizzle";
 import * as schema from "@/db/schema";
 import { betterAuth } from "better-auth";
