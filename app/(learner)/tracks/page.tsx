@@ -81,7 +81,7 @@ export default async function LearnerTracksPage({
 									<div className="flex items-center justify-between">
 										<div className="flex items-center gap-2">
 											<Rating rating={Math.round(4.1)} />
-											<p className="text-md font-semibold">4.8</p>
+											<p className="text-md font-semibold">4.1</p>
 										</div>
 										<p className="text-muted-foreground font-semibold">
 											Price:{" "}

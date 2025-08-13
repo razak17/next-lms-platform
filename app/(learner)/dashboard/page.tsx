@@ -1,10 +1,21 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { db } from "@/db/drizzle";
+import { Course, learnerTrack } from "@/db/schema";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
-import { db } from "@/db/drizzle";
-import { learnerTrack, track, user } from "@/db/schema";
+import {
+	IconArrowRight,
+	IconDashboard,
+	IconSettings,
+	IconReceipt,
+} from "@tabler/icons-react";
 import { desc, eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function LearnersDashboardPage() {
 	const session = await auth.api.getSession({
@@ -12,26 +23,169 @@ export default async function LearnersDashboardPage() {
 	});
 
 	if (!session) {
-		redirect(redirects.adminToLogin);
+		redirect(redirects.toLogin);
 	}
 
-	const learnerTracks = await db
-		.select()
-		.from(learnerTrack)
-		.leftJoin(track, eq(learnerTrack.trackId, track.id))
-		.leftJoin(user, eq(learnerTrack.userId, user.id))
-		.where(eq(learnerTrack.userId, session.user.id))
-		.orderBy(desc(learnerTrack.createdAt));
+	const learnerTracksWithCourses = await db.query.learnerTrack.findMany({
+		with: {
+			track: {
+				with: {
+					courses: true,
+				},
+			},
+		},
+		where: eq(learnerTrack.userId, session.user.id),
+		orderBy: desc(learnerTrack.createdAt),
+	});
 
-	console.warn("DEBUGPRINT[1151]: page.tsx:18: learnerTracks=", learnerTracks);
 	return (
 		<div className="flex min-h-screen flex-col">
-			<div className="bg-sidebar py-12 text-center text-white">
-				<h1 className="text-2xl font-bold md:text-3xl">Dashboard</h1>
-			</div>
-			<div className="mb-12 w-full gap-6 px-4 lg:mx-auto lg:w-6xl">
-				<h1>Learners Dashboard</h1>
+			<div className="py-1 text-center text-white">
+				<div className="bg-background text-foreground mx-auto max-w-6xl p-4">
+					<Tabs defaultValue="dashboard" className="w-full">
+						<TabsList className="grid w-full grid-cols-3">
+							<TabsTrigger
+								value="dashboard"
+								className="flex items-center gap-2"
+							>
+								<IconDashboard className="h-4 w-4" />
+								Dashboard
+							</TabsTrigger>
+							<TabsTrigger value="settings" className="flex items-center gap-2">
+								<IconSettings className="h-4 w-4" />
+								Settings
+							</TabsTrigger>
+							<TabsTrigger value="invoices" className="flex items-center gap-2">
+								<IconReceipt className="h-4 w-4" />
+								Invoices
+							</TabsTrigger>
+						</TabsList>
+						<TabsContent value="dashboard">
+							<div className="mb-12 w-full gap-6 px-4 py-8">
+								<h2 className="mb-8 text-xl font-bold md:text-2xl">
+									Enrolled Tracks
+								</h2>
+								{learnerTracksWithCourses.length > 0 ? (
+									<div className="space-y-8">
+										{learnerTracksWithCourses.map((learnerTrack, i) => (
+											<div
+												key={i}
+												className="flex w-full flex-col gap-4 rounded-lg border px-6 py-4"
+											>
+												<div className="flex items-center justify-between">
+													<h2 className="pb-2 text-xl font-semibold">
+														{learnerTrack.track?.name}
+													</h2>
+													<Link href={`/tracks/${learnerTrack.track?.id}`}>
+														<Button
+															variant="ghost"
+															size="sm"
+															className="px-4 lg:px-6"
+														>
+															Go to Track
+															<IconArrowRight className="mr-2 h-4 w-4" />
+														</Button>
+													</Link>
+												</div>
+												{learnerTrack.track?.courses &&
+												learnerTrack.track.courses.length > 0 ? (
+													<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+														{learnerTrack.track.courses.map((course, j) => (
+															<CourseCard
+																key={j}
+																course={course}
+																image={course.image?.url}
+															/>
+														))}
+													</div>
+												) : (
+													<div className="text-muted-foreground py-8 text-center">
+														No courses available in this track yet.
+													</div>
+												)}
+											</div>
+										))}
+									</div>
+								) : (
+									<div className="text-center text-lg">
+										You have not enrolled in any tracks yet. Explore available
+										tracks and start learning!
+									</div>
+								)}
+							</div>
+						</TabsContent>
+						<TabsContent value="settings">
+							<div className="mb-12 w-full gap-6 px-4 py-8">
+								<h2 className="mb-8 text-xl font-bold md:text-2xl">Settings</h2>
+								<div className="space-y-6">
+									<Card className="p-6">
+										<h3 className="mb-4 text-lg font-semibold">
+											Profile Settings
+										</h3>
+										<p className="text-muted-foreground">
+											Manage your account settings and preferences.
+										</p>
+									</Card>
+								</div>
+							</div>
+						</TabsContent>
+						<TabsContent value="invoices">
+							<div className="mb-12 w-full gap-6 px-4 py-8">
+								<h2 className="mb-8 text-xl font-bold md:text-2xl">Invoices</h2>
+								<div className="space-y-6">
+									<Card className="p-6">
+										<h3 className="mb-4 text-lg font-semibold">
+											Billing History
+										</h3>
+										<p className="text-muted-foreground mb-4">
+											View your invoices.
+										</p>
+										<div className="text-muted-foreground py-8 text-center">
+											No invoices found. Your billing history will appear here
+											once you make a purchase.
+										</div>
+									</Card>
+								</div>
+							</div>
+						</TabsContent>
+					</Tabs>
+				</div>
 			</div>
 		</div>
+	);
+}
+
+function CourseCard({
+	course,
+	image = "/placeholders/placeholder-md.jpg",
+}: {
+	course: Course;
+	image?: string;
+}) {
+	return (
+		<Card className="@container/card flex min-h-[20rem] flex-col gap-0 p-0 transition-all hover:scale-105 hover:shadow-lg">
+			<Image
+				src={image}
+				alt={course.title}
+				width={400}
+				height={200}
+				loading="lazy"
+				className="h-40 w-full rounded-t-lg object-cover"
+			/>
+			<CardContent className="flex flex-1 flex-col gap-3 p-4">
+				<CardTitle className="group-hover:text-primary line-clamp-2 text-lg">
+					{course.title}
+				</CardTitle>
+				{course.description && (
+					<p className="text-muted-foreground line-clamp-3 flex-1 text-sm">
+						{course.description}
+					</p>
+				)}
+				<div className="text-muted-foreground flex items-center justify-between text-sm">
+					<span>Course</span>
+					<span className="text-primary font-medium">Registered</span>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }

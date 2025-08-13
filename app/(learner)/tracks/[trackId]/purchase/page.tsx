@@ -15,7 +15,7 @@ export default async function TrackPurchasePage({
 	params: Promise<{ trackId: string }>;
 }) {
 	return (
-		<Suspense fallback={<LoadingSpinner className="mx-auto my-6 size-36" />}>
+		<Suspense fallback={<LoadingSpinner className="mx-auto my-6 min-h-screen size-36" />}>
 			<SuspendedComponent params={params} />
 		</Suspense>
 	);
