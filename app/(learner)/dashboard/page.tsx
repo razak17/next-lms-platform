@@ -16,6 +16,9 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getUserByEmail } from "@/features/shared/queries/users";
+import { LearnerProfileForm } from "@/features/learner/profile/components/learner-profile-form";
+import { LearnerChangePasswordButton } from "@/features/learner/profile/components/learner-change-password-button";
 
 export default async function LearnersDashboardPage() {
 	const session = await auth.api.getSession({
@@ -23,6 +26,12 @@ export default async function LearnersDashboardPage() {
 	});
 
 	if (!session) {
+		redirect(redirects.toLogin);
+	}
+
+	const user = await getUserByEmail(session.user.email);
+
+	if (!user || "error" in user) {
 		redirect(redirects.toLogin);
 	}
 
@@ -122,9 +131,19 @@ export default async function LearnersDashboardPage() {
 										<h3 className="mb-4 text-lg font-semibold">
 											Profile Settings
 										</h3>
-										<p className="text-muted-foreground">
-											Manage your account settings and preferences.
+										<p className="text-muted-foreground mb-6">
+											Update your profile information and preferences.
 										</p>
+										<LearnerProfileForm user={user} />
+									</Card>
+									<Card className="p-6">
+										<h3 className="mb-4 text-lg font-semibold">
+											Security Settings
+										</h3>
+										<p className="text-muted-foreground mb-4">
+											Manage your account security and password.
+										</p>
+										<LearnerChangePasswordButton />
 									</Card>
 								</div>
 							</div>
