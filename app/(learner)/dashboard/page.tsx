@@ -19,6 +19,8 @@ import { redirect } from "next/navigation";
 import { getUserByEmail } from "@/features/shared/queries/users";
 import { LearnerProfileForm } from "@/features/learner/profile/components/learner-profile-form";
 import { LearnerChangePasswordButton } from "@/features/learner/profile/components/learner-change-password-button";
+import { getPurchasesByUserId } from "@/features/learner/purchases/queries/purchases";
+import { PurchasesTable } from "@/features/learner/purchases/components/purchases-table";
 
 export default async function LearnersDashboardPage() {
 	const session = await auth.api.getSession({
@@ -47,6 +49,9 @@ export default async function LearnersDashboardPage() {
 		orderBy: desc(learnerTrack.createdAt),
 	});
 
+	const purchases = await getPurchasesByUserId(session.user.id);
+	const purchasesData = Array.isArray(purchases) ? purchases : [];
+
 	return (
 		<div className="flex min-h-screen flex-col">
 			<div className="py-1 text-center text-white">
@@ -66,7 +71,7 @@ export default async function LearnersDashboardPage() {
 							</TabsTrigger>
 							<TabsTrigger value="invoices" className="flex items-center gap-2">
 								<IconReceipt className="h-4 w-4" />
-								Invoices
+								Purchases
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="dashboard">
@@ -128,18 +133,14 @@ export default async function LearnersDashboardPage() {
 								<h2 className="mb-8 text-xl font-bold md:text-2xl">Settings</h2>
 								<div className="space-y-6">
 									<Card className="p-6">
-										<h3 className="mb-4 text-lg font-semibold">
-											Profile Settings
-										</h3>
+										<h3 className="text-lg font-semibold">Profile Settings</h3>
 										<p className="text-muted-foreground mb-6">
-											Update your profile information and preferences.
+											Update your profile information.
 										</p>
 										<LearnerProfileForm user={user} />
 									</Card>
 									<Card className="p-6">
-										<h3 className="mb-4 text-lg font-semibold">
-											Security Settings
-										</h3>
+										<h3 className="text-lg font-semibold">Security Settings</h3>
 										<p className="text-muted-foreground mb-4">
 											Manage your account security and password.
 										</p>
@@ -150,19 +151,25 @@ export default async function LearnersDashboardPage() {
 						</TabsContent>
 						<TabsContent value="invoices">
 							<div className="mb-12 w-full gap-6 px-4 py-8">
-								<h2 className="mb-8 text-xl font-bold md:text-2xl">Invoices</h2>
+								<h2 className="mb-8 text-xl font-bold md:text-2xl">
+									Purchases
+								</h2>
 								<div className="space-y-6">
 									<Card className="p-6">
 										<h3 className="mb-4 text-lg font-semibold">
-											Billing History
+											Purchase History
 										</h3>
-										<p className="text-muted-foreground mb-4">
-											View your invoices.
+										<p className="text-muted-foreground mb-6">
+											View your purchase history and download receipts.
 										</p>
-										<div className="text-muted-foreground py-8 text-center">
-											No invoices found. Your billing history will appear here
-											once you make a purchase.
-										</div>
+										{purchasesData.length > 0 ? (
+											<PurchasesTable data={purchasesData} />
+										) : (
+											<div className="text-muted-foreground py-8 text-center">
+												No purchases found. Start learning by enrolling in a
+												track!
+											</div>
+										)}
 									</Card>
 								</div>
 							</div>

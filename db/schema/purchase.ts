@@ -35,7 +35,7 @@ export const purchase = pgTable("purchase", {
 		.notNull(),
 });
 
-export const trackRelations = relations(purchase, ({ one }) => ({
+export const purchaseRelations = relations(purchase, ({ one }) => ({
 	user: one(user, {
 		fields: [purchase.userId],
 		references: [user.id],

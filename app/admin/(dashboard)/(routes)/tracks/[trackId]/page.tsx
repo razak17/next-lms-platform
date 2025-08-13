@@ -1,6 +1,6 @@
 import { Heading } from "@/components/ui/heading";
 import { User } from "@/db/schema";
-import { TrackDetails } from "@/features/shared/components/track-details
+import { TrackDetails } from "@/features/shared/components/track-details";
 import { getTrackById } from "@/features/admin/tracks/queries/tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
