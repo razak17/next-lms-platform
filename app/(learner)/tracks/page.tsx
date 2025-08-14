@@ -3,8 +3,8 @@ import { SearchInput } from "@/components/search-input";
 import { Button } from "@/components/ui/button";
 import { env } from "@/config/server";
 import { db } from "@/db/drizzle";
-import { track as tracksTable } from "@/db/schema";
-import { and, desc, eq, ilike, or } from "drizzle-orm";
+import { track as tracksTable, trackRating } from "@/db/schema";
+import { and, desc, eq, ilike, or, avg, count } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
@@ -39,11 +39,22 @@ export default async function LearnerTracksPage({
 			)
 		: baseFilter;
 
-	const tracks = await db.query.track.findMany({
-		with: { courses: true },
-		where,
-		orderBy: desc(tracksTable.createdAt),
-	});
+	const tracks = await db
+		.select({
+			id: tracksTable.id,
+			name: tracksTable.name,
+			description: tracksTable.description,
+			image: tracksTable.image,
+			price: tracksTable.price,
+			rating: tracksTable.rating,
+			averageRating: avg(trackRating.rating),
+			totalRatings: count(trackRating.rating),
+		})
+		.from(tracksTable)
+		.leftJoin(trackRating, eq(tracksTable.id, trackRating.trackId))
+		.where(where)
+		.groupBy(tracksTable.id)
+		.orderBy(desc(tracksTable.createdAt));
 
 	return (
 		<div className="flex min-h-screen flex-col">
@@ -80,8 +91,23 @@ export default async function LearnerTracksPage({
 								<div className="mt-auto">
 									<div className="flex items-center justify-between">
 										<div className="flex items-center gap-2">
-											<Rating rating={Math.round(4.1)} />
-											<p className="text-md font-semibold">4.1</p>
+											<Rating
+												rating={Math.round(
+													Number(track.averageRating) || track.rating || 0
+												)}
+											/>
+											<p className="text-md font-semibold">
+												{track.averageRating
+													? Number(track.averageRating).toFixed(1)
+													: track.rating
+														? track.rating.toString()
+														: "0.0"}
+											</p>
+											{track.totalRatings > 0 && (
+												<p className="text-muted-foreground text-sm">
+													({track.totalRatings})
+												</p>
+											)}
 										</div>
 										<p className="text-muted-foreground font-semibold">
 											Price:{" "}

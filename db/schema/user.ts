@@ -4,6 +4,7 @@ import { course } from "./course";
 import { track } from "./track";
 import { invoice } from "./invoice";
 import { learnerTrack } from "./learner-track";
+import { trackRating } from "./track-rating";
 
 export const userRoles = ["admin", "learner"] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -92,6 +93,7 @@ export const userRelations = relations(user, ({ many }) => ({
 	learner: many(user, { relationName: "learner" }),
 	learnerTrack: many(learnerTrack),
 	createdBy: many(user, { relationName: "createdBy" }),
+	trackRatings: many(trackRating),
 }));
 
 export type User = typeof user.$inferSelect;

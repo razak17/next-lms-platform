@@ -4,3 +4,4 @@ export * from "./course";
 export * from "./invoice";
 export * from "./learner-track";
 export * from "./purchase";
+export * from "./track-rating";

@@ -14,6 +14,7 @@ import {
 import { Course, course } from "./course";
 import { learnerTrack } from "./learner-track";
 import { user } from "./user";
+import { trackRating } from "./track-rating";
 
 export const track = pgTable("track", {
 	id: varchar("id", { length: 30 })
@@ -45,6 +46,7 @@ export const trackRelations = relations(track, ({ many, one }) => ({
 	}),
 	courses: many(course),
 	learnerTrack: many(learnerTrack),
+	ratings: many(trackRating),
 }));
 
 export type Track = typeof track.$inferSelect;

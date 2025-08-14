@@ -17,6 +17,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { db } from "@/db/drizzle";
 import { track as tracksTable } from "@/db/schema";
 import { learnerOwnsTrack } from "@/features/shared/actions/tracks";
+import { getTrackRatings } from "@/features/shared/queries/track-ratings";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { eq } from "drizzle-orm";
@@ -48,6 +49,9 @@ export default async function TrackItemPreviewPage({
 		where: eq(tracksTable.id, trackId),
 		with: { courses: true },
 	});
+
+	// Get track ratings data
+	const ratingsData = await getTrackRatings(trackId);
 
 	function formatMonthYear(value?: Date | string | null): string {
 		if (!value) return "N/A";
@@ -137,9 +141,13 @@ export default async function TrackItemPreviewPage({
 									<span>Rating</span>
 								</div>
 								<div className="flex items-center gap-2">
-									<Rating rating={Math.round(4.8)} />
+									<Rating
+                    rating={Math.round(ratingsData.averageRating)}
+                    emptyClassName="text-background"
+                  />
 									<span className="font-semibold text-white">
-										(127 reviews)
+										({ratingsData.totalRatings}{" "}
+										{ratingsData.totalRatings === 1 ? "review" : "reviews"})
 									</span>
 								</div>
 							</div>

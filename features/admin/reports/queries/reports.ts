@@ -1,7 +1,14 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { user, track, course, learnerTrack, purchase } from "@/db/schema";
+import {
+	user,
+	track,
+	course,
+	learnerTrack,
+	purchase,
+	trackRating,
+} from "@/db/schema";
 import {
 	count,
 	sum,
@@ -26,12 +33,14 @@ export async function getReportsOverview() {
 			totalRevenue,
 			avgTrackRating,
 		] = await Promise.all([
-			db.select({ count: countDistinct(learnerTrack.userId) }).from(learnerTrack),
+			db
+				.select({ count: countDistinct(learnerTrack.userId) })
+				.from(learnerTrack),
 			db.select({ count: count() }).from(track),
 			db.select({ count: count() }).from(course),
 			db.select({ count: count() }).from(learnerTrack),
 			db.select({ total: sum(purchase.pricePaidInCents) }).from(purchase),
-			db.select({ avg: avg(track.rating) }).from(track),
+			db.select({ avg: avg(trackRating.rating) }).from(trackRating),
 		]);
 
 		return {

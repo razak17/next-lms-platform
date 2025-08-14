@@ -2,6 +2,7 @@
 
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Rating } from "@/components/rating";
+import { InteractiveRating } from "@/components/interactive-rating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrackWithCourses, User } from "@/db/schema";
@@ -13,12 +14,20 @@ import { useRouter } from "next/navigation";
 import { TrackDialog } from "../../admin/tracks/components/track-dialog";
 import { isAdmin } from "@/features/shared/utils/middleware";
 
+interface RatingsData {
+	averageRating: number;
+	totalRatings: number;
+	userRating: number | null;
+}
+
 export function TrackDetails({
 	user,
 	track,
+	ratingsData,
 }: {
 	user: User;
 	track: TrackWithCourses;
+	ratingsData?: RatingsData;
 }) {
 	const router = useRouter();
 
@@ -61,10 +70,23 @@ export function TrackDetails({
 					})}
 				</div>
 				<div className="flex items-center justify-between">
-					<Rating rating={Math.round(4.8)} />
-					<Badge className="ml-2 rounded-full bg-red-100 px-4 py-2 tracking-wider text-yellow-800">
-						{"4.8 / 5.0"}
-					</Badge>
+					{ratingsData ? (
+						<InteractiveRating
+							trackId={track.id}
+							userId={user.id}
+							currentRating={ratingsData.userRating || 0}
+							averageRating={ratingsData.averageRating}
+							totalRatings={ratingsData.totalRatings}
+							disabled={isAdmin(user.role)}
+						/>
+					) : (
+						<>
+							<Rating rating="0" />
+							<Badge className="ml-2 rounded-full bg-red-100 px-4 py-2 tracking-wider text-yellow-800">
+								{"0 / 5.0"}
+							</Badge>
+						</>
+					)}
 				</div>
 			</div>
 			<p className="text-md">{track.description}</p>
