@@ -1,42 +1,20 @@
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
+import { db } from "@/db/drizzle";
+import { track, user, purchase, learnerTrack } from "@/db/schema";
 import { LatestInvoice } from "@/features/admin/overview/components/latest-invoice";
 import { OverviewStatsCard } from "@/features/admin/overview/components/overview-stats-card";
-import { OverviewTrackCard } from "@/features/shared/components/overview-track-card";
 import { RecentRevenue } from "@/features/admin/overview/components/recent-revenue";
-import { getTracksWithCourses } from "@/features/admin/tracks/queries/tracks";
+import { OverviewTrackCard } from "@/features/shared/components/overview-track-card";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
+import { CardItem } from "@/types";
 import { IconArrowRight } from "@tabler/icons-react";
+import { desc, eq, count, sum, countDistinct, gte, lt, and } from "drizzle-orm";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Icons } from "@/components/icons";
-import { CardItem } from "@/types";
-
-const cardData: CardItem[] = [
-	{
-		title: "Total Learners",
-		value: "12,450",
-		change: "+12%",
-		changeDirection: "up",
-		icon: <Icons.users />,
-	},
-	{
-		title: "Revenue",
-		value: "12,434",
-		change: "+20%",
-		changeDirection: "up",
-		icon: <Icons.earnings />,
-	},
-	{
-		title: "Invoice",
-		value: "100",
-		change: "-2%",
-		changeDirection: "down",
-		icon: <Icons.clipboard />,
-	},
-];
 
 export default async function DashbordOverviewPage() {
 	const session = await auth.api.getSession({
@@ -47,23 +25,53 @@ export default async function DashbordOverviewPage() {
 		redirect(redirects.adminToLogin);
 	}
 
-	const tracksWithCourses = await getTracksWithCourses(session.user.id);
+	const [
+		tracksWithCourses,
+		learnersData,
+		revenueData,
+		purchasesData,
+		purchases,
+	] = await Promise.all([
+		getTracks(session.user.id),
+		getTotalLearners(),
+		getTotalRevenue(),
+		getTotalPurchases(),
+		getPurchases(session.user.id),
+	]);
 
-	if ("error" in tracksWithCourses) {
-		return (
-			<div className="flex h-screen flex-col items-center justify-center">
-				<Heading
-					title="Error"
-					description="Unable to load tracks. Please try again later."
-				/>
-				<p className="mt-2 text-red-500">
-					{tracksWithCourses.error || "An unexpected error occurred."}
-				</p>
-			</div>
-		);
-	}
+	console.warn("DEBUGPRINT[1155]: page.tsx:28: purchases=", purchases.length);
+	const formatChange = (change: number) => {
+		const sign = change >= 0 ? "+" : "";
+		return `${sign}${change.toFixed(1)}%`;
+	};
 
-	const firstFourTracks = tracksWithCourses.slice(0, 4);
+	const getChangeDirection = (change: number): "up" | "down" => {
+		return change >= 0 ? "up" : "down";
+	};
+
+	const cardData: CardItem[] = [
+		{
+			title: "Total Learners",
+			value: learnersData.total.toLocaleString(),
+			change: formatChange(learnersData.change),
+			changeDirection: getChangeDirection(learnersData.change),
+			icon: <Icons.users />,
+		},
+		{
+			title: "Revenue",
+			value: `$${revenueData.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+			change: formatChange(revenueData.change),
+			changeDirection: getChangeDirection(revenueData.change),
+			icon: <Icons.earnings />,
+		},
+		{
+			title: "Purchases",
+			value: purchasesData.total.toLocaleString(),
+			change: formatChange(purchasesData.change),
+			changeDirection: getChangeDirection(purchasesData.change),
+			icon: <Icons.clipboard />,
+		},
+	];
 
 	return (
 		<div className="@container/main flex flex-1 flex-col gap-2">
@@ -92,12 +100,12 @@ export default async function DashbordOverviewPage() {
 						</Link>
 					</div>
 					<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-						{firstFourTracks.length === 0 && (
+						{tracksWithCourses.length === 0 && (
 							<div className="text-muted-foreground col-span-full text-center">
 								No tracks created yet.
 							</div>
 						)}
-						{firstFourTracks.map((track, i) => (
+						{tracksWithCourses.map((track, i) => (
 							<OverviewTrackCard
 								showDescription={false}
 								showInstructor={false}
@@ -110,9 +118,118 @@ export default async function DashbordOverviewPage() {
 				</div>
 				<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-1 @5xl/main:grid-cols-2">
 					<RecentRevenue />
-					<LatestInvoice />
+					<LatestInvoice purchases={purchases} />
 				</div>
 			</div>
 		</div>
 	);
+}
+
+async function getTotalLearners() {
+	const now = new Date();
+	const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+	const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+	const currentResult = await db
+		.select({ count: countDistinct(learnerTrack.userId) })
+		.from(learnerTrack)
+		.where(gte(learnerTrack.createdAt, currentMonth));
+
+	const previousResult = await db
+		.select({ count: countDistinct(learnerTrack.userId) })
+		.from(learnerTrack)
+		.where(
+			and(
+				gte(learnerTrack.createdAt, lastMonth),
+				lt(learnerTrack.createdAt, currentMonth)
+			)
+		);
+
+	const current = currentResult[0]?.count ?? 0;
+	const previous = previousResult[0]?.count ?? 0;
+	const change = previous === 0 ? 0 : ((current - previous) / previous) * 100;
+
+	return { total: current, change };
+}
+
+async function getTotalRevenue() {
+	const now = new Date();
+	const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+	const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+	const currentResult = await db
+		.select({ total: sum(purchase.pricePaidInCents) })
+		.from(purchase)
+		.where(gte(purchase.createdAt, currentMonth));
+
+	const previousResult = await db
+		.select({ total: sum(purchase.pricePaidInCents) })
+		.from(purchase)
+		.where(
+			and(
+				gte(purchase.createdAt, lastMonth),
+				lt(purchase.createdAt, currentMonth)
+			)
+		);
+
+	const currentCents = currentResult[0]?.total ?? 0;
+	const previousCents = previousResult[0]?.total ?? 0;
+	const currentDollars = Number(currentCents) / 100;
+	const previousDollars = Number(previousCents) / 100;
+	const change =
+		previousDollars === 0
+			? 0
+			: ((currentDollars - previousDollars) / previousDollars) * 100;
+
+	return { total: currentDollars, change };
+}
+
+async function getTotalPurchases() {
+	const now = new Date();
+	const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+	const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+	const currentResult = await db
+		.select({ count: count() })
+		.from(purchase)
+		.where(gte(purchase.createdAt, currentMonth));
+
+	const previousResult = await db
+		.select({ count: count() })
+		.from(purchase)
+		.where(
+			and(
+				gte(purchase.createdAt, lastMonth),
+				lt(purchase.createdAt, currentMonth)
+			)
+		);
+
+	const current = currentResult[0]?.count ?? 0;
+	const previous = previousResult[0]?.count ?? 0;
+	const change = previous === 0 ? 0 : ((current - previous) / previous) * 100;
+
+	return { total: current, change };
+}
+
+async function getTracks(userId: string) {
+	const results = await db.query.track.findMany({
+		with: { courses: true },
+		where: eq(track.userId, userId),
+		limit: 4,
+		orderBy: desc(track.createdAt),
+	});
+
+	return results;
+}
+
+async function getPurchases(userId: string) {
+	const results = await db
+		.select()
+		.from(purchase)
+		.leftJoin(track, eq(purchase.trackId, track.id))
+		.leftJoin(user, eq(purchase.userId, user.id))
+		.limit(5)
+		.orderBy(desc(purchase.createdAt));
+
+	return results;
 }

@@ -1,5 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Track, Purchase, User } from "@/db/schema";
+import { formatPrice } from "@/lib/utils";
 
 const invoiceData = [
 	{
@@ -39,7 +41,15 @@ const invoiceData = [
 	},
 ];
 
-export function LatestInvoice() {
+export function LatestInvoice({
+	purchases,
+}: {
+	purchases?: {
+		track: Track | null;
+		purchase: Purchase;
+		user: User | null;
+	}[];
+}) {
 	return (
 		<Card className="h-full">
 			<CardHeader>
@@ -47,17 +57,29 @@ export function LatestInvoice() {
 			</CardHeader>
 			<CardContent>
 				<div className="space-y-8">
-					{invoiceData.map((sale, index) => (
+					{purchases?.map((purchase, index) => (
 						<div key={index} className="flex items-center">
 							<Avatar className="h-9 w-9">
-								<AvatarImage src={sale.avatar} alt="Avatar" />
-								<AvatarFallback>{sale.fallback}</AvatarFallback>
+								<AvatarImage
+									src={purchase.user?.image ? purchase.user?.image : undefined}
+									alt="Avatar"
+								/>
+								<AvatarFallback>
+									{purchase.user?.name?.charAt(0).toUpperCase() ||
+										purchase.user?.email?.charAt(0).toUpperCase()}
+								</AvatarFallback>
 							</Avatar>
 							<div className="ml-4 space-y-1">
-								<p className="text-sm leading-none font-medium">{sale.name}</p>
-								<p className="text-muted-foreground text-sm">{sale.email}</p>
+								<p className="text-sm leading-none font-medium">
+									{purchase.user?.name}
+								</p>
+								<p className="text-muted-foreground text-sm">
+									{purchase.user?.email}
+								</p>
 							</div>
-							<div className="ml-auto font-medium">{sale.amount}</div>
+							<div className="ml-auto font-medium">
+                {purchase.track?.price ? formatPrice(purchase.track.price) : "Free"}
+              </div>
 						</div>
 					))}
 				</div>
