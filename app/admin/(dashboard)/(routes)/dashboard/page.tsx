@@ -11,7 +11,17 @@ import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { CardItem } from "@/types";
 import { IconArrowRight } from "@tabler/icons-react";
-import { desc, eq, count, sum, countDistinct, gte, lt, and } from "drizzle-orm";
+import {
+	desc,
+	eq,
+	count,
+	sum,
+	countDistinct,
+	gte,
+	lt,
+	and,
+	sql,
+} from "drizzle-orm";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -31,12 +41,14 @@ export default async function DashbordOverviewPage() {
 		revenueData,
 		purchasesData,
 		purchases,
+		monthlyRevenueData,
 	] = await Promise.all([
 		getTracks(session.user.id),
 		getTotalLearners(),
 		getTotalRevenue(),
 		getTotalPurchases(),
 		getPurchases(session.user.id),
+		getMonthlyRevenue(),
 	]);
 
 	console.warn("DEBUGPRINT[1155]: page.tsx:28: purchases=", purchases.length);
@@ -117,7 +129,7 @@ export default async function DashbordOverviewPage() {
 					</div>
 				</div>
 				<div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-1 @5xl/main:grid-cols-2">
-					<RecentRevenue />
+					<RecentRevenue data={monthlyRevenueData} />
 					<LatestInvoice purchases={purchases} />
 				</div>
 			</div>
@@ -222,7 +234,7 @@ async function getTracks(userId: string) {
 	return results;
 }
 
-async function getPurchases(userId: string) {
+async function getPurchases() {
 	const results = await db
 		.select()
 		.from(purchase)
@@ -232,4 +244,55 @@ async function getPurchases(userId: string) {
 		.orderBy(desc(purchase.createdAt));
 
 	return results;
+}
+
+async function getMonthlyRevenue() {
+	const now = new Date();
+	const currentYear = now.getFullYear();
+	const startDate = new Date(currentYear, now.getMonth() - 11, 1);
+
+	const monthlyData = await db
+		.select({
+			year: sql<number>`EXTRACT(YEAR FROM ${purchase.createdAt})`,
+			month: sql<number>`EXTRACT(MONTH FROM ${purchase.createdAt})`,
+			revenue: sum(purchase.pricePaidInCents),
+		})
+		.from(purchase)
+		.where(gte(purchase.createdAt, startDate))
+		.groupBy(
+			sql`EXTRACT(YEAR FROM ${purchase.createdAt})`,
+			sql`EXTRACT(MONTH FROM ${purchase.createdAt})`
+		)
+		.orderBy(
+			sql`EXTRACT(YEAR FROM ${purchase.createdAt})`,
+			sql`EXTRACT(MONTH FROM ${purchase.createdAt})`
+		);
+
+	const monthlyRevenue = new Map<string, number>();
+
+	for (let i = 11; i >= 0; i--) {
+		const date = new Date(currentYear, now.getMonth() - i, 1);
+		const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+		monthlyRevenue.set(monthKey, 0);
+	}
+
+	monthlyData.forEach((row) => {
+		if (row.year && row.month && row.revenue) {
+			const monthKey = `${row.year}-${String(row.month).padStart(2, "0")}`;
+			const revenueInDollars = Number(row.revenue) / 100;
+			monthlyRevenue.set(monthKey, revenueInDollars);
+		}
+	});
+
+	return Array.from(monthlyRevenue.entries()).map(([monthKey, revenue]) => {
+		const [year, month] = monthKey.split("-");
+		const date = new Date(parseInt(year), parseInt(month) - 1, 1);
+		const monthName = date.toLocaleString("default", { month: "long" });
+
+		return {
+			month: monthName,
+			revenue: Math.round(revenue * 100) / 100,
+			formattedRevenue: `$${revenue.toFixed(2)}`,
+		};
+	});
 }

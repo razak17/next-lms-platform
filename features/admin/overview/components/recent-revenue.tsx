@@ -11,22 +11,17 @@ import {
 	ChartTooltipContent,
 } from "@/components/ui/chart";
 
-export const description = "A stacked bar chart with a legend";
+export const description = "A bar chart showing monthly revenue";
 
-const chartData = [
-	{ month: "January", revenue: 1860 },
-	{ month: "February", revenue: 3050 },
-	{ month: "March", revenue: 2370 },
-	{ month: "April", revenue: 3300 },
-	{ month: "May", revenue: 2090 },
-	{ month: "June", revenue: 2140 },
-	{ month: "July", revenue: 1500 },
-	{ month: "August", revenue: 3000 },
-	{ month: "September", revenue: 2500 },
-	{ month: "October", revenue: 4000 },
-	{ month: "November", revenue: 3500 },
-	{ month: "December", revenue: 5000 },
-];
+export interface RevenueData {
+	month: string;
+	revenue: number;
+	formattedRevenue: string;
+}
+
+interface RecentRevenueProps {
+	data?: RevenueData[];
+}
 
 const chartConfig = {
 	revenue: {
@@ -35,45 +30,47 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export function RecentRevenue() {
+export function RecentRevenue({ data = [] }: RecentRevenueProps) {
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle className="border-b pb-4 text-2xl">Recent Revenue</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<ChartContainer config={chartConfig}>
-					<BarChart accessibilityLayer data={chartData}>
-						<CartesianGrid vertical={false} />
-						<XAxis
-							dataKey="month"
-							tickLine={false}
-							tickMargin={10}
-							axisLine={false}
-							tickFormatter={(value) => value.slice(0, 3)}
-						/>
-						<YAxis
-							tickLine={false}
-							tickMargin={10}
-							axisLine={false}
-							tickFormatter={(value) => `$${value}`}
-						/>
-						<ChartTooltip content={<ChartTooltipContent hideLabel />} />
-						<ChartLegend content={<ChartLegendContent />} />
-						<Bar
-							dataKey="revenue"
-							stackId="a"
-							fill="var(--color-revenue)"
-							radius={[8, 8, 0, 0]}
-						/>
-						<Bar
-							dataKey="mobile"
-							stackId="a"
-							fill="var(--color-mobile)"
-							radius={[4, 4, 0, 0]}
-						/>
-					</BarChart>
-				</ChartContainer>
+				{data.length === 0 ? (
+					<div className="text-muted-foreground flex h-48 items-center justify-center">
+						No revenue data available
+					</div>
+				) : (
+					<ChartContainer config={chartConfig}>
+						<BarChart accessibilityLayer data={data}>
+							<CartesianGrid vertical={false} />
+							<XAxis
+								dataKey="month"
+								tickLine={false}
+								tickMargin={10}
+								axisLine={false}
+								tickFormatter={(value) => value.slice(0, 3)}
+							/>
+							<YAxis
+								tickLine={false}
+								tickMargin={10}
+								axisLine={false}
+								tickFormatter={(value) => `$${value}`}
+							/>
+							<ChartTooltip
+								content={<ChartTooltipContent hideLabel />}
+								formatter={(value) => [`$${value}`, " Revenue"]}
+							/>
+							<ChartLegend content={<ChartLegendContent />} />
+							<Bar
+								dataKey="revenue"
+								fill="var(--color-revenue)"
+								radius={[8, 8, 0, 0]}
+							/>
+						</BarChart>
+					</ChartContainer>
+				)}
 			</CardContent>
 		</Card>
 	);
