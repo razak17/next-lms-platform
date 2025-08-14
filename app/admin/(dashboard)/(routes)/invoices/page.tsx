@@ -1,11 +1,22 @@
 import { Heading } from "@/components/ui/heading";
 import { InvoicesTable } from "@/features/admin/invoices/components/invoices-table";
-import { getInvoicesWithLearner } from "@/features/admin/invoices/queries/invoices";
-import { getLearners } from "@/features/shared/queries/users";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { db } from "@/db/drizzle";
+import {
+	desc,
+	eq,
+	count,
+	sum,
+	countDistinct,
+	gte,
+	lt,
+	and,
+	sql,
+} from "drizzle-orm";
+import { track, user, purchase, learnerTrack } from "@/db/schema";
 
 export default async function InvoicesPage() {
 	const session = await auth.api.getSession({
@@ -16,37 +27,10 @@ export default async function InvoicesPage() {
 		redirect(redirects.adminToLogin);
 	}
 
-	const invoicesWithLearner = await getInvoicesWithLearner(session.user.id);
-
-	if ("error" in invoicesWithLearner) {
-		return (
-			<div className="flex h-screen flex-col items-center justify-center">
-				<Heading
-					title="Error"
-					description="Unable to load invoices. Please try again later."
-				/>
-				<p className="mt-2 text-red-500">
-					{invoicesWithLearner.error || "An unexpected error occurred."}
-				</p>
-			</div>
-		);
-	}
-
-	const learners = await getLearners();
-
-	if ("error" in learners) {
-		return (
-			<div className="flex h-screen flex-col items-center justify-center">
-				<Heading
-					title="Error"
-					description="Unable to load learners. Please try again later."
-				/>
-				<p className="mt-2 text-red-500">
-					{learners.error || "An unexpected error occurred."}
-				</p>
-			</div>
-		);
-	}
+	const [invoicesWithLearner, learners] = await Promise.all([
+		getPurchases(),
+		getLearners(),
+	]);
 
 	return (
 		<div className="@container/main flex flex-1 flex-col gap-2">
@@ -65,4 +49,23 @@ export default async function InvoicesPage() {
 			</div>
 		</div>
 	);
+}
+
+async function getPurchases() {
+	const results = await db
+		.select()
+		.from(purchase)
+		.leftJoin(user, eq(purchase.userId, user.id))
+		.orderBy(desc(purchase.createdAt));
+
+	return results;
+}
+
+export async function getLearners() {
+	const results = await db
+		.select()
+		.from(user)
+		.where(eq(user.role, "learner"))
+		.orderBy(desc(user.createdAt));
+	return results;
 }

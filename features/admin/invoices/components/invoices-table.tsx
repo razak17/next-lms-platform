@@ -1,82 +1,90 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Invoice, User } from "@/db/schema";
+import { Purchase, User } from "@/db/schema";
+import { formatDate, formatPrice } from "@/lib/utils";
 import { IconPlus } from "@tabler/icons-react";
+import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../../shared/components/data-table";
 import { InvoiceDialog } from "./invoice-dialog";
-import { InvoiceTableActions } from "./invoice-table-actions";
-import { formatDate, formatPrice, toTitleCase } from "@/lib/utils";
 
 interface InvoicesTableProps {
-	data: (Invoice & { learner: User })[];
+	data: {
+		user: User | null;
+		purchase: Purchase;
+	}[];
 	userId: string;
 	learners: User[];
 }
 
 export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
-	const columns: ColumnDef<Invoice & { learner: User }>[] = [
+	const columns: ColumnDef<{
+		user: User | null;
+		purchase: Purchase;
+	}>[] = [
 		{
-			id: "learner",
-			accessorFn: (row) => row.learner?.name,
+			id: "user",
+			accessorFn: (row) => row.user?.name,
 			header: "Learner",
 			cell: ({ row }) => {
-				const { learner } = row.original;
+				const { user } = row.original;
 				return (
 					<div className="flex items-center gap-2">
 						<Avatar className="h-10 w-10 rounded-full">
 							<AvatarImage
-								src={learner?.image ? learner?.image : undefined}
-								alt={learner?.name}
+								src={user?.image ? user?.image : undefined}
+								alt={user?.name}
 							/>
 							<AvatarFallback className="text-sidebar-accent-foreground rounded-full">
-								{learner.name
-									? learner.name
+								{user?.name
+									? user?.name
 											.split(" ")
 											.map((n) => n[0])
 											.join("")
 									: "U"}
 							</AvatarFallback>
 						</Avatar>
-						<span>{learner.name}</span>
+						<span>{user?.name}</span>
 					</div>
 				);
 			},
 			filterFn: (row, _, filterValue) => {
-				const { learner } = row.original;
-				if (!learner || !learner.name) return false;
-				return learner.name
+				const { user } = row.original;
+				if (!user || !user.name) return false;
+				return user.name
 					.toLowerCase()
 					.includes(String(filterValue).toLowerCase());
 			},
 		},
 		{
 			id: "email",
-			accessorFn: (row) => row.learner?.email,
+			accessorFn: (row) => row.user?.email,
 			header: "Email",
-			cell: ({ row }) => row.original.learner.email || "—",
+			cell: ({ row }) => row.original.user?.email || "—",
 		},
 		{
-			accessorKey: "dueDate",
-			header: "Due Date",
+			accessorKey: "date",
+			header: "Date",
 			cell: ({ row }) => {
-				const { dueDate } = row.original;
-				return <span>{dueDate ? formatDate(dueDate) : "—"}</span>;
+				const { createdAt } = row.original.purchase;
+				return <span>{createdAt ? formatDate(createdAt) : "—"}</span>;
 			},
 		},
 		{
 			accessorKey: "amount",
 			header: "Amount",
-			cell: ({ cell }) => formatPrice(cell.getValue() as number),
-			sortingFn: (rowA, rowB, columnId) => {
-				const a = parseFloat(rowA.getValue(columnId));
-				const b = parseFloat(rowB.getValue(columnId));
-				if (isNaN(a) && isNaN(b)) return 0;
-				if (isNaN(a)) return 1;
-				if (isNaN(b)) return -1;
+			cell: ({ row }) => {
+				const { pricePaidInCents } = row.original.purchase;
+				return (
+					<span>
+						{pricePaidInCents ? formatPrice(pricePaidInCents / 100) : "—"}
+					</span>
+				);
+			},
+			sortingFn: (rowA, rowB, _) => {
+				const a = rowA.original.purchase.pricePaidInCents;
+				const b = rowB.original.purchase.pricePaidInCents;
 				return a - b;
 			},
 		},
@@ -84,30 +92,19 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 			accessorKey: "status",
 			header: "Status",
 			cell: ({ row }) => {
-				const { status } = row.original;
-				const statusColors = {
-					paid: "green",
-					pending: "gray",
-					overdue: "red",
-				};
+				const { refundedAt } = row.original.purchase;
 				return (
-					<Badge
-						className={`text-${statusColors[status]}-500 bg-${statusColors[status]}-100 rounded-full font-medium`}
+					<span
+						className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+							refundedAt
+								? "bg-red-100 text-red-800"
+								: "bg-green-100 text-green-800"
+						}`}
 					>
-						{status ? toTitleCase(status) : "Unknown"}
-					</Badge>
+						{refundedAt ? "Refunded" : "Paid"}
+					</span>
 				);
 			},
-		},
-		{
-			id: "actions",
-			cell: ({ row }) => (
-				<InvoiceTableActions
-					userId={userId}
-					invoice={row.original}
-					learners={learners}
-				/>
-			),
 		},
 	];
 
@@ -116,7 +113,7 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 			columns={columns}
 			data={data}
 			item="invoices"
-			searchColumn="learner"
+			searchColumn="user"
 			addButton={
 				<InvoiceDialog
 					userId={userId}
