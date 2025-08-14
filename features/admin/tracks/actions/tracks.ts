@@ -20,7 +20,6 @@ export async function createTrack(data: Omit<TrackInsert, "id">) {
 			};
 		}
 
-		// Optional: assign userId
 		if (!data.userId) data.userId = currentUser.id;
 
 		const [newTrack] = await db.insert(track).values(data).returning();
@@ -59,7 +58,6 @@ export async function updateTrack(
 			};
 		}
 
-		// Ensure the user owns the track OR is admin (pseudo logic, adjust as needed)
 		const [existingTrack] = await db
 			.select()
 			.from(track)

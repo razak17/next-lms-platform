@@ -1,14 +1,7 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import {
-	user,
-	track,
-	course,
-	learnerTrack,
-	purchase,
-	invoice,
-} from "@/db/schema";
+import { user, track, course, learnerTrack, purchase } from "@/db/schema";
 import {
 	count,
 	sum,
@@ -23,7 +16,6 @@ import {
 	avg,
 } from "drizzle-orm";
 
-// Overview Analytics
 export async function getReportsOverview() {
 	try {
 		const [
@@ -34,7 +26,7 @@ export async function getReportsOverview() {
 			totalRevenue,
 			avgTrackRating,
 		] = await Promise.all([
-			db.select({ count: count() }).from(user).where(eq(user.role, "learner")),
+			db.select({ count: countDistinct(learnerTrack.userId) }).from(learnerTrack),
 			db.select({ count: count() }).from(track),
 			db.select({ count: count() }).from(course),
 			db.select({ count: count() }).from(learnerTrack),
@@ -67,7 +59,6 @@ export async function getReportsOverview() {
 	}
 }
 
-// User Growth Analytics
 export async function getUserGrowthData() {
 	try {
 		const sixMonthsAgo = new Date();
@@ -90,7 +81,6 @@ export async function getUserGrowthData() {
 	}
 }
 
-// Revenue Analytics
 export async function getRevenueData() {
 	try {
 		const sixMonthsAgo = new Date();
@@ -118,7 +108,6 @@ export async function getRevenueData() {
 	}
 }
 
-// Top Performing Tracks
 export async function getTopTracks() {
 	try {
 		const result = await db
@@ -149,7 +138,6 @@ export async function getTopTracks() {
 	}
 }
 
-// Recent Enrollments
 export async function getRecentEnrollments() {
 	try {
 		const result = await db
@@ -177,7 +165,6 @@ export async function getRecentEnrollments() {
 	}
 }
 
-// User Demographics
 export async function getUserDemographics() {
 	try {
 		const [genderStats, locationStats] = await Promise.all([
@@ -215,55 +202,68 @@ export async function getUserDemographics() {
 	}
 }
 
-// Invoice Analytics
-export async function getInvoiceAnalytics() {
+export async function getPurchaseAnalytics() {
 	try {
-		const [statusStats, recentInvoices] = await Promise.all([
+		const [purchaseStats, recentPurchases] = await Promise.all([
 			db
 				.select({
-					status: invoice.status,
+					status: sql<string>`
+						CASE 
+							WHEN ${purchase.refundedAt} IS NOT NULL THEN 'refunded'
+							ELSE 'completed'
+						END
+					`,
 					count: count(),
-					totalAmount: sum(invoice.amount),
+					totalAmount: sum(purchase.pricePaidInCents),
 				})
-				.from(invoice)
-				.groupBy(invoice.status),
+				.from(purchase).groupBy(sql`
+					CASE 
+						WHEN ${purchase.refundedAt} IS NOT NULL THEN 'refunded'
+						ELSE 'completed'
+					END
+				`),
 
 			db
 				.select({
-					id: invoice.id,
-					amount: invoice.amount,
-					status: invoice.status,
-					dueDate: invoice.dueDate,
+					id: purchase.id,
+					amount: purchase.pricePaidInCents,
+					status: sql<string>`
+						CASE 
+							WHEN ${purchase.refundedAt} IS NOT NULL THEN 'refunded'
+							ELSE 'completed'
+						END
+					`,
+					trackName: sql<string>`${purchase.trackDetails}->>'name'`,
 					learnerName: user.name,
 					learnerEmail: user.email,
-					createdAt: invoice.createdAt,
+					createdAt: purchase.createdAt,
+					refundedAt: purchase.refundedAt,
 				})
-				.from(invoice)
-				.innerJoin(user, eq(invoice.learnerId, user.id))
-				.orderBy(desc(invoice.createdAt))
+				.from(purchase)
+				.innerJoin(user, eq(purchase.userId, user.id))
+				.orderBy(desc(purchase.createdAt))
 				.limit(15),
 		]);
 
 		return {
-			statusStats: statusStats.map((item) => ({
+			purchaseStats: purchaseStats.map((item) => ({
 				...item,
 				totalAmount: item.totalAmount ? Number(item.totalAmount) : 0,
 			})),
-			recentInvoices: recentInvoices.map((item) => ({
+			recentPurchases: recentPurchases.map((item) => ({
 				...item,
 				amount: Number(item.amount),
 			})),
 		};
 	} catch (error) {
-		console.error("Error fetching invoice analytics:", error);
+		console.error("Error fetching purchase analytics:", error);
 		return {
-			statusStats: [],
-			recentInvoices: [],
+			purchaseStats: [],
+			recentPurchases: [],
 		};
 	}
 }
 
-// Course Analytics
 export async function getCourseAnalytics() {
 	try {
 		const result = await db

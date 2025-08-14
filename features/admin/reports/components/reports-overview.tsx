@@ -35,7 +35,7 @@ export function ReportsOverview({ data }: ReportsOverviewProps) {
 		{
 			title: "Total Tracks",
 			value: data.totalTracks.toLocaleString(),
-			icon: <Icons.learners className="h-6 w-6" />,
+			icon: <Icons.users className="h-6 w-6" />,
 			description: "Available learning tracks",
 		},
 		{

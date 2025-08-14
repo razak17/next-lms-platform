@@ -6,7 +6,7 @@ import { RevenueChart } from "@/features/admin/reports/components/revenue-chart"
 import { TopTracks } from "@/features/admin/reports/components/top-tracks";
 import { RecentEnrollments } from "@/features/admin/reports/components/recent-enrollments";
 import { UserDemographics } from "@/features/admin/reports/components/user-demographics";
-import { InvoiceAnalytics } from "@/features/admin/reports/components/invoice-analytics";
+import { PurchaseAnalytics } from "@/features/admin/reports/components/purchase-analytics";
 import { CourseAnalytics } from "@/features/admin/reports/components/course-analytics";
 import {
 	getReportsOverview,
@@ -15,7 +15,7 @@ import {
 	getTopTracks,
 	getRecentEnrollments,
 	getUserDemographics,
-	getInvoiceAnalytics,
+	getPurchaseAnalytics,
 	getCourseAnalytics,
 } from "@/features/admin/reports/queries/reports";
 
@@ -27,7 +27,7 @@ export default async function ReportsPage() {
 		topTracksData,
 		recentEnrollmentsData,
 		userDemographicsData,
-		invoiceAnalyticsData,
+		purchaseAnalyticsData,
 		courseAnalyticsData,
 	] = await Promise.all([
 		getReportsOverview(),
@@ -36,7 +36,7 @@ export default async function ReportsPage() {
 		getTopTracks(),
 		getRecentEnrollments(),
 		getUserDemographics(),
-		getInvoiceAnalytics(),
+		getPurchaseAnalytics(),
 		getCourseAnalytics(),
 	]);
 
@@ -80,7 +80,7 @@ export default async function ReportsPage() {
 					</TabsContent>
 
 					<TabsContent value="financial" className="space-y-6">
-						<InvoiceAnalytics data={invoiceAnalyticsData} />
+						<PurchaseAnalytics data={purchaseAnalyticsData} />
 					</TabsContent>
 				</Tabs>
 			</div>
