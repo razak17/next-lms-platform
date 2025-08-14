@@ -10,8 +10,8 @@ import { formatDate, formatPrice } from "@/lib/utils";
 interface LearnersTableProps {
 	data: {
 		user: User | null;
-		track: Track;
-		learner_track: LearnerTrack | null;
+		track: Track | null;
+		learner_track: LearnerTrack;
 	}[];
 }
 
@@ -55,7 +55,14 @@ export function LearnersTable({ data }: LearnersTableProps) {
 			id: "track",
 			accessorFn: (row) => row.track?.name,
 			header: "Track",
-			cell: ({ row }) => row.original.track.name,
+			cell: ({ row }) => {
+				const track = row.original.track;
+				return (
+					<span className="text-sm font-medium">
+						{track ? track.name : "—"}
+					</span>
+				);
+			},
 		},
 		{
 			id: "dateJoined",
@@ -76,8 +83,18 @@ export function LearnersTable({ data }: LearnersTableProps) {
 			id: "amount",
 			accessorFn: (row) => row.track?.price,
 			header: "Amount",
-			cell: ({ row }) => formatPrice(row.original.track.price),
+			cell: ({ row }) => {
+				const price = row.original.track?.price;
+				return (
+					<span className="text-sm font-medium">
+						{price ? formatPrice(price) : "Free"}
+					</span>
+				);
+			},
 			sortingFn: (rowA, rowB, _) => {
+				if (!rowA.original.track?.price || !rowB.original.track?.price) {
+					return 0;
+				}
 				const a = parseFloat(rowA.original.track.price);
 				const b = parseFloat(rowB.original.track.price);
 				if (isNaN(a) && isNaN(b)) return 0;

@@ -1,3 +1,15 @@
+import {
+	desc,
+	eq,
+	count,
+	sum,
+	countDistinct,
+	gte,
+	lt,
+	and,
+	sql,
+} from "drizzle-orm";
+import { db } from "@/db/drizzle";
 import { Heading } from "@/components/ui/heading";
 import { LearnersTable } from "@/features/admin/learners/components/learners-table";
 import { getAllLearnersTracks } from "@/features/admin/learners/queries/learner-tracks";
@@ -5,6 +17,7 @@ import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { track, user, purchase, learnerTrack } from "@/db/schema";
 
 export default async function LearnersPage() {
 	const session = await auth.api.getSession({
@@ -15,21 +28,7 @@ export default async function LearnersPage() {
 		redirect(redirects.adminToLogin);
 	}
 
-	const learners = await getAllLearnersTracks(session.user.id);
-
-	if ("error" in learners) {
-		return (
-			<div className="flex h-screen flex-col items-center justify-center">
-				<Heading
-					title="Error"
-					description="Unable to load learners. Please try again later."
-				/>
-				<p className="mt-2 text-red-500">
-					{learners.error || "An unexpected error occurred."}
-				</p>
-			</div>
-		);
-	}
+	const learners = await getAllLearners(session.user.id);
 
 	return (
 		<div className="@container/main flex flex-1 flex-col gap-2">
@@ -45,3 +44,16 @@ export default async function LearnersPage() {
 		</div>
 	);
 }
+
+async function getAllLearners(userId: string) {
+  const results = await db
+    .select()
+    .from(learnerTrack)
+    .leftJoin(track, eq(learnerTrack.trackId, track.id))
+    .leftJoin(user, eq(learnerTrack.userId, user.id))
+    .where(eq(learnerTrack.createdBy, userId))
+    .orderBy(desc(learnerTrack.createdAt));
+
+  return results;
+}
+

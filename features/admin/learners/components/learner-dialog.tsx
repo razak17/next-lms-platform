@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 interface InvoiceDialogProps {
 	trigger: React.ReactNode;
 	user: User;
-	track: Track;
+	track: Track | null;
 }
 
 export function LearnerDialog({ trigger, user, track }: InvoiceDialogProps) {
@@ -69,25 +69,25 @@ export function LearnerDialog({ trigger, user, track }: InvoiceDialogProps) {
 							<Badge className="text-md bg-sidebar-accent text-sidebar-accent-foreground inline-block rounded-full px-3 py-1 font-semibold">
 								Contact
 							</Badge>
-							<span className="font-bold">-</span>
+							<span className="font-bold">{user?.phone || "-"}</span>
 						</div>
 						<div className="grid grid-cols-[120px_1fr] items-center">
 							<Badge className="text-md bg-sidebar-accent text-sidebar-accent-foreground inline-block rounded-full px-3 py-1 font-semibold">
 								Location
 							</Badge>
-							<span className="font-bold">-</span>
+							<span className="font-bold">{user?.location || "-"}</span>
 						</div>
 						<div className="grid grid-cols-[120px_1fr] items-center">
 							<Badge className="text-md bg-sidebar-accent text-sidebar-accent-foreground inline-block rounded-full px-3 py-1 font-semibold">
 								Paid
 							</Badge>
-							<span className="font-bold">-</span>
+							<span className="font-bold">{track?.price}</span>
 						</div>
 						<div className="grid grid-cols-[120px_1fr] items-center">
 							<Badge className="text-md bg-sidebar-accent text-sidebar-accent-foreground inline-block rounded-full px-3 py-1 font-semibold">
 								Bio
 							</Badge>
-							<span className="font-bold">-</span>
+							<span className="font-bold">{user?.bio || "-"}</span>
 						</div>
 					</div>
 				</div>

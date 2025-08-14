@@ -8,7 +8,7 @@ export function LearnerTableActions({
 	track,
 }: {
 	user: User;
-	track: Track;
+	track: Track | null;
 }) {
 	return (
 		<div className="flex gap-2">

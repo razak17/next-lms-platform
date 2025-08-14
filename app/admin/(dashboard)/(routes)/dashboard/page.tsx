@@ -47,7 +47,7 @@ export default async function DashbordOverviewPage() {
 		getTotalLearners(),
 		getTotalRevenue(),
 		getTotalPurchases(),
-		getPurchases(session.user.id),
+		getPurchases(),
 		getMonthlyRevenue(),
 	]);
 
