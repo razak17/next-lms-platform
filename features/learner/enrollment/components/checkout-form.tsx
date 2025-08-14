@@ -5,9 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import Image from "next/image";
-import Link from "next/link";
 import PhoneInput from "react-phone-input-2";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,9 +16,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
 	Select,
 	SelectContent,
@@ -30,30 +25,13 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
-	Clock,
-	GraduationCap,
-	CreditCard,
-	Shield,
-	CheckCircle,
-	ChevronRight,
 	Loader2,
-	LockKeyhole,
+	CreditCard,
 	Mail,
 	User as UserIcon,
 	Users as UsersIcon,
 	MapPin,
-	Tag,
 	GraduationCapIcon,
-	LocateIcon,
-	PhoneCall,
 } from "lucide-react";
 import {
 	enrollmentSchema,
@@ -102,31 +80,6 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 	async function onSubmit(values: EnrollmentFormData) {
 		setIsSubmitting(true);
 
-    console.warn("DEBUGPRINT[1147]: checkout-form.tsx:102: values=", values)
-
-		// try {
-		// 	const response = await fetch("/api/enrollment", {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
-		// 		},
-		// 		body: JSON.stringify({
-		// 			...values,
-		// 			trackId: track.id,
-		// 		}),
-		// 	});
-		//
-		// 	const result = await response.json();
-		//
-		// 	if (result.success) {
-		// 		toast.success(result.message);
-		// 		router.push(`/enrollment/success`);
-		// 	} else {
-		// 		toast.error(result.message);
-		// 	}
-		// } catch (error) {
-		// 	toast.error("An error occurred during enrollment. Please try again.");
-		// }
 
 		setIsSubmitting(false);
 	}
@@ -134,7 +87,7 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 	return (
 		<div className="container mx-auto px-4 py-8 lg:max-w-6xl">
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 					<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
 						{/* Left Column - Form */}
 						<div className="lg:col-span-2">

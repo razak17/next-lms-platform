@@ -15,12 +15,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { db } from "@/db/drizzle";
-import { track as tracksTable } from "@/db/schema";
+import { track as tracksTable, learnerTrack } from "@/db/schema";
 import { learnerOwnsTrack } from "@/features/shared/actions/tracks";
 import { getTrackRatings } from "@/features/shared/queries/track-ratings";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
-import { eq } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import {
 	BookOpen,
 	CalendarDays,
@@ -50,8 +50,14 @@ export default async function TrackItemPreviewPage({
 		with: { courses: true },
 	});
 
-	// Get track ratings data
 	const ratingsData = await getTrackRatings(trackId);
+
+	const enrolledLearnersResult = await db
+		.select({ count: count() })
+		.from(learnerTrack)
+		.where(eq(learnerTrack.trackId, trackId));
+
+	const enrolledLearnersCount = enrolledLearnersResult[0]?.count || 0;
 
 	function formatMonthYear(value?: Date | string | null): string {
 		if (!value) return "N/A";
@@ -96,12 +102,6 @@ export default async function TrackItemPreviewPage({
 
 					<div className="flex max-w-4xl flex-col">
 						<div className="mb-4 flex items-center gap-2">
-							<Badge
-								variant="secondary"
-								className="border-white/30 bg-white/20 text-white"
-							>
-								Premium Track
-							</Badge>
 							<Badge variant="outline" className="border-white/30 text-white">
 								{track?.courses?.length || 0} Courses
 							</Badge>
@@ -132,7 +132,7 @@ export default async function TrackItemPreviewPage({
 									<span>Enrolled Students</span>
 								</div>
 								<span className="text-base font-semibold text-white">
-									1,247
+									{enrolledLearnersCount.toLocaleString()}
 								</span>
 							</div>
 							<div className="flex flex-col gap-2 rounded-lg bg-white/10 p-4 backdrop-blur-sm">
@@ -142,9 +142,9 @@ export default async function TrackItemPreviewPage({
 								</div>
 								<div className="flex items-center gap-2">
 									<Rating
-                    rating={Math.round(ratingsData.averageRating)}
-                    emptyClassName="text-background"
-                  />
+										rating={Math.round(ratingsData.averageRating)}
+										emptyClassName="text-background"
+									/>
 									<span className="font-semibold text-white">
 										({ratingsData.totalRatings}{" "}
 										{ratingsData.totalRatings === 1 ? "review" : "reviews"})
@@ -366,7 +366,7 @@ async function EnrollButton({
 }) {
 	const EnrollNow = () => (
 		<Button asChild size="lg" className="mb-6 w-full">
-			<Link href={`/tracks/${trackId}/purchase`}>Enroll Now</Link>
+			<Link href={`/tracks/${trackId}/checkout`}>Enroll Now</Link>
 		</Button>
 	);
 
