@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Purchase, User } from "@/db/schema";
 import { formatDate, formatPrice } from "@/lib/utils";
 import { IconPlus } from "@tabler/icons-react";
+import { Eye } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../../shared/components/data-table";
 import { InvoiceDialog } from "./invoice-dialog";
+import { InvoiceInfoDialog } from "./invoice-info-dialog";
 
 interface InvoicesTableProps {
 	data: {
@@ -103,6 +105,27 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 					>
 						{refundedAt ? "Refunded" : "Paid"}
 					</span>
+				);
+			},
+		},
+		{
+			id: "actions",
+			header: "",
+			cell: ({ row }) => {
+				return (
+					<InvoiceInfoDialog
+						data={row.original}
+						trigger={
+							<Button
+								variant="ghost"
+								size="sm"
+								className="flex h-8 items-center gap-1.5 px-3"
+							>
+						    <Eye />
+								View
+							</Button>
+						}
+					/>
 				);
 			},
 		},

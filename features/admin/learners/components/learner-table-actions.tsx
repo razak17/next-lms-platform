@@ -15,10 +15,12 @@ export function LearnerTableActions({
 			<LearnerDialog
 				trigger={
 					<Button
-						variant="ghost"
-						className="h-4 w-8 p-4 text-blue-600 hover:bg-blue-100"
+            variant="ghost"
+            size="sm"
+            className="flex h-8 items-center gap-1.5 px-3"
 					>
 						<Eye />
+						View
 					</Button>
 				}
 				user={user}
