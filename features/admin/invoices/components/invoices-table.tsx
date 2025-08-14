@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Purchase, User } from "@/db/schema";
 import { formatDate, formatPrice } from "@/lib/utils";
 import { IconPlus } from "@tabler/icons-react";
-import { Eye } from "lucide-react";
+import { Eye, RefreshCcw } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../../shared/components/data-table";
 import { InvoiceDialog } from "./invoice-dialog";
 import { InvoiceInfoDialog } from "./invoice-info-dialog";
+import { RefundDialog } from "./refund-dialog";
 
 interface InvoicesTableProps {
 	data: {
@@ -112,20 +113,40 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 			id: "actions",
 			header: "",
 			cell: ({ row }) => {
+				const { purchase } = row.original;
+				const isRefunded = !!purchase.refundedAt;
+
 				return (
-					<InvoiceInfoDialog
-						data={row.original}
-						trigger={
-							<Button
-								variant="ghost"
-								size="sm"
-								className="flex h-8 items-center gap-1.5 px-3"
-							>
-						    <Eye />
-								View
-							</Button>
-						}
-					/>
+					<div className="flex items-center gap-2">
+						<InvoiceInfoDialog
+							data={row.original}
+							trigger={
+								<Button
+									variant="ghost"
+									size="sm"
+									className="flex h-8 items-center gap-1.5 px-3"
+								>
+									<Eye className="h-4 w-4" />
+									View
+								</Button>
+							}
+						/>
+						{!isRefunded && (
+							<RefundDialog
+								data={row.original}
+								trigger={
+									<Button
+										variant="ghost"
+										size="sm"
+										className="flex h-8 items-center gap-1.5 px-3 text-red-600 hover:bg-red-50 hover:text-red-700"
+									>
+										<RefreshCcw className="h-4 w-4" />
+										Refund
+									</Button>
+								}
+							/>
+						)}
+					</div>
 				);
 			},
 		},

@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Purchase, Track } from "@/db/schema";
-import { IconEye } from "@tabler/icons-react";
+import { Eye } from "lucide-react";
 import { DataTable } from "@/features/admin/shared/components/data-table";
 import { formatDate, formatPrice } from "@/lib/utils";
 import Link from "next/link";
@@ -73,8 +73,8 @@ export function PurchasesTable({ data }: PurchasesTableProps) {
 			cell: ({ row }) => (
 				<Link href={`/dashboard/purchases/${row.original.id}`}>
 					<Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-						<IconEye className="h-4 w-4" />
-						<span className="sr-only">View receipt</span>
+						<Eye className="h-4 w-4" />
+            View
 					</Button>
 				</Link>
 			),

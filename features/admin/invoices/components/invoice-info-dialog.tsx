@@ -7,14 +7,18 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
+	DialogFooter,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Purchase, User } from "@/db/schema";
 import { formatDate, formatPrice } from "@/lib/utils";
 import { IconCalendar, IconCreditCard, IconUser } from "@tabler/icons-react";
+import { RefreshCcw } from "lucide-react";
+import { RefundDialog } from "./refund-dialog";
 
 interface InvoiceInfoDialogProps {
 	trigger: React.ReactNode;
@@ -172,6 +176,28 @@ export function InvoiceInfoDialog({ trigger, data }: InvoiceInfoDialogProps) {
 						)}
 					</div>
 				</div>
+
+				{/* Refund Action */}
+				{!purchase.refundedAt && (
+					<>
+						<Separator />
+						<div className="flex justify-end">
+							<RefundDialog
+								data={data}
+								trigger={
+									<Button
+										variant="destructive"
+										size="sm"
+										className="flex items-center gap-2"
+									>
+										<RefreshCcw className="h-4 w-4" />
+										Process Refund
+									</Button>
+								}
+							/>
+						</div>
+					</>
+				)}
 			</DialogContent>
 		</Dialog>
 	);
