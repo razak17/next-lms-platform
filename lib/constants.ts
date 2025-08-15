@@ -1,5 +1,3 @@
-import { env } from "@/config/server";
-
 export const unknownError =
 	"An unknown error occurred. Please try again later.";
 

@@ -1,23 +1,15 @@
-import {
-	desc,
-	eq,
-	count,
-	sum,
-	countDistinct,
-	gte,
-	lt,
-	and,
-	sql,
-} from "drizzle-orm";
-import { db } from "@/db/drizzle";
 import { Heading } from "@/components/ui/heading";
+import { db } from "@/db/drizzle";
+import { learnerTrack, track, user } from "@/db/schema";
 import { LearnersTable } from "@/features/admin/learners/components/learners-table";
-import { getAllLearnersTracks } from "@/features/admin/learners/queries/learner-tracks";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
+import {
+    desc,
+    eq
+} from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { track, user, purchase, learnerTrack } from "@/db/schema";
 
 export default async function LearnersPage() {
 	const session = await auth.api.getSession({

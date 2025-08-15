@@ -164,7 +164,7 @@ export default async function TrackItemPreviewPage({
 								<CardContent className="p-8">
 									<h2 className="mb-6 flex items-center gap-2 text-2xl font-bold">
 										<TrendingUp className="text-primary" size={24} />
-										What You'll Learn
+										What You&apso;ll Learn
 									</h2>
 									<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 										{[

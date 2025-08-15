@@ -81,7 +81,7 @@ export function TrackDetails({
 						/>
 					) : (
 						<>
-							<Rating rating="0" />
+							<Rating rating={0} />
 							<Badge className="ml-2 rounded-full bg-red-100 px-4 py-2 tracking-wider text-yellow-800">
 								{"0 / 5.0"}
 							</Badge>

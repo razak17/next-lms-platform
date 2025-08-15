@@ -33,7 +33,7 @@ export default async function PurchaseReceiptPage({
 		notFound();
 	}
 
-	const { payment_intent, total_details, amount_total, amount_subtotal } =
+	const { payment_intent } =
 		await stripe.checkout.sessions.retrieve(purchase.stripeSessionId, {
 			expand: [
 				"payment_intent.latest_charge",

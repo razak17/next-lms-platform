@@ -2,7 +2,6 @@
 
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 interface InteractiveRatingProps {

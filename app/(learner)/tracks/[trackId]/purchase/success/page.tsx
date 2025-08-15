@@ -1,13 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, ArrowRight, BookOpen, Users } from "lucide-react";
+import { CheckCircle, BookOpen, Users } from "lucide-react";
 
-export default function EnrollmentSuccessPage({
-  params,
-}: {
-  params: Promise<{ trackId: string }>
-}) {
+export default function EnrollmentSuccessPage() {
 	return (
 		<div className="from-background to-muted/20 flex min-h-screen items-center justify-center bg-gradient-to-br p-4">
 			<Card className="w-full max-w-2xl shadow-lg">

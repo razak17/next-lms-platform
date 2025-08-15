@@ -9,7 +9,7 @@ import {
 	desc,
 	eq,
 } from "drizzle-orm";
-import { track, user, purchase, learnerTrack } from "@/db/schema";
+import { track, user, purchase } from "@/db/schema";
 
 export default async function InvoicesPage() {
 	const session = await auth.api.getSession({
