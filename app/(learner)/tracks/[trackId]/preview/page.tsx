@@ -102,6 +102,12 @@ export default async function TrackItemPreviewPage({
 
 					<div className="flex max-w-4xl flex-col">
 						<div className="mb-4 flex items-center gap-2">
+							{/* <Badge */}
+							{/* 	variant="secondary" */}
+							{/* 	className="border-white/30 bg-white/20 text-white" */}
+							{/* > */}
+							{/* 	Premium Track */}
+							{/* </Badge> */}
 							<Badge variant="outline" className="border-white/30 text-white">
 								{track?.courses?.length || 0} Courses
 							</Badge>
@@ -142,9 +148,9 @@ export default async function TrackItemPreviewPage({
 								</div>
 								<div className="flex items-center gap-2">
 									<Rating
-										rating={Math.round(ratingsData.averageRating)}
-										emptyClassName="text-background"
-									/>
+                    rating={Math.round(ratingsData.averageRating)}
+                    emptyClassName="text-background"
+                  />
 									<span className="font-semibold text-white">
 										({ratingsData.totalRatings}{" "}
 										{ratingsData.totalRatings === 1 ? "review" : "reviews"})
@@ -164,7 +170,7 @@ export default async function TrackItemPreviewPage({
 								<CardContent className="p-8">
 									<h2 className="mb-6 flex items-center gap-2 text-2xl font-bold">
 										<TrendingUp className="text-primary" size={24} />
-										What You&apso;ll Learn
+										What You&apos;ll Learn
 									</h2>
 									<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 										{[
@@ -210,9 +216,9 @@ export default async function TrackItemPreviewPage({
 															</p>
 														</div>
 													</div>
-													<Badge variant="outline">
-														{track.duration || "2 weeks"}
-													</Badge>
+													{/* <Badge variant="outline"> */}
+													{/* 	{track.duration || "2 weeks"} */}
+													{/* </Badge> */}
 												</div>
 											</div>
 										)) || (

@@ -5,5 +5,4 @@ export * from "./components/revenue-chart";
 export * from "./components/top-tracks";
 export * from "./components/recent-enrollments";
 export * from "./components/user-demographics";
-export * from "./components/invoice-analytics";
 export * from "./components/course-analytics";
