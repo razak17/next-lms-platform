@@ -39,6 +39,8 @@ import {
 } from "../validations/enrollment";
 import { User } from "@/db/schema/user";
 import { genderOptions } from "@/lib/constants";
+import { updateUser } from "@/features/shared/actions/users";
+import { toast } from "sonner";
 import "react-phone-input-2/lib/style.css";
 
 interface Track {
@@ -80,20 +82,49 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 	async function onSubmit(values: EnrollmentFormData) {
 		setIsSubmitting(true);
 
+		try {
+			if (!user?.id) {
+				toast.error("User not found. Please log in and try again.");
+				return;
+			}
 
-		setIsSubmitting(false);
+			const updatedUser = await updateUser(user.id, {
+				firstName: values.name.split(" ")[0] || "",
+				lastName: values.name.split(" ").slice(1).join(" ") || "",
+				email: values.email,
+				gender: values.gender,
+				phone: values.phone || null,
+				location: values.location || null,
+				bio: values.bio || null,
+				image: user.image,
+			});
+
+			if ("error" in updatedUser) {
+				toast.error(updatedUser.error);
+				return;
+			}
+
+			toast.success("Information updated successfully!");
+
+			router.push(`/tracks/${track.id}/purchase`);
+		} catch (error) {
+			console.error("Error updating user:", error);
+			toast.error("Failed to update information. Please try again.");
+		} finally {
+			setIsSubmitting(false);
+		}
 	}
 
 	return (
 		<div className="container mx-auto px-4 py-8 lg:max-w-6xl">
 			<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 					<div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
 						{/* Left Column - Form */}
 						<div className="lg:col-span-2">
 							<Card className="rounded-sm border-none shadow-lg">
 								<CardHeader>
-									<CardTitle className="flex items-center text-2xl gap-2">
+									<CardTitle className="flex items-center gap-2 text-2xl">
 										<UserIcon size={20} />
 										Personal Information
 									</CardTitle>
@@ -117,6 +148,7 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 														<Input
 															placeholder="Name"
 															className="bg-secondary pl-9"
+															disabled
 															{...field}
 														/>
 													</div>
@@ -139,6 +171,7 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 														<Input
 															placeholder="Email"
 															className="bg-secondary pl-9"
+															disabled
 															{...field}
 														/>
 													</div>
@@ -161,6 +194,7 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 														<Input
 															placeholder="Track"
 															className="bg-secondary pl-9"
+															disabled
 															{...field}
 														/>
 													</div>
@@ -185,7 +219,7 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 																	aria-hidden="true"
 																	className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2"
 																/>
-																<SelectValue />
+																<SelectValue placeholder="Select gender" />
 															</div>
 														</SelectTrigger>
 													</FormControl>
@@ -261,16 +295,16 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 																	aria-hidden="true"
 																	className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2"
 																/>
-																<SelectValue />
+																<SelectValue placeholder="Do you have a disability?" />
 															</div>
 														</SelectTrigger>
 													</FormControl>
 													<SelectContent>
 														<SelectItem value="false">
-															<span className="ml-2">True</span>
+															<span className="ml-2">No</span>
 														</SelectItem>
 														<SelectItem value="true">
-															<span className="ml-2">False</span>
+															<span className="ml-2">Yes</span>
 														</SelectItem>
 													</SelectContent>
 												</Select>
@@ -306,35 +340,22 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 							<Card className="mt-6 overflow-hidden rounded-xs border-none shadow-lg">
 								<CardContent className="flex flex-col gap-8 p-6">
 									<h3 className="border-b pb-4 text-3xl font-semibold">
-										${track.price}{" "}USD
+										${track.price} USD
 									</h3>
-									<FormField
-										control={form.control}
-										name="gender"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Select Amount</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													defaultValue={field.value}
-												>
-													<FormControl>
-														<SelectTrigger className="bg-secondary w-full">
-															<SelectValue />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{genderOptions?.map((genderOption, i) => (
-															<SelectItem key={i} value={genderOption.value}>
-																{genderOption.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
+									<div className="space-y-4">
+										<div>
+											<p className="text-muted-foreground mb-2 text-sm">
+												Track
+											</p>
+											<p className="font-medium">{track.name}</p>
+										</div>
+										<div>
+											<p className="text-muted-foreground mb-2 text-sm">
+												Price
+											</p>
+											<p className="text-lg font-medium">${track.price} USD</p>
+										</div>
+									</div>
 
 									<Button
 										type="submit"
@@ -345,12 +366,12 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 										{isSubmitting ? (
 											<>
 												<Loader2 className="mr-2 h-5 w-5 animate-spin" />
-												Processing Enrollment...
+												Updating Information...
 											</>
 										) : (
 											<>
 												<CreditCard className="mr-2 h-5 w-5" />
-												Complete Purchase
+												Continue To Payment
 											</>
 										)}
 									</Button>
