@@ -8,13 +8,6 @@ import { db } from "@/db/drizzle";
 import {
 	desc,
 	eq,
-	count,
-	sum,
-	countDistinct,
-	gte,
-	lt,
-	and,
-	sql,
 } from "drizzle-orm";
 import { track, user, purchase, learnerTrack } from "@/db/schema";
 
@@ -28,7 +21,7 @@ export default async function InvoicesPage() {
 	}
 
 	const [invoicesWithLearner, learners] = await Promise.all([
-		getPurchases(),
+		getPurchases(session.user.id),
 		getLearners(),
 	]);
 
@@ -51,11 +44,13 @@ export default async function InvoicesPage() {
 	);
 }
 
-async function getPurchases() {
+async function getPurchases(adminUserId: string) {
 	const results = await db
 		.select()
 		.from(purchase)
 		.leftJoin(user, eq(purchase.userId, user.id))
+		.leftJoin(track, eq(purchase.trackId, track.id))
+		.where(eq(track.userId, adminUserId))
 		.orderBy(desc(purchase.createdAt));
 
 	return results;
