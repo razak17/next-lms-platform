@@ -75,7 +75,8 @@ export function CheckoutForm({ track, user }: CheckoutFormProps) {
 			gender: user?.gender || undefined,
 			phone: user?.phone || "",
 			location: user?.location || "",
-			disabled: false,
+			bio: user?.bio || "",
+			disabled: user?.disabled || false,
 		},
 	});
 

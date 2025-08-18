@@ -55,11 +55,8 @@ export async function POST(request: Request) {
 
 async function processStripeCheckout(checkoutSession: Stripe.Checkout.Session) {
 	const userId = checkoutSession.metadata?.userId;
-	console.warn("DEBUGPRINT[1148]: route.ts:59: userId=", userId);
 	const trackId = checkoutSession.metadata?.trackId;
-	console.warn("DEBUGPRINT[1149]: route.ts:61: trackId=", trackId);
 	const createdBy = checkoutSession.metadata?.createdBy;
-	console.warn("DEBUGPRINT[1150]: route.ts:63: createdBy=", createdBy);
 
 	if (userId == null || trackId == null || createdBy == null) {
 		throw new Error("Missing metadata");

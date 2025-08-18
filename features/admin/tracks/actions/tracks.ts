@@ -1,10 +1,10 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { TrackInsert, track } from "@/db/schema";
+import { TrackInsert, track, course } from "@/db/schema";
 import { getCurrentUser } from "@/features/shared/queries/users";
 import { redirects } from "@/lib/constants";
-import { eq } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { isAdmin } from "@/features/shared/utils/middleware";
 
@@ -127,6 +127,19 @@ export async function deleteTrack(trackId: string) {
 			return {
 				error: true,
 				message: "Forbidden",
+			};
+		}
+
+		// Check if track has any courses
+		const [courseCount] = await db
+			.select({ count: count() })
+			.from(course)
+			.where(eq(course.trackId, trackId));
+
+		if (courseCount.count > 0) {
+			return {
+				error: true,
+				message: `Cannot delete track. This track has ${courseCount.count} course${courseCount.count > 1 ? "s" : ""} associated with it. Please delete all courses first.`,
 			};
 		}
 

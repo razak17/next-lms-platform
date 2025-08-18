@@ -90,6 +90,7 @@
 - [ ] Redirect to origin
 - [ ] Dynamic colors for landing page courses badges borders
 - [ ] Rate track
+- [ ] Show proper error when trying to delete track which is being used by some courses
 
 # Bugs
 - [x] Sign user in once they verify their email
