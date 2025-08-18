@@ -9,12 +9,9 @@ import { revalidatePath } from "next/cache";
 import { isAdmin } from "@/features/shared/utils/middleware";
 import { stripe } from "@/lib/stripe";
 
-async function revokeUserAccess(
-	refundedPurchase: Purchase,
-	trx: Omit<typeof db, "$client">
-) {
+async function revokeUserAccess(refundedPurchase: Purchase) {
 	// Remove the user's access to the track by deleting their learner track enrollment
-	await trx
+	await db
 		.delete(learnerTrack)
 		.where(
 			and(
@@ -35,74 +32,49 @@ export async function refundPurchase(id: string) {
 		};
 	}
 
-	const data = await db.transaction(async (trx) => {
-		const refundedPurchase = await updatePurchaseById(
-			id,
-			{ refundedAt: new Date() },
-			trx
-		);
+	try {
+		const refundedPurchase = await updatePurchaseById(id, {
+			refundedAt: new Date(),
+		});
 
 		const session = await stripe.checkout.sessions.retrieve(
 			refundedPurchase.stripeSessionId
 		);
 
 		if (session.payment_intent == null) {
-			trx.rollback();
 			return {
 				error: true,
 				message: "There was an error refunding this purchase",
 			};
 		}
 
-		try {
-			await stripe.refunds.create({
-				payment_intent:
-					typeof session.payment_intent === "string"
-						? session.payment_intent
-						: session.payment_intent.id,
-			});
-			await revokeUserAccess(refundedPurchase, trx);
-		} catch {
-			trx.rollback();
-			return {
-				error: true,
-				message: "There was an error refunding this purchase",
-			};
-		}
-	});
+		await stripe.refunds.create({
+			payment_intent:
+				typeof session.payment_intent === "string"
+					? session.payment_intent
+					: session.payment_intent.id,
+		});
 
-	// Revalidate relevant paths
-	revalidatePath(redirects.adminToInvoices);
-	revalidatePath(redirects.toDashboard);
+		await revokeUserAccess(refundedPurchase);
 
-	return data ?? { error: false, message: "Successfully refunded purchase" };
+		// Revalidate relevant paths
+		revalidatePath(redirects.adminToInvoices);
+		revalidatePath(redirects.toDashboard);
+
+		return { error: false, message: "Successfully refunded purchase" };
+	} catch (error) {
+		console.error("Error processing refund:", error);
+		return {
+			error: true,
+			message: "There was an error refunding this purchase",
+		};
+	}
 }
 
-export async function createPurchase(
-	data: PurchaseInsert,
-	trx: Omit<typeof db, "$client"> = db
-) {
-	// const user = await getCurrentUser();
-	//
-	// if (!user) {
-	// 	throw new Error("User not authenticated");
-	// }
-	//
-	// if (isAdmin(user?.currentUser?.role)) {
-	// 	throw new Error("Admins cannot create purchases");
-	// }
-
-	// const existingPurchase = await trx.query.purchase.findFirst({
-	// 	where: eq(purchase.userId, user?.currentUser?.id),
-	// });
-	//
-	// if (existingPurchase) {
-	// 	throw new Error("You have already made a purchase");
-	// }
-
+export async function createPurchase(data: PurchaseInsert) {
 	const details = data.trackDetails;
 
-	const newPurchase = await trx
+	const newPurchase = await db
 		.insert(purchase)
 		.values({
 			...data,
@@ -122,8 +94,7 @@ export async function createPurchase(
 
 export async function updatePurchaseById(
 	id: string,
-	data: Partial<PurchaseInsert>,
-	trx: Omit<typeof db, "$client"> = db
+	data: Partial<PurchaseInsert>
 ) {
 	const user = await getCurrentUser();
 
@@ -141,7 +112,7 @@ export async function updatePurchaseById(
 
 	const details = data.trackDetails;
 
-	const updatedPurchase = await trx
+	const updatedPurchase = await db
 		.update(purchase)
 		.set({
 			...data,

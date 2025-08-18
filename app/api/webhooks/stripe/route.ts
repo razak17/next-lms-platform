@@ -62,10 +62,7 @@ async function processStripeCheckout(checkoutSession: Stripe.Checkout.Session) {
 		throw new Error("Missing metadata");
 	}
 
-	const [track, user] = await Promise.all([
-		getTrack(trackId),
-		await getUser(userId),
-	]);
+	const [track, user] = await Promise.all([getTrack(trackId), getUser(userId)]);
 
 	if (track == null) throw new Error("Track not found");
 	if (user == null) throw new Error("User not found");
@@ -81,37 +78,60 @@ async function processStripeCheckout(checkoutSession: Stripe.Checkout.Session) {
 	// 	throw new Error("User already enrolled in this track");
 	// }
 
-	db.transaction(async (trx) => {
-		try {
-			await enrollInTrack({ userId: user.id, trackId, createdBy }, trx);
-			await createPurchase(
-				{
-					stripeSessionId: checkoutSession.id,
-					pricePaidInCents:
-						checkoutSession.amount_total ||
-						Math.round(parseFloat(track.price) * 100),
-					trackDetails: {
-						...track,
-						image: track?.image?.url as string,
-					},
-					userId: user.id,
-					trackId,
-				},
-				trx
-			);
-		} catch (error) {
-			trx.rollback();
-			throw error;
+	// Note: Neon HTTP driver doesn't support transactions, so we handle operations sequentially
+	// We implement manual rollback logic in case of failures
+	let enrollmentResult;
+	try {
+		enrollmentResult = await enrollInTrack({
+			userId: user.id,
+			trackId,
+			createdBy,
+		});
+
+		await createPurchase({
+			stripeSessionId: checkoutSession.id,
+			pricePaidInCents:
+				checkoutSession.amount_total ||
+				Math.round(parseFloat(track.price) * 100),
+			trackDetails: {
+				...track,
+				image: track?.image?.url as string,
+			},
+			userId: user.id,
+			trackId,
+		});
+	} catch (error) {
+		// If enrollment succeeded but purchase failed, rollback the enrollment
+		if (
+			enrollmentResult &&
+			Array.isArray(enrollmentResult) &&
+			enrollmentResult.length > 0
+		) {
+			try {
+				await db
+					.delete(learnerTrack)
+					.where(
+						and(
+							eq(learnerTrack.userId, user.id),
+							eq(learnerTrack.trackId, trackId)
+						)
+					);
+			} catch (rollbackError) {
+				console.error("Failed to rollback enrollment:", rollbackError);
+			}
 		}
-	});
+		console.error("Error processing Stripe checkout:", error);
+		throw error;
+	}
 
 	return trackId;
 }
 
-async function enrollInTrack(
-	data: { userId: string; trackId: string; createdBy: string },
-	trx: Omit<typeof db, "$client"> = db
-) {
+async function enrollInTrack(data: {
+	userId: string;
+	trackId: string;
+	createdBy: string;
+}) {
 	const { userId, trackId, createdBy } = data;
 
 	const existingEnrollment = await db.query.learnerTrack.findFirst({
@@ -128,7 +148,7 @@ async function enrollInTrack(
 		};
 	}
 
-	const accesses = await trx
+	const accesses = await db
 		.insert(learnerTrack)
 		.values({
 			userId,
