@@ -40,9 +40,9 @@ export function OverviewTrackCard({
 					? `${redirects.adminToTracks}/${track.id}`
 					: `${redirects.toTracks}/${track.id}/preview`
 			}
-			className="block"
+			className="block h-full"
 		>
-			<Card className="@container/card flex flex-col gap-0 p-0 transition-all hover:scale-105 hover:shadow-lg">
+			<Card className="@container/card flex h-full flex-col gap-0 p-0 transition-all hover:scale-105 hover:shadow-lg">
 				<div className="relative">
 					<Image
 						src={track.image?.url || "/placeholders/placeholder-md.jpg"}
