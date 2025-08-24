@@ -51,7 +51,6 @@ export default async function DashbordOverviewPage() {
 		getMonthlyRevenue(session.user.id),
 	]);
 
-	console.warn("DEBUGPRINT[1155]: page.tsx:28: purchases=", purchases.length);
 	const formatChange = (change: number) => {
 		const sign = change >= 0 ? "+" : "";
 		return `${sign}${change.toFixed(1)}%`;
