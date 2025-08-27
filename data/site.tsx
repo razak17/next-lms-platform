@@ -62,7 +62,7 @@ export const mainCourses = [
 export const siteConfig = {
 	name: "G-Client",
 	description: "E-Learning Platform",
-	url: "https://g-client.vercel.app",
+	url: "https://lms.razakmo.tech",
 	mainNav,
 	adminNav,
 };
