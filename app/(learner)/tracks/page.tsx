@@ -27,18 +27,6 @@ export default async function LearnerTracksPage({
 
 	const q = title?.trim() ?? "";
 
-	const baseFilter = eq(tracksTable.userId, env.LANDING_PAGE_ADMIN_ID);
-
-	const where = q
-		? and(
-				baseFilter,
-				or(
-					ilike(tracksTable.name, `%${q}%`),
-					ilike(tracksTable.description, `%${q}%`)
-				)
-			)
-		: baseFilter;
-
 	const tracks = await db
 		.select({
 			id: tracksTable.id,
@@ -52,7 +40,12 @@ export default async function LearnerTracksPage({
 		})
 		.from(tracksTable)
 		.leftJoin(trackRating, eq(tracksTable.id, trackRating.trackId))
-		.where(where)
+		.where(
+			or(
+				ilike(tracksTable.name, `%${q}%`),
+				ilike(tracksTable.description, `%${q}%`)
+			)
+		)
 		.groupBy(tracksTable.id)
 		.orderBy(desc(tracksTable.createdAt));
 

@@ -10,7 +10,6 @@ import { headers } from "next/headers";
 export default async function LandingPage() {
 	const tracksWithCourses = await db.query.track.findMany({
 		with: { courses: true },
-		where: eq(track.userId, env.LANDING_PAGE_ADMIN_ID),
 		limit: 4,
 		orderBy: desc(track.createdAt),
 	});
