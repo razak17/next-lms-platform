@@ -1,10 +1,9 @@
-import { env } from "@/config/server";
 import { db } from "@/db/drizzle";
 import { track } from "@/db/schema";
 import { Banner } from "@/features/learner/landing/components/banner";
 import { MainContent } from "@/features/learner/landing/components/main-content";
 import { auth } from "@/lib/auth/auth";
-import { desc, eq } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { headers } from "next/headers";
 
 export default async function LandingPage() {

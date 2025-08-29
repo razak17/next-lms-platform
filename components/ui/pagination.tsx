@@ -48,7 +48,6 @@ export function Pagination({
 
 	const pageButtons = [];
 
-	// Always show first page
 	if (totalPages <= 7) {
 		for (let i = 1; i <= totalPages; i++) {
 			pageButtons.push(createPageButton(i));
@@ -56,7 +55,6 @@ export function Pagination({
 	} else {
 		pageButtons.push(createPageButton(1));
 
-		// Left side ellipsis
 		if (currentPage > 4) {
 			pageButtons.push(
 				<span key="start-ellipsis" className="text-muted-foreground px-2">
@@ -65,7 +63,6 @@ export function Pagination({
 			);
 		}
 
-		// Pages around current
 		for (
 			let i = Math.max(2, currentPage - 2);
 			i <= Math.min(totalPages - 1, currentPage + 2);
@@ -76,7 +73,6 @@ export function Pagination({
 			}
 		}
 
-		// Right side ellipsis
 		if (currentPage < totalPages - 3) {
 			pageButtons.push(
 				<span key="end-ellipsis" className="text-muted-foreground px-2">
@@ -85,7 +81,6 @@ export function Pagination({
 			);
 		}
 
-		// Always show last page
 		if (totalPages > 1) {
 			pageButtons.push(createPageButton(totalPages));
 		}
@@ -105,7 +100,6 @@ export function Pagination({
 			</div>
 
 			<div className="flex items-center gap-2">
-				{/* Previous Button */}
 				<Button
 					variant="outline"
 					size="sm"
@@ -116,10 +110,8 @@ export function Pagination({
 					Previous
 				</Button>
 
-				{/* Page Numbers */}
 				<div className="flex items-center gap-1">{pageButtons}</div>
 
-				{/* Next Button */}
 				<Button
 					variant="outline"
 					size="sm"

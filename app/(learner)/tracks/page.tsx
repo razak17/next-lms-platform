@@ -1,4 +1,5 @@
 import { SearchInput } from "@/components/search-input";
+import { Pagination } from "@/components/ui/pagination";
 import { db } from "@/db/drizzle";
 import { trackRating, track as tracksTable } from "@/db/schema";
 import { TrackCard } from "@/features/learner/tracks/components/track-card";
@@ -7,7 +8,7 @@ import { avg, count, desc, eq, ilike, or } from "drizzle-orm";
 import { headers } from "next/headers";
 
 interface LearnerTracksPageProps {
-	searchParams: Promise<{ title?: string }>;
+	searchParams: Promise<{ title?: string; page?: string }>;
 }
 
 export default async function LearnerTracksPage({
@@ -17,11 +18,16 @@ export default async function LearnerTracksPage({
 		headers: await headers(),
 	});
 
-	const { title } = await searchParams;
+	const { title, page } = await searchParams;
 
 	const q = title?.trim() ?? "";
+	const currentPage = Number(page) || 1;
+	const pageSize = 6;
 
-	const tracks = await getTracks(q);
+	const result = await getTracks(q, currentPage, pageSize);
+	const tracks = result.tracks;
+	const totalCount = result.totalCount;
+	const totalPages = Math.ceil(totalCount / pageSize);
 
 	return (
 		<div className="flex min-h-screen flex-col">
@@ -39,16 +45,32 @@ export default async function LearnerTracksPage({
 					<h1 className="text-2xl font-bold">Top Tracks</h1>
 					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{tracks?.map((track) => (
-							<TrackCard key={track.id} track={track} userId={session?.user?.id} />
+							<TrackCard
+								key={track.id}
+								track={track}
+								userId={session?.user?.id}
+							/>
 						))}
 					</div>
+					{totalPages > 1 && (
+						<div className="mt-8">
+							<Pagination
+								currentPage={currentPage}
+								totalPages={totalPages}
+								totalItems={totalCount}
+								pageSize={pageSize}
+							/>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
 	);
 }
 
-async function getTracks(q: string) {
+async function getTracks(q: string, page: number, pageSize: number) {
+	const offset = (page - 1) * pageSize;
+
 	const tracks = await db
 		.select({
 			id: tracksTable.id,
@@ -69,8 +91,24 @@ async function getTracks(q: string) {
 			)
 		)
 		.groupBy(tracksTable.id)
-		.orderBy(desc(tracksTable.createdAt));
+		.orderBy(desc(tracksTable.createdAt))
+		.limit(pageSize)
+		.offset(offset);
 
-	return tracks;
+	const [{ totalCount }] = await db
+		.select({
+			totalCount: count(tracksTable.id),
+		})
+		.from(tracksTable)
+		.where(
+			or(
+				ilike(tracksTable.name, `%${q}%`),
+				ilike(tracksTable.description, `%${q}%`)
+			)
+		);
+
+	return {
+		tracks,
+		totalCount,
+	};
 }
-
