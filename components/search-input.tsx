@@ -32,13 +32,15 @@ export const SearchInput = ({
 				query: {
 					categoryId: currentCategoryId,
 					title: debouncedValue,
+					// Reset to page 1 when searching
+					page: debouncedValue ? "1" : searchParams.get("page"),
 				},
 			},
 			{ skipEmptyString: true, skipNull: true }
 		);
 
 		router.push(url);
-	}, [debouncedValue, currentCategoryId, router, pathname]);
+	}, [debouncedValue, currentCategoryId, router, pathname, searchParams]);
 
 	return (
 		<div className="relative flex flex-col items-center justify-center">

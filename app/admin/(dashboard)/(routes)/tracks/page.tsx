@@ -1,6 +1,7 @@
 import { SearchInput } from "@/components/search-input";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
+import { Pagination } from "@/components/ui/pagination";
 import { db } from "@/db/drizzle";
 import { track } from "@/db/schema";
 import { TrackCard } from "@/features/admin/tracks/components/track-card";
@@ -8,12 +9,12 @@ import { TrackDialog } from "@/features/admin/tracks/components/track-dialog";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { IconPlus } from "@tabler/icons-react";
-import { desc, ilike, or } from "drizzle-orm";
+import { count, desc, ilike, or } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 interface TracksPageProps {
-	searchParams: Promise<{ title?: string }>;
+	searchParams: Promise<{ title?: string; page?: string }>;
 }
 
 export default async function TracksPage({ searchParams }: TracksPageProps) {
@@ -25,18 +26,30 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 		redirect(redirects.adminToLogin);
 	}
 
-	const { title } = await searchParams;
+	const { title, page } = await searchParams;
 
 	const q = title?.trim() ?? "";
+	const currentPage = page ? parseInt(page) : 1;
+	const pageSize = 8;
 
 	const where = q
 		? or(ilike(track.name, `%${q}%`), ilike(track.description, `%${q}%`))
 		: undefined;
 
+	const totalTracksResult = await db
+		.select({ count: count() })
+		.from(track)
+		.where(where);
+
+	const totalTracks = totalTracksResult[0]?.count ?? 0;
+	const totalPages = Math.ceil(totalTracks / pageSize);
+
 	const tracks = await db.query.track.findMany({
 		with: { courses: true },
 		where,
 		orderBy: desc(track.createdAt),
+		limit: pageSize,
+		offset: (currentPage - 1) * pageSize,
 	});
 
 	return (
@@ -69,6 +82,17 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 						<TrackCard track={track} key={i} />
 					))}
 				</div>
+
+				{totalTracks > 0 && (
+					<div className="px-4 lg:px-6">
+						<Pagination
+							currentPage={currentPage}
+							totalPages={totalPages}
+							totalItems={totalTracks}
+							pageSize={pageSize}
+						/>
+					</div>
+				)}
 			</div>
 		</div>
 	);
