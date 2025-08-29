@@ -44,9 +44,13 @@ export function MobileNav({ items, user }: MobileNavProps) {
 		<div className="flex px-2 lg:hidden">
 			<Sheet open={open} onOpenChange={setOpen}>
 				<SheetTrigger asChild>
-					<Button variant="ghost" size="icon" className="ml-auto">
-						<Menu className="size-6" />
-						<span className="sr-only">Toggle navigation menu</span>
+					<Button
+						variant="ghost"
+						size="icon"
+						className="size-5 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+					>
+						<Icons.menu aria-hidden="true" />
+						<span className="sr-only">Toggle Menu</span>
 					</Button>
 				</SheetTrigger>
 				<SheetContent side="left" className="w-[300px] p-0">

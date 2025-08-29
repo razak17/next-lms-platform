@@ -22,8 +22,6 @@ export function MainContent({
 	tracksWithCourses: TrackWithCourses[];
 	userId?: string;
 }) {
-	const router = useRouter();
-
 	return (
 		<div className="flex flex-col">
 			<div className="mx-auto mt-8 w-full max-w-6xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:px-8">
