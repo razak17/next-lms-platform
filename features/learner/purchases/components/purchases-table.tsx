@@ -19,7 +19,7 @@ export function PurchasesTable({ data }: PurchasesTableProps) {
 			header: "Track",
 			cell: ({ row }) => {
 				const { trackDetails } = row.original;
-				return trackDetails.name
+				return trackDetails.name;
 			},
 			filterFn: (row, _, filterValue) => {
 				const { trackDetails } = row.original;
@@ -74,7 +74,7 @@ export function PurchasesTable({ data }: PurchasesTableProps) {
 				<Link href={`/dashboard/purchases/${row.original.id}`}>
 					<Button variant="ghost" size="sm" className="h-8 w-8 p-0">
 						<Eye className="h-4 w-4" />
-            View
+						View
 					</Button>
 				</Link>
 			),

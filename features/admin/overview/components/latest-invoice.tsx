@@ -78,8 +78,10 @@ export function LatestInvoice({
 								</p>
 							</div>
 							<div className="ml-auto font-medium">
-                {purchase.track?.price ? formatPrice(purchase.track.price) : "Free"}
-              </div>
+								{purchase.track?.price
+									? formatPrice(purchase.track.price)
+									: "Free"}
+							</div>
 						</div>
 					))}
 				</div>

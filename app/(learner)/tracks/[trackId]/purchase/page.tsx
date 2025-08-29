@@ -15,7 +15,11 @@ export default async function TrackPurchasePage({
 	params: Promise<{ trackId: string }>;
 }) {
 	return (
-		<Suspense fallback={<LoadingSpinner className="mx-auto my-6 min-h-screen size-36" />}>
+		<Suspense
+			fallback={
+				<LoadingSpinner className="mx-auto my-6 size-36 min-h-screen" />
+			}
+		>
 			<SuspendedComponent params={params} />
 		</Suspense>
 	);
@@ -42,7 +46,7 @@ async function SuspendedComponent({
 	}
 
 	return (
-		<div className="container mx-auto min-h-screen lg:max-w-6xl my-12">
+		<div className="container mx-auto my-12 min-h-screen lg:max-w-6xl">
 			<StripeCheckoutForm track={track} user={session.user as User} />
 		</div>
 	);
@@ -56,7 +60,7 @@ async function getTrack(id: string) {
 			image: true,
 			description: true,
 			price: true,
-      userId: true,
+			userId: true,
 		},
 		where: eq(tracksTable.id, id),
 	});

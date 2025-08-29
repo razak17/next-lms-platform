@@ -41,13 +41,13 @@ export const SearchInput = ({
 	}, [debouncedValue, currentCategoryId, router, pathname]);
 
 	return (
-		<div className="relative flex flex-col justify-center items-center">
+		<div className="relative flex flex-col items-center justify-center">
 			<Search className="absolute top-3 left-3 h-5 w-5 text-slate-600" />
 			<Input
 				onChange={(e) => setValue(e.target.value)}
 				value={value}
 				className={cn(
-					"rounded-md pl-10 py-5 shadow-sm md:w-40 lg:w-[350px]",
+					"rounded-md py-5 pl-10 shadow-sm md:w-40 lg:w-[350px]",
 					className
 				)}
 				placeholder={placeholder ?? "Search"}

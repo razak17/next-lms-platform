@@ -28,18 +28,19 @@ export default async function PurchaseReceiptPage({
 		notFound();
 	}
 
-	
 	if (purchase.userId !== session.user.id) {
 		notFound();
 	}
 
-	const { payment_intent } =
-		await stripe.checkout.sessions.retrieve(purchase.stripeSessionId, {
+	const { payment_intent } = await stripe.checkout.sessions.retrieve(
+		purchase.stripeSessionId,
+		{
 			expand: [
 				"payment_intent.latest_charge",
 				"total_details.breakdown.discounts",
 			],
-		});
+		}
+	);
 
 	return (
 		<PurchaseReceipt

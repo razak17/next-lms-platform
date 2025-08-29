@@ -34,7 +34,7 @@ export function MainContent({
 					Create your account quickly with just your email or social media
 					login, then explore a wide range
 				</p>
-				<div className="mt-6 grid grid-cols-1 gap-4 sm:mt-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr">
+				<div className="mt-6 grid auto-rows-fr grid-cols-1 gap-4 sm:mt-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
 					{tracksWithCourses?.map((track, i) => (
 						<OverviewTrackCard
 							showDescription={false}

@@ -1,30 +1,36 @@
 import { Button } from "@/components/ui/button";
-import { Track, User } from "@/db/schema";
+import { User } from "@/db/schema";
 import { Eye } from "lucide-react";
 import { LearnerDialog } from "./learner-dialog";
 
 export function LearnerTableActions({
 	user,
-	track,
+	enrolledTracks,
+	totalPurchases,
+	totalPurchaseAmount,
 }: {
 	user: User;
-	track: Track | null;
+	enrolledTracks?: Array<{ id: string | null; name: string | null }>;
+	totalPurchases?: number;
+	totalPurchaseAmount?: number;
 }) {
 	return (
 		<div className="flex gap-2">
 			<LearnerDialog
 				trigger={
 					<Button
-            variant="ghost"
-            size="sm"
-            className="flex h-8 items-center gap-1.5 px-3"
+						variant="ghost"
+						size="sm"
+						className="flex h-8 items-center gap-1.5 px-3"
 					>
 						<Eye />
 						View
 					</Button>
 				}
 				user={user}
-				track={track}
+				enrolledTracks={enrolledTracks}
+				totalPurchases={totalPurchases}
+				totalPurchaseAmount={totalPurchaseAmount}
 			/>
 		</div>
 	);

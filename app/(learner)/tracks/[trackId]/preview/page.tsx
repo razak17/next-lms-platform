@@ -148,9 +148,9 @@ export default async function TrackItemPreviewPage({
 								</div>
 								<div className="flex items-center gap-2">
 									<Rating
-                    rating={Math.round(ratingsData.averageRating)}
-                    emptyClassName="text-background"
-                  />
+										rating={Math.round(ratingsData.averageRating)}
+										emptyClassName="text-background"
+									/>
 									<span className="font-semibold text-white">
 										({ratingsData.totalRatings}{" "}
 										{ratingsData.totalRatings === 1 ? "review" : "reviews"})

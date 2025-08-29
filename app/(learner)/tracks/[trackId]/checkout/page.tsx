@@ -37,10 +37,7 @@ export default async function CheckoutPage({
 			<div className="bg-sidebar py-12 text-center text-white">
 				<h1 className="text-2xl font-bold md:text-3xl">Checkout</h1>
 			</div>
-			<CheckoutForm
-        track={track}
-        user={session.user as User}
-      />
+			<CheckoutForm track={track} user={session.user as User} />
 		</div>
 	);
 }
