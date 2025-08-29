@@ -16,7 +16,7 @@ export default async function CoursesPage() {
 		redirect(redirects.adminToLogin);
 	}
 
-	const coursesWithTrack = await getCoursesWithTrack(session.user.id);
+	const coursesWithTrack = await getCoursesWithTrack();
 
 	if ("error" in coursesWithTrack) {
 		return (
@@ -32,7 +32,7 @@ export default async function CoursesPage() {
 		);
 	}
 
-	const tracks = await getTracks(session.user.id);
+	const tracks = await getTracks();
 
 	if ("error" in tracks) {
 		return (
@@ -57,11 +57,7 @@ export default async function CoursesPage() {
 				/>
 			</div>
 			<div className="flex flex-col px-6 pt-6">
-				<CoursesTable
-					data={coursesWithTrack}
-					userId={session.user.id}
-					tracks={tracks}
-				/>
+				<CoursesTable data={coursesWithTrack} tracks={tracks} />
 			</div>
 		</div>
 	);

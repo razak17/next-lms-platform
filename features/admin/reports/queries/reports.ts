@@ -16,18 +16,14 @@ import {
 	asc,
 	eq,
 	gte,
-	lt,
 	and,
 	sql,
 	countDistinct,
 	avg,
 } from "drizzle-orm";
-import { getCurrentUser } from "@/features/shared/queries/users";
 
 export async function getReportsOverview() {
 	try {
-		const { currentUser } = await getCurrentUser();
-
 		const [
 			totalUsers,
 			totalTracks,
@@ -38,33 +34,12 @@ export async function getReportsOverview() {
 		] = await Promise.all([
 			db
 				.select({ count: countDistinct(learnerTrack.userId) })
-				.from(learnerTrack)
-				.innerJoin(track, eq(learnerTrack.trackId, track.id))
-				.where(eq(track.userId, currentUser.id)),
-			db
-				.select({ count: count() })
-				.from(track)
-				.where(eq(track.userId, currentUser.id)),
-			db
-				.select({ count: count() })
-				.from(course)
-				.innerJoin(track, eq(course.trackId, track.id))
-				.where(eq(track.userId, currentUser.id)),
-			db
-				.select({ count: count() })
-				.from(learnerTrack)
-				.innerJoin(track, eq(learnerTrack.trackId, track.id))
-				.where(eq(track.userId, currentUser.id)),
-			db
-				.select({ total: sum(purchase.pricePaidInCents) })
-				.from(purchase)
-				.innerJoin(track, eq(purchase.trackId, track.id))
-				.where(eq(track.userId, currentUser.id)),
-			db
-				.select({ avg: avg(trackRating.rating) })
-				.from(trackRating)
-				.innerJoin(track, eq(trackRating.trackId, track.id))
-				.where(eq(track.userId, currentUser.id)),
+				.from(learnerTrack),
+			db.select({ count: count() }).from(track),
+			db.select({ count: count() }).from(course),
+			db.select({ count: count() }).from(learnerTrack),
+			db.select({ total: sum(purchase.pricePaidInCents) }).from(purchase),
+			db.select({ avg: avg(trackRating.rating) }).from(trackRating),
 		]);
 
 		return {
@@ -94,7 +69,6 @@ export async function getReportsOverview() {
 
 export async function getUserGrowthData() {
 	try {
-		const { currentUser } = await getCurrentUser();
 		const sixMonthsAgo = new Date();
 		sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
@@ -104,13 +78,7 @@ export async function getUserGrowthData() {
 				users: countDistinct(learnerTrack.userId),
 			})
 			.from(learnerTrack)
-			.innerJoin(track, eq(learnerTrack.trackId, track.id))
-			.where(
-				and(
-					eq(track.userId, currentUser.id),
-					gte(learnerTrack.createdAt, sixMonthsAgo)
-				)
-			)
+			.where(gte(learnerTrack.createdAt, sixMonthsAgo))
 			.groupBy(sql`to_char(${learnerTrack.createdAt}, 'YYYY-MM')`)
 			.orderBy(asc(sql`to_char(${learnerTrack.createdAt}, 'YYYY-MM')`));
 
@@ -123,7 +91,6 @@ export async function getUserGrowthData() {
 
 export async function getRevenueData() {
 	try {
-		const { currentUser } = await getCurrentUser();
 		const sixMonthsAgo = new Date();
 		sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
@@ -134,13 +101,7 @@ export async function getRevenueData() {
 				purchases: count(),
 			})
 			.from(purchase)
-			.innerJoin(track, eq(purchase.trackId, track.id))
-			.where(
-				and(
-					eq(track.userId, currentUser.id),
-					gte(purchase.createdAt, sixMonthsAgo)
-				)
-			)
+			.where(gte(purchase.createdAt, sixMonthsAgo))
 			.groupBy(sql`to_char(${purchase.createdAt}, 'YYYY-MM')`)
 			.orderBy(asc(sql`to_char(${purchase.createdAt}, 'YYYY-MM')`));
 
@@ -157,8 +118,6 @@ export async function getRevenueData() {
 
 export async function getTopTracks() {
 	try {
-		const { currentUser } = await getCurrentUser();
-
 		const result = await db
 			.select({
 				id: track.id,
@@ -172,7 +131,6 @@ export async function getTopTracks() {
 			.from(track)
 			.leftJoin(learnerTrack, eq(track.id, learnerTrack.trackId))
 			.leftJoin(purchase, eq(track.id, purchase.trackId))
-			.where(eq(track.userId, currentUser.id))
 			.groupBy(track.id)
 			.orderBy(desc(count(learnerTrack.userId)))
 			.limit(10);
@@ -190,8 +148,6 @@ export async function getTopTracks() {
 
 export async function getRecentEnrollments() {
 	try {
-		const { currentUser } = await getCurrentUser();
-
 		const result = await db
 			.select({
 				id: learnerTrack.userId,
@@ -204,7 +160,6 @@ export async function getRecentEnrollments() {
 			.from(learnerTrack)
 			.innerJoin(user, eq(learnerTrack.userId, user.id))
 			.innerJoin(track, eq(learnerTrack.trackId, track.id))
-			.where(eq(track.userId, currentUser.id))
 			.orderBy(desc(learnerTrack.createdAt))
 			.limit(20);
 
@@ -220,8 +175,6 @@ export async function getRecentEnrollments() {
 
 export async function getUserDemographics() {
 	try {
-		const { currentUser } = await getCurrentUser();
-
 		const [genderStats, locationStats] = await Promise.all([
 			db
 				.select({
@@ -230,8 +183,7 @@ export async function getUserDemographics() {
 				})
 				.from(user)
 				.innerJoin(learnerTrack, eq(user.id, learnerTrack.userId))
-				.innerJoin(track, eq(learnerTrack.trackId, track.id))
-				.where(and(eq(user.role, "learner"), eq(track.userId, currentUser.id)))
+				.where(eq(user.role, "learner"))
 				.groupBy(user.gender),
 
 			db
@@ -241,14 +193,7 @@ export async function getUserDemographics() {
 				})
 				.from(user)
 				.innerJoin(learnerTrack, eq(user.id, learnerTrack.userId))
-				.innerJoin(track, eq(learnerTrack.trackId, track.id))
-				.where(
-					and(
-						eq(user.role, "learner"),
-						eq(track.userId, currentUser.id),
-						sql`${user.location} IS NOT NULL`
-					)
-				)
+				.where(and(eq(user.role, "learner"), sql`${user.location} IS NOT NULL`))
 				.groupBy(user.location)
 				.orderBy(desc(count()))
 				.limit(10),
@@ -269,8 +214,6 @@ export async function getUserDemographics() {
 
 export async function getPurchaseAnalytics() {
 	try {
-		const { currentUser } = await getCurrentUser();
-
 		const [purchaseStats, recentPurchases] = await Promise.all([
 			db
 				.select({
@@ -283,9 +226,7 @@ export async function getPurchaseAnalytics() {
 					count: count(),
 					totalAmount: sum(purchase.pricePaidInCents),
 				})
-				.from(purchase)
-				.innerJoin(track, eq(purchase.trackId, track.id))
-				.where(eq(track.userId, currentUser.id)).groupBy(sql`
+				.from(purchase).groupBy(sql`
 					CASE 
 						WHEN ${purchase.refundedAt} IS NOT NULL THEN 'refunded'
 						ELSE 'completed'
@@ -310,8 +251,6 @@ export async function getPurchaseAnalytics() {
 				})
 				.from(purchase)
 				.innerJoin(user, eq(purchase.userId, user.id))
-				.innerJoin(track, eq(purchase.trackId, track.id))
-				.where(eq(track.userId, currentUser.id))
 				.orderBy(desc(purchase.createdAt))
 				.limit(15),
 		]);
@@ -337,8 +276,6 @@ export async function getPurchaseAnalytics() {
 
 export async function getCourseAnalytics() {
 	try {
-		const { currentUser } = await getCurrentUser();
-
 		const result = await db
 			.select({
 				trackName: track.name,
@@ -348,7 +285,6 @@ export async function getCourseAnalytics() {
 			.from(track)
 			.leftJoin(course, eq(track.id, course.trackId))
 			.leftJoin(learnerTrack, eq(track.id, learnerTrack.trackId))
-			.where(eq(track.userId, currentUser.id))
 			.groupBy(track.id, track.name)
 			.orderBy(desc(count(course.id)));
 

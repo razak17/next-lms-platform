@@ -17,11 +17,10 @@ interface InvoicesTableProps {
 		user: User | null;
 		purchase: Purchase;
 	}[];
-	userId: string;
 	learners: User[];
 }
 
-export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
+export function InvoicesTable({ data, learners }: InvoicesTableProps) {
 	const columns: ColumnDef<{
 		user: User | null;
 		purchase: Purchase;
@@ -160,7 +159,6 @@ export function InvoicesTable({ data, userId, learners }: InvoicesTableProps) {
 			searchColumn="user"
 			addButton={
 				<InvoiceDialog
-					userId={userId}
 					learners={learners}
 					trigger={
 						<Button className="flex w-48 items-center gap-2">

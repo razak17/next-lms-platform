@@ -31,14 +31,12 @@ import {
 } from "../validations/invoices";
 
 interface InvoiceFormProps {
-	userId: string;
 	invoice?: Invoice;
 	learners: User[];
 	onSuccess?: () => void;
 }
 
 export function InvoiceForm({
-	userId,
 	invoice,
 	learners,
 	onSuccess,
@@ -70,7 +68,6 @@ export function InvoiceForm({
 		try {
 			const invoiceData = {
 				...values,
-				userId,
 				dueDate: values.dueDate ? new Date(values.dueDate) : null,
 			};
 			const action = invoice

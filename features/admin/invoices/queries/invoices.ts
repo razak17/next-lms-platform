@@ -4,12 +4,11 @@ import { db } from "@/db/drizzle";
 import { invoice } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 
-export async function getInvoices(userId: string) {
+export async function getInvoices() {
 	try {
 		const results = await db
 			.select()
 			.from(invoice)
-			.where(eq(invoice.userId, userId))
 			.orderBy(desc(invoice.createdAt));
 		return results;
 	} catch (error) {
@@ -18,11 +17,10 @@ export async function getInvoices(userId: string) {
 	}
 }
 
-export async function getInvoicesWithLearner(userId: string) {
+export async function getInvoicesWithLearner() {
 	try {
 		const results = await db.query.invoice.findMany({
 			with: { learner: true },
-			where: eq(invoice.userId, userId),
 			orderBy: desc(invoice.createdAt),
 		});
 		return results;

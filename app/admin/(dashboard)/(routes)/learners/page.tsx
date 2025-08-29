@@ -4,10 +4,7 @@ import { learnerTrack, track, user } from "@/db/schema";
 import { LearnersTable } from "@/features/admin/learners/components/learners-table";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
-import {
-    desc,
-    eq
-} from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -20,7 +17,7 @@ export default async function LearnersPage() {
 		redirect(redirects.adminToLogin);
 	}
 
-	const learners = await getAllLearners(session.user.id);
+	const learners = await getAllLearners();
 
 	return (
 		<div className="@container/main flex flex-1 flex-col gap-2">
@@ -37,15 +34,13 @@ export default async function LearnersPage() {
 	);
 }
 
-async function getAllLearners(userId: string) {
-  const results = await db
-    .select()
-    .from(learnerTrack)
-    .leftJoin(track, eq(learnerTrack.trackId, track.id))
-    .leftJoin(user, eq(learnerTrack.userId, user.id))
-    .where(eq(learnerTrack.createdBy, userId))
-    .orderBy(desc(learnerTrack.createdAt));
+async function getAllLearners() {
+	const results = await db
+		.select()
+		.from(learnerTrack)
+		.leftJoin(track, eq(learnerTrack.trackId, track.id))
+		.leftJoin(user, eq(learnerTrack.userId, user.id))
+		.orderBy(desc(learnerTrack.createdAt));
 
-  return results;
+	return results;
 }
-

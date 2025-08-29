@@ -5,10 +5,7 @@ import { redirects } from "@/lib/constants";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/db/drizzle";
-import {
-	desc,
-	eq,
-} from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { track, user, purchase } from "@/db/schema";
 
 export default async function InvoicesPage() {
@@ -21,7 +18,7 @@ export default async function InvoicesPage() {
 	}
 
 	const [invoicesWithLearner, learners] = await Promise.all([
-		getPurchases(session.user.id),
+		getPurchases(),
 		getLearners(),
 	]);
 
@@ -34,23 +31,18 @@ export default async function InvoicesPage() {
 				/>
 			</div>
 			<div className="flex flex-col px-6 pt-6">
-				<InvoicesTable
-					data={invoicesWithLearner}
-					userId={session.user.id}
-					learners={learners}
-				/>
+				<InvoicesTable data={invoicesWithLearner} learners={learners} />
 			</div>
 		</div>
 	);
 }
 
-async function getPurchases(adminUserId: string) {
+async function getPurchases() {
 	const results = await db
 		.select()
 		.from(purchase)
 		.leftJoin(user, eq(purchase.userId, user.id))
 		.leftJoin(track, eq(purchase.trackId, track.id))
-		.where(eq(track.userId, adminUserId))
 		.orderBy(desc(purchase.createdAt));
 
 	return results;

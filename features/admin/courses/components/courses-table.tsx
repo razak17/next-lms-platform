@@ -12,11 +12,10 @@ import { formatDate } from "@/lib/utils";
 
 interface CoursesTableProps {
 	data: (Course & { track: Track })[];
-	userId: string;
 	tracks: Track[];
 }
 
-export function CoursesTable({ data, userId, tracks }: CoursesTableProps) {
+export function CoursesTable({ data, tracks }: CoursesTableProps) {
 	const columns: ColumnDef<Course & { track: Track }>[] = [
 		{
 			accessorKey: "title",
@@ -57,11 +56,7 @@ export function CoursesTable({ data, userId, tracks }: CoursesTableProps) {
 		{
 			id: "actions",
 			cell: ({ row }) => (
-				<CourseTableActions
-					userId={userId}
-					course={row.original}
-					tracks={tracks}
-				/>
+				<CourseTableActions course={row.original} tracks={tracks} />
 			),
 		},
 	];
@@ -74,7 +69,6 @@ export function CoursesTable({ data, userId, tracks }: CoursesTableProps) {
 			searchColumn="title"
 			addButton={
 				<CourseDialog
-					userId={userId}
 					tracks={tracks}
 					trigger={
 						<Button className="flex w-48 items-center gap-2">

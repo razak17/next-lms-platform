@@ -13,18 +13,12 @@ import { CourseForm } from "./course-form";
 import { Track, Course } from "@/db/schema";
 
 interface CourseDialogProps {
-	userId: string;
 	trigger: React.ReactNode;
 	tracks: Track[];
 	course?: Course;
 }
 
-export function CourseDialog({
-	userId,
-	course,
-	trigger,
-	tracks,
-}: CourseDialogProps) {
+export function CourseDialog({ course, trigger, tracks }: CourseDialogProps) {
 	const [open, setOpen] = useState(false);
 
 	const handleSuccess = () => setOpen(false);
@@ -42,12 +36,7 @@ export function CourseDialog({
 						course.
 					</DialogDescription>
 				</DialogHeader>
-				<CourseForm
-					userId={userId}
-					course={course}
-					tracks={tracks}
-					onSuccess={handleSuccess}
-				/>
+				<CourseForm course={course} tracks={tracks} onSuccess={handleSuccess} />
 			</DialogContent>
 		</Dialog>
 	);

@@ -43,12 +43,12 @@ export default async function DashbordOverviewPage() {
 		purchases,
 		monthlyRevenueData,
 	] = await Promise.all([
-		getTracks(session.user.id),
-		getTotalLearners(session.user.id),
-		getTotalRevenue(session.user.id),
-		getTotalPurchases(session.user.id),
-		getPurchases(session.user.id),
-		getMonthlyRevenue(session.user.id),
+		getTracks(),
+		getTotalLearners(),
+		getTotalRevenue(),
+		getTotalPurchases(),
+		getPurchases(),
+		getMonthlyRevenue(),
 	]);
 
 	const formatChange = (change: number) => {
@@ -136,7 +136,7 @@ export default async function DashbordOverviewPage() {
 	);
 }
 
-async function getTotalLearners(adminUserId: string) {
+async function getTotalLearners() {
 	const now = new Date();
 	const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 	const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -144,21 +144,13 @@ async function getTotalLearners(adminUserId: string) {
 	const currentResult = await db
 		.select({ count: countDistinct(learnerTrack.userId) })
 		.from(learnerTrack)
-		.leftJoin(track, eq(learnerTrack.trackId, track.id))
-		.where(
-			and(
-				eq(track.userId, adminUserId),
-				gte(learnerTrack.createdAt, currentMonth)
-			)
-		);
+		.where(gte(learnerTrack.createdAt, currentMonth));
 
 	const previousResult = await db
 		.select({ count: countDistinct(learnerTrack.userId) })
 		.from(learnerTrack)
-		.leftJoin(track, eq(learnerTrack.trackId, track.id))
 		.where(
 			and(
-				eq(track.userId, adminUserId),
 				gte(learnerTrack.createdAt, lastMonth),
 				lt(learnerTrack.createdAt, currentMonth)
 			)
@@ -171,7 +163,7 @@ async function getTotalLearners(adminUserId: string) {
 	return { total: current, change };
 }
 
-async function getTotalRevenue(adminUserId: string) {
+async function getTotalRevenue() {
 	const now = new Date();
 	const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 	const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -179,18 +171,13 @@ async function getTotalRevenue(adminUserId: string) {
 	const currentResult = await db
 		.select({ total: sum(purchase.pricePaidInCents) })
 		.from(purchase)
-		.leftJoin(track, eq(purchase.trackId, track.id))
-		.where(
-			and(eq(track.userId, adminUserId), gte(purchase.createdAt, currentMonth))
-		);
+		.where(gte(purchase.createdAt, currentMonth));
 
 	const previousResult = await db
 		.select({ total: sum(purchase.pricePaidInCents) })
 		.from(purchase)
-		.leftJoin(track, eq(purchase.trackId, track.id))
 		.where(
 			and(
-				eq(track.userId, adminUserId),
 				gte(purchase.createdAt, lastMonth),
 				lt(purchase.createdAt, currentMonth)
 			)
@@ -208,7 +195,7 @@ async function getTotalRevenue(adminUserId: string) {
 	return { total: currentDollars, change };
 }
 
-async function getTotalPurchases(adminUserId: string) {
+async function getTotalPurchases() {
 	const now = new Date();
 	const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 	const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -216,18 +203,13 @@ async function getTotalPurchases(adminUserId: string) {
 	const currentResult = await db
 		.select({ count: count() })
 		.from(purchase)
-		.leftJoin(track, eq(purchase.trackId, track.id))
-		.where(
-			and(eq(track.userId, adminUserId), gte(purchase.createdAt, currentMonth))
-		);
+		.where(gte(purchase.createdAt, currentMonth));
 
 	const previousResult = await db
 		.select({ count: count() })
 		.from(purchase)
-		.leftJoin(track, eq(purchase.trackId, track.id))
 		.where(
 			and(
-				eq(track.userId, adminUserId),
 				gte(purchase.createdAt, lastMonth),
 				lt(purchase.createdAt, currentMonth)
 			)
@@ -240,10 +222,9 @@ async function getTotalPurchases(adminUserId: string) {
 	return { total: current, change };
 }
 
-async function getTracks(userId: string) {
+async function getTracks() {
 	const results = await db.query.track.findMany({
 		with: { courses: true },
-		where: eq(track.userId, userId),
 		limit: 4,
 		orderBy: desc(track.createdAt),
 	});
@@ -251,20 +232,19 @@ async function getTracks(userId: string) {
 	return results;
 }
 
-async function getPurchases(adminUserId: string) {
+async function getPurchases() {
 	const results = await db
 		.select()
 		.from(purchase)
 		.leftJoin(track, eq(purchase.trackId, track.id))
 		.leftJoin(user, eq(purchase.userId, user.id))
-		.where(eq(track.userId, adminUserId))
 		.limit(5)
 		.orderBy(desc(purchase.createdAt));
 
 	return results;
 }
 
-async function getMonthlyRevenue(adminUserId: string) {
+async function getMonthlyRevenue() {
 	const now = new Date();
 	const currentYear = now.getFullYear();
 	const startDate = new Date(currentYear, now.getMonth() - 11, 1);
@@ -276,10 +256,7 @@ async function getMonthlyRevenue(adminUserId: string) {
 			revenue: sum(purchase.pricePaidInCents),
 		})
 		.from(purchase)
-		.leftJoin(track, eq(purchase.trackId, track.id))
-		.where(
-			and(eq(track.userId, adminUserId), gte(purchase.createdAt, startDate))
-		)
+		.where(gte(purchase.createdAt, startDate))
 		.groupBy(
 			sql`EXTRACT(YEAR FROM ${purchase.createdAt})`,
 			sql`EXTRACT(MONTH FROM ${purchase.createdAt})`

@@ -26,12 +26,11 @@ import { Track } from "@/db/schema/track";
 import { Files } from "@/components/files";
 
 interface TrackFormProps {
-	userId: string;
 	track?: Track;
 	onSuccess?: () => void;
 }
 
-export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
+export function TrackForm({ track, onSuccess }: TrackFormProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
 		"imageUploader",
@@ -66,7 +65,6 @@ export function TrackForm({ userId, track, onSuccess }: TrackFormProps) {
 			const data = await action({
 				...values,
 				image: imageToSave,
-				userId,
 			});
 			if (data.error) {
 				toast.error(data.message || "Failed to create track");

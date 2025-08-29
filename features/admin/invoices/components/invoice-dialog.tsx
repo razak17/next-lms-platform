@@ -13,14 +13,12 @@ import { InvoiceForm } from "./invoice-form";
 import { Invoice, User } from "@/db/schema";
 
 interface InvoiceDialogProps {
-	userId: string;
 	trigger: React.ReactNode;
 	learners: User[];
 	invoice?: Invoice;
 }
 
 export function InvoiceDialog({
-	userId,
 	invoice,
 	trigger,
 	learners,
@@ -43,7 +41,6 @@ export function InvoiceDialog({
 					</DialogDescription>
 				</DialogHeader>
 				<InvoiceForm
-					userId={userId}
 					invoice={invoice}
 					learners={learners}
 					onSuccess={handleSuccess}

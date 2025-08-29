@@ -36,18 +36,12 @@ import { createCourse, updateCourse } from "../actions/courses";
 import { CreateCourseSchema, createCourseSchema } from "../validations/courses";
 
 interface CourseFormProps {
-	userId: string;
 	tracks: Track[];
 	course?: Course;
 	onSuccess?: () => void;
 }
 
-export function CourseForm({
-	userId,
-	tracks,
-	course,
-	onSuccess,
-}: CourseFormProps) {
+export function CourseForm({ tracks, course, onSuccess }: CourseFormProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
 		"imageUploader",
@@ -80,7 +74,6 @@ export function CourseForm({
 			const data = await action({
 				...values,
 				image: imageToSave,
-				userId,
 			});
 			if (data.error) {
 				toast.error(data.message || "Failed to create course");

@@ -6,18 +6,15 @@ import { Pencil, Trash2 } from "lucide-react";
 import { CourseDialog } from "./course-dialog";
 
 export function CourseTableActions({
-	userId,
 	course,
 	tracks,
 }: {
-	userId: string;
 	course: Course;
 	tracks: Track[];
 }) {
 	return (
 		<div className="flex gap-2">
 			<CourseDialog
-				userId={userId}
 				tracks={tracks}
 				course={course}
 				trigger={

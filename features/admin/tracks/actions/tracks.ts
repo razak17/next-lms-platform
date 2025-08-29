@@ -8,7 +8,9 @@ import { eq, count } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { isAdmin } from "@/features/shared/utils/middleware";
 
-export async function createTrack(data: Omit<TrackInsert, "id">) {
+export async function createTrack(
+	data: Omit<TrackInsert, "userId"> & { userId?: string }
+) {
 	try {
 		const { currentUser } = await getCurrentUser();
 		if (!currentUser) return { error: "Unauthorized" };
@@ -20,9 +22,12 @@ export async function createTrack(data: Omit<TrackInsert, "id">) {
 			};
 		}
 
-		if (!data.userId) data.userId = currentUser.id;
+		const trackData: TrackInsert = {
+			...data,
+			userId: data.userId || currentUser.id,
+		};
 
-		const [newTrack] = await db.insert(track).values(data).returning();
+		const [newTrack] = await db.insert(track).values(trackData).returning();
 		if (!newTrack) throw new Error("Failed to create track");
 
 		revalidatePath(redirects.adminToTracks);
@@ -40,7 +45,7 @@ export async function createTrack(data: Omit<TrackInsert, "id">) {
 
 export async function updateTrack(
 	trackId: string,
-	data: Partial<typeof track.$inferInsert>
+	data: Partial<Omit<typeof track.$inferInsert, "userId">>
 ) {
 	try {
 		const { currentUser } = await getCurrentUser();
@@ -68,13 +73,6 @@ export async function updateTrack(
 				error: true,
 				message: "Track not found",
 			};
-
-		if (existingTrack.userId !== currentUser.id /* && !currentUser.isAdmin */) {
-			return {
-				error: true,
-				message: "Forbidden",
-			};
-		}
 
 		const [updatedTrack] = await db
 			.update(track)
@@ -122,13 +120,6 @@ export async function deleteTrack(trackId: string) {
 				error: true,
 				message: "Track not found",
 			};
-
-		if (existingTrack.userId !== currentUser.id /* && !currentUser.isAdmin */) {
-			return {
-				error: true,
-				message: "Forbidden",
-			};
-		}
 
 		// Check if track has any courses
 		const [courseCount] = await db

@@ -13,12 +13,11 @@ import { useState } from "react";
 import { TrackForm } from "./track-form";
 
 interface TrackDialogProps {
-	userId: string;
 	trigger: React.ReactNode;
 	track?: Track;
 }
 
-export function TrackDialog({ userId, trigger, track }: TrackDialogProps) {
+export function TrackDialog({ trigger, track }: TrackDialogProps) {
 	const [open, setOpen] = useState(false);
 
 	const handleSuccess = () => setOpen(false);
@@ -36,7 +35,7 @@ export function TrackDialog({ userId, trigger, track }: TrackDialogProps) {
 						track.
 					</DialogDescription>
 				</DialogHeader>
-				<TrackForm userId={userId} track={track} onSuccess={handleSuccess} />
+				<TrackForm track={track} onSuccess={handleSuccess} />
 			</DialogContent>
 		</Dialog>
 	);

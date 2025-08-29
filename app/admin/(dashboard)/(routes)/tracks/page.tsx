@@ -8,7 +8,7 @@ import { TrackDialog } from "@/features/admin/tracks/components/track-dialog";
 import { auth } from "@/lib/auth/auth";
 import { redirects } from "@/lib/constants";
 import { IconPlus } from "@tabler/icons-react";
-import { and, desc, eq, ilike, or } from "drizzle-orm";
+import { desc, ilike, or } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -29,14 +29,9 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 
 	const q = title?.trim() ?? "";
 
-	const baseFilter = eq(track.userId, session.user.id);
-
 	const where = q
-		? and(
-				baseFilter,
-				or(ilike(track.name, `%${q}%`), ilike(track.description, `%${q}%`))
-			)
-		: baseFilter;
+		? or(ilike(track.name, `%${q}%`), ilike(track.description, `%${q}%`))
+		: undefined;
 
 	const tracks = await db.query.track.findMany({
 		with: { courses: true },
@@ -55,7 +50,6 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 			<div className="flex items-center justify-between px-6 pt-6">
 				<SearchInput placeholder="Search tracks..." />
 				<TrackDialog
-					userId={session.user.id}
 					trigger={
 						<Button className="flex w-48 items-center gap-2" size="lg">
 							<IconPlus />

@@ -8,7 +8,9 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { isAdmin } from "@/features/shared/utils/middleware";
 
-export async function createCourse(data: CourseInsert) {
+export async function createCourse(
+	data: Omit<CourseInsert, "userId"> & { userId?: string }
+) {
 	try {
 		const { currentUser } = await getCurrentUser();
 		if (!currentUser) return { error: "Unauthorized" };
@@ -20,9 +22,12 @@ export async function createCourse(data: CourseInsert) {
 			};
 		}
 
-		if (!data.userId) data.userId = currentUser.id;
+		const courseData: CourseInsert = {
+			...data,
+			userId: data.userId || currentUser.id,
+		};
 
-		const [newCourse] = await db.insert(course).values(data).returning();
+		const [newCourse] = await db.insert(course).values(courseData).returning();
 		if (!newCourse) throw new Error("Failed to create course");
 
 		revalidatePath(redirects.adminToCourses);
@@ -40,7 +45,7 @@ export async function createCourse(data: CourseInsert) {
 
 export async function updateCourse(
 	courseId: string,
-	data: Partial<typeof course.$inferInsert>
+	data: Partial<Omit<typeof course.$inferInsert, "userId">>
 ) {
 	try {
 		const { currentUser } = await getCurrentUser();
@@ -70,12 +75,6 @@ export async function updateCourse(
 				message: "Course not found",
 			};
 		}
-
-		if (existingCourse.userId !== currentUser.id /* && !currentUser.isAdmin */)
-			return {
-				error: true,
-				message: "Forbidden",
-			};
 
 		const [updatedCourse] = await db
 			.update(course)
@@ -119,12 +118,6 @@ export async function deleteCourse(courseId: string) {
 			.where(eq(course.id, courseId));
 
 		if (!existingCourse) return { error: true, message: "Course not found" };
-
-		if (existingCourse.userId !== currentUser.id /* && !currentUser.isAdmin */)
-			return {
-				error: true,
-				message: "Forbidden",
-			};
 
 		const [deletedCourse] = await db
 			.delete(course)

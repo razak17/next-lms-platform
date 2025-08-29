@@ -7,14 +7,22 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirects } from "@/lib/constants";
 
-export async function createInvoice(data: InvoiceInsert) {
+export async function createInvoice(
+	data: Omit<InvoiceInsert, "userId"> & { userId?: string }
+) {
 	try {
 		const { currentUser } = await getCurrentUser();
 		if (!currentUser) return { error: "Unauthorized" };
 
-		if (!data.userId) data.userId = currentUser.id;
+		const invoiceData: InvoiceInsert = {
+			...data,
+			userId: data.userId || currentUser.id,
+		};
 
-		const [newInvoice] = await db.insert(invoice).values(data).returning();
+		const [newInvoice] = await db
+			.insert(invoice)
+			.values(invoiceData)
+			.returning();
 		if (!newInvoice) throw new Error("Failed to create invoice");
 
 		revalidatePath(redirects.adminToInvoices);
@@ -32,7 +40,7 @@ export async function createInvoice(data: InvoiceInsert) {
 
 export async function updateInvoice(
 	invoiceId: string,
-	data: Partial<typeof invoice.$inferInsert>
+	data: Partial<Omit<typeof invoice.$inferInsert, "userId">>
 ) {
 	try {
 		const { currentUser } = await getCurrentUser();
@@ -54,12 +62,6 @@ export async function updateInvoice(
 				message: "Invoice not found",
 			};
 		}
-
-		if (existingInvoice.userId !== currentUser.id /* && !currentUser.isAdmin */)
-			return {
-				error: true,
-				message: "You do not have permission to update this invoice",
-			};
 
 		const [updatedInvoice] = await db
 			.update(invoice)
@@ -101,12 +103,6 @@ export async function deleteInvoice(invoiceId: string) {
 				message: "Invoice not found",
 			};
 		}
-
-		if (existingInvoice.userId !== currentUser.id /* && !currentUser.isAdmin */)
-			return {
-				error: true,
-				message: "You do not have permission to delete this invoice",
-			};
 
 		await db.delete(invoice).where(eq(invoice.id, invoiceId));
 

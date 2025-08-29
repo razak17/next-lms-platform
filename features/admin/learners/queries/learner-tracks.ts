@@ -18,14 +18,13 @@ export async function getLearnerTracks(userId: string) {
 	}
 }
 
-export async function getAllLearnersTracks(userId: string) {
+export async function getAllLearnersTracks() {
 	try {
 		const results = await db
 			.select()
 			.from(track)
 			.leftJoin(learnerTrack, eq(learnerTrack.trackId, track.id))
 			.leftJoin(user, eq(learnerTrack.userId, user.id))
-			.where(eq(learnerTrack.createdBy, userId))
 			.orderBy(desc(learnerTrack.createdAt));
 		return results;
 	} catch (error) {

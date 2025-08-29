@@ -4,12 +4,11 @@ import { db } from "@/db/drizzle";
 import { track } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 
-export async function getTracks(userId: string) {
+export async function getTracks() {
 	try {
 		const results = await db
 			.select()
 			.from(track)
-			.where(eq(track.userId, userId))
 			.orderBy(desc(track.createdAt));
 		return results;
 	} catch (error) {
@@ -18,11 +17,10 @@ export async function getTracks(userId: string) {
 	}
 }
 
-export async function getTracksWithCourses(userId: string) {
+export async function getTracksWithCourses() {
 	try {
 		const results = await db.query.track.findMany({
 			with: { courses: true },
-			where: eq(track.userId, userId),
 			orderBy: desc(track.createdAt),
 		});
 		return results;
