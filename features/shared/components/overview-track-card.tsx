@@ -75,18 +75,25 @@ export function OverviewTrackCard({
 					)}
 					<div className="mt-2 flex flex-wrap gap-1">
 						{track?.courses && track?.courses?.length > 0 ? (
-							track?.courses?.map((course, courseIndex) => {
-								const color =
-									courseColorClasses[courseIndex % courseColorClasses.length];
-								return (
-									<Badge
-										key={courseIndex}
-										className={`${color.bg} ${color.text} rounded-full px-4 py-2 font-medium`}
-									>
-										{course.title}
+							<>
+								{track?.courses?.slice(0, 2).map((course, courseIndex) => {
+									const color =
+										courseColorClasses[courseIndex % courseColorClasses.length];
+									return (
+										<Badge
+											key={courseIndex}
+											className={`${color.bg} ${color.text} rounded-full px-4 py-2 font-medium`}
+										>
+											{course.title}
+										</Badge>
+									);
+								})}
+								{track?.courses?.length > 2 && (
+									<Badge variant="outline" className="text-xs">
+										+{track?.courses?.length - 2} more
 									</Badge>
-								);
-							})
+								)}
+							</>
 						) : (
 							<Badge className="invisible rounded-full px-4 py-2 text-xs font-medium">
 								No courses

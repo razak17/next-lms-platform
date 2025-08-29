@@ -94,7 +94,7 @@ export function TrackForm({ track, onSuccess }: TrackFormProps) {
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Track Name</FormLabel>
+										<FormLabel>Track Name *</FormLabel>
 										<FormControl>
 											<Input {...field} />
 										</FormControl>
@@ -109,7 +109,7 @@ export function TrackForm({ track, onSuccess }: TrackFormProps) {
 								name="price"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Price</FormLabel>
+										<FormLabel>Price *</FormLabel>
 										<FormControl>
 											<Input {...field} onChange={field.onChange} />
 										</FormControl>
@@ -124,7 +124,7 @@ export function TrackForm({ track, onSuccess }: TrackFormProps) {
 								name="duration"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Duration</FormLabel>
+										<FormLabel>Duration *</FormLabel>
 										<FormControl>
 											<Input {...field} />
 										</FormControl>
@@ -139,7 +139,7 @@ export function TrackForm({ track, onSuccess }: TrackFormProps) {
 								name="instructor"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Instructor</FormLabel>
+										<FormLabel>Instructor *</FormLabel>
 										<FormControl>
 											<Input {...field} />
 										</FormControl>
@@ -183,7 +183,7 @@ export function TrackForm({ track, onSuccess }: TrackFormProps) {
 									name="description"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Description</FormLabel>
+											<FormLabel>Description *</FormLabel>
 											<FormControl>
 												<Textarea {...field} />
 											</FormControl>

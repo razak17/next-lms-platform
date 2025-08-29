@@ -102,7 +102,7 @@ export function InvoiceForm({
 								name="learnerId"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Select Learner</FormLabel>
+										<FormLabel>Select Learner *</FormLabel>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<FormControl className="w-full">
 												<SelectTrigger>
@@ -128,7 +128,7 @@ export function InvoiceForm({
 								name="amount"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Enter Amount</FormLabel>
+										<FormLabel>Enter Amount *</FormLabel>
 										<FormControl>
 											<Input type="text" {...field} />
 										</FormControl>
@@ -143,7 +143,7 @@ export function InvoiceForm({
 								name="dueDate"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Due Date</FormLabel>
+										<FormLabel>Due Date *</FormLabel>
 										<FormControl>
 											<Input type="date" {...field} />
 										</FormControl>
@@ -158,7 +158,7 @@ export function InvoiceForm({
 								name="status"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Status</FormLabel>
+										<FormLabel>Status *</FormLabel>
 										<Select value={field.value} onValueChange={field.onChange}>
 											<FormControl className="w-full">
 												<SelectTrigger>
@@ -184,7 +184,7 @@ export function InvoiceForm({
 								name="details"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Payment Details</FormLabel>
+										<FormLabel>Payment Details *</FormLabel>
 										<FormControl>
 											<Textarea {...field} />
 										</FormControl>

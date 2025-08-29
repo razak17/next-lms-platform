@@ -54,7 +54,6 @@ export function RegisterForm({
 		defaultValues: {
 			firstName: "",
 			lastName: "",
-			gender: "male",
 			email: "",
 			password: "",
 			confirmPassword: "",
@@ -64,14 +63,13 @@ export function RegisterForm({
 	async function onSubmit(values: z.infer<typeof registerSchema>) {
 		setIsLoading(true);
 
-		const { email, password, firstName, lastName, gender } = values;
+		const { email, password, firstName, lastName } = values;
 
 		const { success, message } = await signUp({
 			email,
 			password,
 			firstName,
 			lastName,
-			gender,
 			role: "admin",
 		});
 
@@ -103,119 +101,88 @@ export function RegisterForm({
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-							<div className="grid gap-6">
-								<div className="grid gap-6">
-									<div className="grid gap-4">
-										<FormField
-											control={form.control}
-											name="firstName"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>First Name</FormLabel>
-													<FormControl>
-														<Input {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="lastName"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Last Name</FormLabel>
-													<FormControl>
-														<Input {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="gender"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Gender</FormLabel>
-													<Select
-														onValueChange={field.onChange}
-														defaultValue={field.value}
-													>
-														<FormControl className="w-full">
-															<SelectTrigger>
-																<SelectValue />
-															</SelectTrigger>
-														</FormControl>
-														<SelectContent>
-															{genderOptions?.map((genderOption, i) => (
-																<SelectItem key={i} value={genderOption.value}>
-																	{genderOption.label}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="email"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Email</FormLabel>
-													<FormControl>
-														<Input {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="password"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Password</FormLabel>
-													<FormControl>
-														<PasswordInput {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="confirmPassword"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Confirm Password</FormLabel>
-													<FormControl>
-														<PasswordInput {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-									</div>
-									<Button type="submit" className="w-full" disabled={isLoading}>
-										{isLoading && (
-											<Loader2 className="mr-2 size-4 animate-spin" />
-										)}
-										{isLoading ? "Signing up..." : "SIgn up"}
-									</Button>
-								</div>
-								<div className="text-center text-sm">
-									Already have an account?{" "}
-									<Link
-										href={`${redirects.adminToLogin}`}
-										className="text-sidebar underline-offset-4 hover:underline"
-									>
-										Login
-									</Link>
-								</div>
+						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+							<FormField
+								control={form.control}
+								name="firstName"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>First Name</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="lastName"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Last Name</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Email</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Password</FormLabel>
+										<FormControl>
+											<PasswordInput {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="confirmPassword"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Confirm Password</FormLabel>
+										<FormControl>
+											<PasswordInput {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button
+								type="submit"
+								className="mt-2 w-full"
+								disabled={isLoading}
+							>
+								{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
+								{isLoading ? "Signing up..." : "SIgn up"}
+							</Button>
+							<div className="text-center text-sm">
+								Already have an account?{" "}
+								<Link
+									href={`${redirects.adminToLogin}`}
+									className="text-sidebar underline-offset-4 hover:underline"
+								>
+									Login
+								</Link>
 							</div>
 						</form>
 					</Form>

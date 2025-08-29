@@ -103,7 +103,7 @@ export function CourseForm({ tracks, course, onSuccess }: CourseFormProps) {
 								name="title"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Title</FormLabel>
+										<FormLabel>Title *</FormLabel>
 										<FormControl>
 											<Input {...field} />
 										</FormControl>
@@ -118,7 +118,7 @@ export function CourseForm({ tracks, course, onSuccess }: CourseFormProps) {
 								name="trackId"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Track</FormLabel>
+										<FormLabel>Track *</FormLabel>
 										<Select
 											onValueChange={field.onChange}
 											defaultValue={field.value}
@@ -200,7 +200,7 @@ export function CourseForm({ tracks, course, onSuccess }: CourseFormProps) {
 									name="description"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Description</FormLabel>
+											<FormLabel>Description *</FormLabel>
 											<FormControl>
 												<Textarea {...field} />
 											</FormControl>

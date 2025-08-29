@@ -94,59 +94,55 @@ export function LoginForm({
 				</CardHeader>
 				<CardContent>
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-							<div className="grid gap-6">
-								<div className="grid gap-6">
-									<div className="grid gap-3">
-										<FormField
-											control={form.control}
-											name="email"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Email</FormLabel>
-													<FormControl>
-														<Input {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<FormField
-											control={form.control}
-											name="password"
-											render={({ field }) => (
-												<FormItem>
-													<FormLabel>Password</FormLabel>
-													<FormControl>
-														<PasswordInput {...field} />
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)}
-										/>
-										<Link
-											href={`${redirects.adminToForgotPassword}`}
-											className="text-sidebar mr-auto text-sm underline-offset-4 hover:underline"
-										>
-											Forgot your password?
-										</Link>
-									</div>
-									<Button type="submit" className="w-full" disabled={isLoading}>
-										{isLoading && (
-											<Loader2 className="mr-2 size-4 animate-spin" />
-										)}
-										{isLoading ? "Logging in..." : "Login"}
-									</Button>
-								</div>
-								<div className="text-center text-sm">
-									Don&apos;t have an account?{" "}
-									<Link
-										href={`${redirects.adminToSignup}`}
-										className="text-sidebar underline-offset-4 hover:underline"
-									>
-										Sign up
-									</Link>
-								</div>
+						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Email</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Password</FormLabel>
+										<FormControl>
+											<PasswordInput {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Link
+								href={`${redirects.adminToForgotPassword}`}
+								className="text-sidebar mr-auto text-sm underline-offset-4 hover:underline"
+							>
+								Forgot your password?
+							</Link>
+							<Button
+								type="submit"
+								className="mt-2 w-full"
+								disabled={isLoading}
+							>
+								{isLoading && <Loader2 className="mr-2 size-4 animate-spin" />}
+								{isLoading ? "Logging in..." : "Login"}
+							</Button>
+							<div className="text-center text-sm">
+								Don&apos;t have an account?{" "}
+								<Link
+									href={`${redirects.adminToSignup}`}
+									className="text-sidebar underline-offset-4 hover:underline"
+								>
+									Sign up
+								</Link>
 							</div>
 						</form>
 					</Form>

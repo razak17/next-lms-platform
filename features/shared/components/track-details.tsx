@@ -20,6 +20,16 @@ interface RatingsData {
 	userRating: number | null;
 }
 
+const courseColorClasses = [
+	{ bg: "bg-blue-100", text: "text-blue-800" },
+	{ bg: "bg-green-100", text: "text-green-800" },
+	{ bg: "bg-yellow-100", text: "text-yellow-800" },
+	{ bg: "bg-purple-100", text: "text-purple-800" },
+	{ bg: "bg-pink-100", text: "text-pink-800" },
+	{ bg: "bg-indigo-100", text: "text-indigo-800" },
+	{ bg: "bg-red-100", text: "text-red-800" },
+];
+
 export function TrackDetails({
 	user,
 	track,
@@ -58,16 +68,24 @@ export function TrackDetails({
 			</div>
 			<div className="flex justify-between gap-4">
 				<div className="flex flex-wrap gap-1">
-					{track.courses?.map((course, i) => {
-						return (
-							<Badge
-								key={i}
-								className="rounded-full bg-blue-100 px-4 py-2 text-blue-800"
-							>
-								{course.title}
-							</Badge>
-						);
-					})}
+					{track?.courses && track?.courses?.length > 0 ? (
+						track?.courses?.map((course, courseIndex) => {
+							const color =
+								courseColorClasses[courseIndex % courseColorClasses.length];
+							return (
+								<Badge
+									key={courseIndex}
+									className={`${color.bg} ${color.text} rounded-full px-4 py-2 font-medium`}
+								>
+									{course.title}
+								</Badge>
+							);
+						})
+					) : (
+						<Badge className="invisible rounded-full px-4 py-2 text-xs font-medium">
+							No courses
+						</Badge>
+					)}
 				</div>
 				<div className="flex items-center justify-between">
 					{ratingsData ? (
