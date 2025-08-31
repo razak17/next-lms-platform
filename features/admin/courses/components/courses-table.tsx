@@ -72,7 +72,7 @@ export function CoursesTable({ data, tracks }: CoursesTableProps) {
 					tracks={tracks}
 					trigger={
 						<Button className="flex w-48 items-center gap-2">
-							<IconPlus />
+							<IconPlus className="size-4" />
 							Add Course
 						</Button>
 					}

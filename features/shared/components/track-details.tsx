@@ -116,9 +116,9 @@ export function TrackDetails({
 						trigger={
 							<Button
 								variant="ghost"
-								className="h-12 w-18 text-blue-700 hover:bg-blue-100"
+								className="text-blue-700 hover:bg-blue-100"
 							>
-								<Pencil />
+								<Pencil className="size-6" />
 							</Button>
 						}
 					/>
@@ -128,9 +128,9 @@ export function TrackDetails({
 					>
 						<Button
 							variant="ghost"
-							className="h-12 w-18 text-red-700 hover:bg-red-100"
+							className="text-red-700 hover:bg-red-100"
 						>
-							<Trash2 />
+							<Trash2 className="size-6" />
 						</Button>
 					</ConfirmDialog>
 				</div>

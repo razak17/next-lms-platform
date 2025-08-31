@@ -125,7 +125,7 @@ export function InvoicesTable({ data, learners }: InvoicesTableProps) {
 									size="sm"
 									className="flex h-8 items-center gap-1.5 px-3"
 								>
-									<Eye className="h-4 w-4" />
+						      <Eye className="size-4" />
 									View
 								</Button>
 							}

@@ -20,18 +20,18 @@ export function CourseTableActions({
 				trigger={
 					<Button
 						variant="ghost"
-						className="h-4 w-8 p-4 text-blue-600 hover:bg-blue-100"
+						className="p-4 text-blue-600 hover:bg-blue-100"
 					>
-						<Pencil />
+						<Pencil className="size-4" />
 					</Button>
 				}
 			/>
 			<ConfirmDialog onConfirm={deleteCourse.bind(null, course.id)}>
 				<Button
 					variant="ghost"
-					className="h-4 w-8 p-4 text-red-700 hover:bg-red-100"
+					className="p-4 text-red-700 hover:bg-red-100"
 				>
-					<Trash2 />
+					<Trash2 className="size-4" />
 				</Button>
 			</ConfirmDialog>
 		</div>

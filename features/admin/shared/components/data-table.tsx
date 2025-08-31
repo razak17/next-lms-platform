@@ -163,7 +163,7 @@ export function DataTable<TData, TValue>({
 					onClick={() => table.previousPage()}
 					disabled={!table.getCanPreviousPage()}
 				>
-					<ArrowLeft />
+					<ArrowLeft className="mr-2 size-4" />
 					Previous
 				</Button>
 
@@ -242,7 +242,7 @@ export function DataTable<TData, TValue>({
 					disabled={!table.getCanNextPage()}
 				>
 					Next
-					<ArrowRight />
+					<ArrowRight className="ml-2 size-4" />
 				</Button>
 			</div>
 		</div>

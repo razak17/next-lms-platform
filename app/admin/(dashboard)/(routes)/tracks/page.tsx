@@ -65,7 +65,7 @@ export default async function TracksPage({ searchParams }: TracksPageProps) {
 				<TrackDialog
 					trigger={
 						<Button className="flex w-48 items-center gap-2" size="lg">
-							<IconPlus />
+							<IconPlus className="size-4" />
 							Add Track
 						</Button>
 					}

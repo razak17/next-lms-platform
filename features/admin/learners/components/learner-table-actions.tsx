@@ -23,7 +23,7 @@ export function LearnerTableActions({
 						size="sm"
 						className="flex h-8 items-center gap-1.5 px-3"
 					>
-						<Eye />
+						<Eye className="size-4" />
 						View
 					</Button>
 				}
