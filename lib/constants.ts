@@ -11,7 +11,7 @@ export const redirects = {
 	toResetPassword: "/reset-password",
 	toForgotPassword: "/forgot-password",
 	toLanding: "/",
-	toDashboard: "/dashboard",
+	toDashboard: "/admin/dashboard",
 	toTracks: "/tracks",
 	toCourses: "/courses",
 
